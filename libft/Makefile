@@ -6,9 +6,12 @@
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pol               #+#    #+#              #
-#    Updated: 2025/03/07 12:29:57 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/03/07 12:54:23 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
+
+# === Désactivation des messages "Entering directory" ===
+MAKEFLAGS += --no-print-directory
 
 # === Nom de la librairie ===
 NAME	= libft.a
@@ -37,30 +40,32 @@ SRCS	= ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 		  ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c \
 		  ft_lstmap.c
 
-OBJS	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
-DEPS	= $(addprefix $(DEP_DIR)/, $(SRCS:.c=.d))
+OBJS	= $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
+DEPS	= $(patsubst %.c, $(DEP_DIR)/%.d, $(SRCS))
 
 # === Compilation ===
 all: $(NAME)
+	@echo "✅ Libft compiled successfully!"
 
 $(NAME): $(OBJS)
-	@echo "Creating archive $(NAME)..."
-	$(AR) $(NAME) $(OBJS)
+	@echo "🔹 Creating archive $(NAME)..."
+	@$(AR) $(NAME) $(OBJS)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR) $(DEP_DIR)
-	@echo "Compiling Libft: $<..."
-	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(DEP_DIR)/$*.d
+	@echo "🔹 Compiling Libft: $<..."
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst %.c, $(DEP_DIR)/%.d, $<)
 
 $(OBJ_DIR) $(DEP_DIR):
 	@mkdir -p $@
 
+# === Clean ===
 clean:
-	@echo "Cleaning Libft object files..."
-	rm -rf $(OBJ_DIR) $(DEP_DIR)
+	@echo "🧹 Cleaning Libft object files..."
+	@rm -rf $(OBJ_DIR) $(DEP_DIR)
 
 fclean: clean
-	@echo "Removing $(NAME)..."
-	rm -f $(NAME)
+	@echo "🧹 Removing $(NAME)..."
+	@rm -f $(NAME)
 
 re: fclean all
 

@@ -6,7 +6,7 @@
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pol               #+#    #+#              #
-#    Updated: 2025/03/07 12:49:12 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/03/07 12:55:29 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,9 +31,9 @@ MSH_OBJ		= $(OBJ_DIR)/minishell
 MSH_DEP		= $(DEP_DIR)/minishell
 
 # === Fichiers Sources Minishell ===
-MSH_SRCS	= main.c
-MSH_OBJS	= $(addprefix $(MSH_OBJ)/, $(MSH_SRCS:.c=.o))
-MSH_DEPS	= $(addprefix $(MSH_DEP)/, $(MSH_SRCS:.c=.d))
+MSH_SRCS	= main.c 
+MSH_OBJS	= $(patsubst %.c, $(MSH_OBJ)/%.o, $(MSH_SRCS))
+MSH_DEPS	= $(patsubst %.c, $(MSH_DEP)/%.d, $(MSH_SRCS))
 
 LIBFT_NAME	= $(LIBFT_DIR)/libft.a
 
@@ -43,7 +43,7 @@ all: libft $(NAME)
 
 # Toujours exécuter `make -C libft` pour s'assurer que libft.a est à jour
 libft:
-	@echo "🔹 Checking Libft..."
+	@echo "❗ Checking Libft..."
 	@$(MAKE) -C $(LIBFT_DIR)
 
 # Relink Minishell si libft.a a changé
@@ -54,7 +54,7 @@ $(NAME): $(MSH_OBJS) $(LIBFT_NAME)
 # === Compilation de Minishell ===
 $(MSH_OBJ)/%.o: $(SRC_DIR)/%.c | $(MSH_OBJ) $(MSH_DEP)
 	@echo "🔹 Compiling $<..."
-	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(MSH_DEP)/$*.d
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(SRC_DIR)/%.c, $(MSH_DEP)/%.d, $<)
 
 # === Création des dossiers ===
 $(MSH_OBJ) $(MSH_DEP):
