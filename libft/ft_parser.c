@@ -6,11 +6,12 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:11:48 by pledieu           #+#    #+#             */
-/*   Updated: 2025/02/10 13:19:00 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 11:48:27 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
+
 
 int	ft_parse_format(char format, va_list args)
 {

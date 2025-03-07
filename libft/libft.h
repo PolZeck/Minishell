@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 11:08:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/07 11:42:53 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 12:11:01 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+#include "../includes/minishell.h"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 32

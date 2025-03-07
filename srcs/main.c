@@ -6,7 +6,13 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/07 11:43:37 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 12:11:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../includes/minishell.h"
+
+int main() {
+    ft_printf("Hello, Minishell!\n");
+    return 0;
+}

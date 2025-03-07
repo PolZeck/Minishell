@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:55:01 by pledieu           #+#    #+#             */
-/*   Updated: 2025/02/10 13:19:08 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 11:48:42 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
 static int	ft_intlen(int n)
 {

@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:47:21 by pledieu           #+#    #+#             */
-/*   Updated: 2025/02/10 13:19:10 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/07 11:48:45 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
 size_t	ft_strlen_gnl(const char *s)
 {
