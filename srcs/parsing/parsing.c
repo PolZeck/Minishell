@@ -1,0 +1,90 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
+/*   Updated: 2025/03/10 10:39:43 by pledieu          ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+#include "../../includes/minishell.h"
+
+t_cmd *create_cmd()
+{
+    t_cmd *cmd = malloc(sizeof(t_cmd));
+    if (!cmd)
+        return (NULL);
+    cmd->args = malloc(sizeof(char *) * 10); // Limite temporaire à 10 args
+    cmd->infile = NULL;
+    cmd->outfile = NULL;
+    cmd->append = 0;
+    cmd->next = NULL;
+    return cmd;
+}
+
+t_cmd *parse_tokens(t_token *tokens)
+{
+    t_cmd *cmd = create_cmd();
+    t_cmd *head = cmd;
+    int arg_count = 0;
+    size_t args_size = 2;
+
+    cmd->args = malloc(sizeof(char *) * args_size);
+    if (!cmd->args)
+        return NULL;
+
+    while (tokens)
+    {
+        if (tokens->type == WORD || tokens->type == QUOTE) // Commandes et arguments
+        {
+            if (arg_count + 1 >= (int)args_size) // Vérifier si on doit agrandir
+            {
+                args_size *= 2;
+                cmd->args = ft_realloc(cmd->args, sizeof(char *) * (arg_count + 1), sizeof(char *) * args_size);
+                if (!cmd->args)
+                    return NULL;
+            }
+            cmd->args[arg_count++] = ft_strdup(tokens->value);
+        }
+        else if (tokens->type == PIPE) // Gérer les pipes
+        {
+            cmd->args[arg_count] = NULL;
+            cmd->next = create_cmd();
+            cmd = cmd->next;
+            arg_count = 0;
+            args_size = 2;
+            cmd->args = malloc(sizeof(char *) * args_size);
+            if (!cmd->args)
+                return NULL;
+        }
+        else if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT || tokens->type == APPEND)
+        {
+            tokens = tokens->next;
+            if (!tokens) // Vérifier si un fichier est bien donné après la redirection
+            {
+                ft_printf("Erreur : redirection sans fichier\n");
+                return NULL;
+            }
+            if (tokens->type != WORD)
+            {
+                ft_printf("Erreur : fichier invalide pour la redirection\n");
+                return NULL;
+            }
+            if (tokens->type == REDIR_IN)
+                cmd->infile = ft_strdup(tokens->value);
+            else
+            {
+                cmd->outfile = ft_strdup(tokens->value);
+                cmd->append = (tokens->type == APPEND) ? 1 : 0;
+            }
+        }
+        tokens = tokens->next;
+    }
+    cmd->args[arg_count] = NULL;
+    return head;
+}
+
