@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/10 10:39:43 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/10 14:53:54 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,27 +61,70 @@ t_cmd *parse_tokens(t_token *tokens)
             if (!cmd->args)
                 return NULL;
         }
-        else if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT || tokens->type == APPEND)
-        {
-            tokens = tokens->next;
-            if (!tokens) // Vérifier si un fichier est bien donné après la redirection
-            {
-                ft_printf("Erreur : redirection sans fichier\n");
-                return NULL;
-            }
-            if (tokens->type != WORD)
-            {
-                ft_printf("Erreur : fichier invalide pour la redirection\n");
-                return NULL;
-            }
-            if (tokens->type == REDIR_IN)
-                cmd->infile = ft_strdup(tokens->value);
-            else
-            {
-                cmd->outfile = ft_strdup(tokens->value);
-                cmd->append = (tokens->type == APPEND) ? 1 : 0;
-            }
-        }
+        else if (tokens->type == REDIR_IN) // Gestion de "<"
+		{
+			tokens = tokens->next;
+			if (!tokens)
+			{
+				ft_printf("Erreur : redirection sans fichier\n");
+				return NULL;
+			}
+			if (tokens->type != WORD)
+			{
+				ft_printf("Erreur : fichier invalide pour la redirection\n");
+				return NULL;
+			}
+			cmd->infile = ft_strdup(tokens->value);
+		}
+		else if (tokens->type == REDIR_OUT) // Gestion de ">" et ">>"
+		{
+			tokens = tokens->next;
+			if (!tokens)
+			{
+				ft_printf("Erreur : redirection sans fichier\n");
+				return NULL;
+			}
+			if (tokens->type != WORD)
+			{
+				ft_printf("Erreur : fichier invalide pour la redirection\n");
+				return NULL;
+			}
+			cmd->outfile = ft_strdup(tokens->value);
+		}
+		else if (tokens->type == HEREDOC) // Gestion du "<<"
+		{
+			tokens = tokens->next;
+			if (!tokens)
+			{
+				ft_printf("Erreur : heredoc sans délimiteur\n");
+				return NULL;
+			}
+			if (tokens->type != WORD)
+			{
+				ft_printf("Erreur : délimiteur invalide pour le heredoc\n");
+				return NULL;
+			}
+			cmd->infile = ft_strdup(tokens->value);
+			ft_printf("Lecture depuis un HEREDOC avec délimiteur : %s\n", cmd->infile);
+		}
+		else if (tokens->type == APPEND) // Gestion du ">>"
+		{
+			tokens = tokens->next;
+			if (!tokens)
+			{
+				ft_printf("Erreur : redirection sans fichier\n");
+				return NULL;
+			}
+			if (tokens->type != WORD)
+			{
+				ft_printf("Erreur : fichier invalide pour la redirection\n");
+				return NULL;
+			}
+			cmd->outfile = ft_strdup(tokens->value);
+			cmd->append = 1; // Spécifier que c'est un append
+			ft_printf("Écriture en mode APPEND vers : %s\n", cmd->outfile);
+		}
+
         tokens = tokens->next;
     }
     cmd->args[arg_count] = NULL;

@@ -47,8 +47,13 @@ t_cmd   *parse_tokens(t_token *tokens);
 void    free_tokens(t_token *tokens);
 void    free_cmds(t_cmd *cmds);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
-char *expand_env_var(char *token);
-int check_unclosed_quotes(char *input);
+char	*expand_env_var(char *token, int in_single_quotes);
+int		check_unclosed_quotes(char *input);
 
+// token_utils
+int is_operator(char c);
+t_token *create_token
+		(char *value, t_token_type type, int in_single_quotes);
+int check_unclosed_quotes(char *input);
 
 #endif
