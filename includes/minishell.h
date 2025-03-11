@@ -56,4 +56,16 @@ t_token *create_token
 		(char *value, t_token_type type, int in_single_quotes);
 int check_unclosed_quotes(char *input);
 
+//utils.c
+
+t_cmd *create_cmd(void);
+
+//parsing_utils.c
+void	handle_argument(t_cmd *cmd, int *arg_count, size_t *args_size, char *value);
+void	handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size);
+void	handle_redirections(t_cmd *cmd, t_token **tokens);
+void	handle_redir_in(t_cmd *cmd, t_token **tokens);
+void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append);
+void	handle_heredoc(t_cmd *cmd, t_token **tokens);
+
 #endif

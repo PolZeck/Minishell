@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/10 13:01:23 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/11 16:10:39 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,17 @@ char *expand_env_var(char *token, int in_single_quotes)
     
     char *env_value = getenv(token + 1); // Récupérer la valeur de la variable
     return env_value ? ft_strdup(env_value) : ft_strdup(""); // Retourner la valeur ou chaîne vide
+}
+
+t_cmd *create_cmd(void)
+{
+    t_cmd *cmd = malloc(sizeof(t_cmd));
+    if (!cmd)
+        return (NULL);
+    cmd->args = malloc(sizeof(char *) * 10); // Limite temporaire à 10 args
+    cmd->infile = NULL;
+    cmd->outfile = NULL;
+    cmd->append = 0;
+    cmd->next = NULL;
+    return cmd;
 }
