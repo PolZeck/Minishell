@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/11/11 11:49:00 by pol               #+#    #+#              #
-#    Updated: 2025/03/11 16:19:05 by pledieu          ###   ########lyon.fr    #
+#    Created: 2024/11/11 11:49:00 by pledieu               #+#    #+#              #
+#    Updated: 2025/03/11 16:23:32 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ MSH_OBJ		= $(OBJ_DIR)/minishell
 MSH_DEP		= $(DEP_DIR)/minishell
 
 # === Fichiers Sources Minishell ===
-MSH_SRCS	= main.c parsing/parsing.c parsing/tokenizer.c parsing/utils.c parsing/tokenizer_utils.c parsing/parsing_utils.c
+MSH_SRCS	= main.c parsing/parsing.c parsing/tokenizer.c parsing/utils.c parsing/tokenizer_utils.c parsing/parsing_utils.c parsing/utils_memory.c
 MSH_OBJS	= $(patsubst %.c, $(MSH_OBJ)/%.o, $(MSH_SRCS))
 MSH_DEPS	= $(patsubst %.c, $(MSH_DEP)/%.d, $(MSH_SRCS))
 

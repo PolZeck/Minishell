@@ -6,48 +6,100 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:03:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/10 13:04:02 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/12 08:58:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int is_operator(char c)
+t_token	*create_token(char *value, t_token_type type, int in_single_quotes)
 {
-    return (c == '|' || c == '<' || c == '>');
+	t_token	*token;
+
+	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	if (type == QUOTE && in_single_quotes)
+		token->value = ft_strdup(value);
+	else
+		token->value = expand_env_var(value, in_single_quotes);
+	token->type = type;
+	token->next = NULL;
+	return (token);
 }
 
-t_token *create_token(char *value, t_token_type type, int in_single_quotes)
+int	check_unclosed_quotes(char *input)
 {
-    t_token *token = malloc(sizeof(t_token));
-    if (!token)
-        return (NULL);
-    
-    if (type == QUOTE && in_single_quotes)
-        token->value = ft_strdup(value); // Pas d'expansion pour les quotes simples
-    else
-        token->value = expand_env_var(value, in_single_quotes);
+	int		i;
+	char	quote;
 
-    token->type = type;
-    token->next = NULL;
-    return (token);
+	i = 0;
+	quote = 0;
+	while (input[i])
+	{
+		if (input[i] == '"' || input[i] == '\'')
+		{
+			if (quote == 0)
+				quote = input[i];
+			else if (quote == input[i])
+				quote = 0;
+		}
+		i++;
+	}
+	return (quote != 0);
 }
 
-int check_unclosed_quotes(char *input)
+void	add_token(t_token **tokens, t_token **last, t_token_info info)
 {
-    int i = 0;
-    char quote = 0;
+	t_token	*new_token;
 
-    while (input[i])
-    {
-        if (input[i] == '"' || input[i] == '\'')
-        {
-            if (quote == 0)
-                quote = input[i];
-            else if (quote == input[i])
-                quote = 0;
-        }
-        i++;
-    }
-    return (quote != 0); // Retourne 1 si une quote est restée ouverte
+	new_token = create_token(info.buffer, info.type, info.in_single_quotes);
+	if (!(*tokens))
+		*tokens = new_token;
+	else
+		(*last)->next = new_token;
+	*last = new_token;
+}
+
+t_token_type	handle_redirections_token(char *buffer,
+												char *input, int *i, int *j)
+{
+	t_token_type	type;
+
+	if (input[*i] == buffer[0])
+	{
+		buffer[(*j)++] = input[(*i)++];
+		if (buffer[0] == '<')
+			type = HEREDOC;
+		else
+			type = APPEND;
+	}
+	else
+	{
+		if (buffer[0] == '<')
+			type = REDIR_IN;
+		else
+			type = REDIR_OUT;
+	}
+	return (type);
+}
+
+t_token_type	handle_quotes(t_quote *q)
+{
+	char			quote;
+	t_token_type	type;
+
+	quote = q->input[(*q->i)++];
+	q->in_single_quotes = (quote == '\'');
+	while (q->input[*q->i] && q->input[*q->i] != quote)
+	{
+		if (q->input[*q->i] == '$' && !(q->in_single_quotes))
+			handle_expansion(q->buffer, q->input, q->i, q->j);
+		else
+			q->buffer[(*q->j)++] = q->input[(*q->i)++];
+	}
+	if (q->input[*q->i] == quote)
+		(*q->i)++;
+	type = QUOTE;
+	return (type);
 }
