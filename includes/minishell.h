@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
+/*   Updated: 2025/03/12 09:26:22 by pledieu          ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -15,23 +27,23 @@
 
 typedef enum e_token_type
 {
-    WORD,        // Commande ou argument
-    PIPE,        // |
-    REDIR_IN,    // <
-    REDIR_OUT,   // >
-    APPEND,      // >>
-    HEREDOC,     // <<
-    ENV_VAR,     // $VAR
-    QUOTE,       // " ou '
-    T_SPACE        // (On pourrait les ignorer après)
-}   t_token_type;
+	WORD,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	APPEND,
+	HEREDOC,
+	ENV_VAR,
+	QUOTE,
+	T_SPACE
+}	t_token_type;
 
 typedef struct s_token
 {
-    char            *value;
-    t_token_type    type;
-    struct s_token *next;
-}   t_token;
+	char			*value;
+	t_token_type	type;
+	struct s_token	*next;
+}	t_token;
 
 typedef struct s_token_info
 {
@@ -42,12 +54,12 @@ typedef struct s_token_info
 
 typedef struct s_cmd
 {
-    char    **args;
-    char    *infile;
-    char    *outfile;
-    int     append;
-    struct s_cmd *next;
-}   t_cmd;
+	char			**args;
+	char			*infile;
+	char			*outfile;
+	int				append;
+	struct s_cmd	*next;
+}	t_cmd;
 
 typedef struct s_quote
 {
@@ -65,9 +77,11 @@ int				check_unclosed_quotes(char *input);
 //utils.c
 
 t_cmd			*create_cmd(void);
+//parsing
 
 //parsing_utils.c
-void			handle_argument(t_cmd *cmd, int *arg_count, size_t *args_size, char *value);
+void			handle_argument(t_cmd *cmd,
+					int *arg_count, size_t *args_size, char *value);
 void			handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size);
 void			handle_redirections(t_cmd *cmd, t_token **tokens);
 void			handle_redir_in(t_cmd *cmd, t_token **tokens);
@@ -76,18 +90,20 @@ void			handle_heredoc(t_cmd *cmd, t_token **tokens);
 
 //tokenizer.c
 t_token			*tokenize(char *input);
-void			handle_token(t_token **tokens, t_token **last, char *input, int *i);
+void			handle_token(t_token **tokens,
+					t_token **last, char *input, int *i);
 t_token_type	handle_operator(char *buffer, char *input, int *i, int *j);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
-void	process_word_or_quote(t_quote *q, t_token_info *info);
+void			process_word_or_quote(t_quote *q, t_token_info *info);
 
 //tokenizer_utils.c
 int				is_operator(char c);
-t_token *create_token
-				(char *value, t_token_type type, int in_single_quotes);
+t_token			*create_token(char *value,
+					t_token_type type, int in_single_quotes);
 int				check_unclosed_quotes(char *input);
-void	add_token(t_token **tokens, t_token **last, t_token_info info);
-t_token_type	handle_redirections_token(char *buffer, char *input, int *i, int *j);
+void			add_token(t_token **tokens, t_token **last, t_token_info info);
+t_token_type	handle_redirections_token(char *buffer,
+					char *input, int *i, int *j);
 t_token_type	handle_quotes(t_quote *q);
 
 //utils_memory.c
