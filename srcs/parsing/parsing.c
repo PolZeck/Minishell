@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/17 14:12:07 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 16:12:46 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 	size_t	args_size;
 
 	if (!tokens || tokens->type == PIPE)
-	{
-		perror("Erreur de syntaxe : pipe mal placé");
 		return (NULL);
-	}
 	cmd = create_cmd();
 	head = cmd;
 	arg_count = 0;
