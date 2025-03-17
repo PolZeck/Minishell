@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/12 08:38:11 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 13:51:54 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,35 @@ t_cmd	*create_cmd(void)
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->append = 0;
+	cmd->invalid = 0;
 	cmd->next = NULL;
 	return (cmd);
 }
 
+
 int	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
+}
+
+
+int is_builtin(char *cmd)
+{
+    if (!cmd)
+        return (0);
+    if (ft_strncmp(cmd, "echo", 4) == 0
+        || ft_strncmp(cmd, "cd", 2) == 0
+        || ft_strncmp(cmd, "pwd", 3) == 0
+        || ft_strncmp(cmd, "export", 6) == 0
+        || ft_strncmp(cmd, "unset", 5) == 0
+        || ft_strncmp(cmd, "env", 3) == 0
+        || ft_strncmp(cmd, "exit", 4) == 0)
+        return (1);
+    return (0);
+}
+
+void mark_invalid(t_cmd *cmd, char *error_msg)
+{
+    ft_printf("%s\n", error_msg);
+    cmd->invalid = 1;
 }

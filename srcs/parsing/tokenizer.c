@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/12 08:58:09 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/12 11:33:36 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,14 @@ t_token	*tokenize(char *input)
 
 void	handle_token(t_token **tokens, t_token **last, char *input, int *i)
 {
-	char			buffer[1024];
+	char			*buffer;
 	int				j;
 	t_token_info	info;
 	t_quote			q;
 
+	buffer = malloc(sizeof(char) * (ft_strlen(input) + 1));
+	if (!buffer)
+		return ;
 	j = 0;
 	info.type = WORD;
 	info.in_single_quotes = 0;
@@ -56,6 +59,7 @@ void	handle_token(t_token **tokens, t_token **last, char *input, int *i)
 	buffer[j] = '\0';
 	info.buffer = buffer;
 	add_token(tokens, last, info);
+	free(buffer);
 }
 
 void	process_word_or_quote(t_quote *q, t_token_info *info)
@@ -84,16 +88,24 @@ t_token_type	handle_operator(char *buffer, char *input, int *i, int *j)
 
 void	handle_expansion(char *buffer, char *input, int *i, int *j)
 {
-	char	var_name[256];
+	char	*var_name;
+	int		start;
 	int		k;
 	char	*expanded;
 
+	start = *i + 1;
+	while (input[start] && (ft_isalnum(input[start]) || input[start] == '_'))
+		start++;
+	var_name = malloc(sizeof(char) * (start - *i));
+	if (!var_name)
+		return ;
 	k = 0;
 	(*i)++;
 	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
 		var_name[k++] = input[(*i)++];
 	var_name[k] = '\0';
 	expanded = getenv(var_name);
+	free(var_name);
 	if (expanded)
 	{
 		k = 0;
@@ -101,3 +113,4 @@ void	handle_expansion(char *buffer, char *input, int *i, int *j)
 			buffer[(*j)++] = expanded[k++];
 	}
 }
+

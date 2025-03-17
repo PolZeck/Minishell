@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/11 16:21:40 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 13:47:57 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ t_cmd	*parse_tokens(t_token *tokens)
 	int		arg_count;
 	size_t	args_size;
 
+	if (!tokens || tokens->type == PIPE)
+	{
+		perror("Erreur de syntaxe : pipe mal placé");
+		return (NULL);
+	}
 	cmd = create_cmd();
 	head = cmd;
 	arg_count = 0;
@@ -28,10 +33,25 @@ t_cmd	*parse_tokens(t_token *tokens)
 		return (NULL);
 	while (tokens)
 	{
-		if (tokens->type == WORD || tokens->type == QUOTE)
+		if (tokens->type == PIPE)
+		{
+    		if (!tokens->next || tokens->next->type == PIPE) // ❌ Vérifie bien s'il y a un token après
+			{
+				perror("Erreur de syntaxe : pipe mal placé");
+				if(head)
+					free_cmds(head);  // ❌ On libère juste les commandes, pas `tokens` !
+				return (NULL);
+			}
+			handle_pipe(&cmd, &arg_count, &args_size, &tokens);
+			continue;	
+		}
+
+		else if (tokens->type == WORD || tokens->type == QUOTE)
+		{
 			handle_argument(cmd, &arg_count, &args_size, tokens->value);
-		else if (tokens->type == PIPE)
-			handle_pipe(&cmd, &arg_count, &args_size);
+			if (arg_count == 1 && !is_builtin(cmd->args[0]))
+    			mark_invalid(cmd, "Commande non supportée");
+		}
 		else
 			handle_redirections(cmd, &tokens);
 		tokens = tokens->next;
@@ -42,12 +62,20 @@ t_cmd	*parse_tokens(t_token *tokens)
 
 void	handle_redirections(t_cmd *cmd, t_token **tokens)
 {
-	if ((*tokens)->type == REDIR_IN)
-		handle_redir_in(cmd, tokens);
-	else if ((*tokens)->type == REDIR_OUT)
-		handle_redir_out(cmd, tokens, 0);
-	else if ((*tokens)->type == APPEND)
-		handle_redir_out(cmd, tokens, 1);
-	else if ((*tokens)->type == HEREDOC)
-		handle_heredoc(cmd, tokens);
+    if (!(*tokens)->next || (*tokens)->next->type != WORD)
+    {
+        ft_printf("Erreur : redirection sans fichier valide\n");
+        free_cmds(cmd);  // Ici, on libère toutes les commandes du pipeline
+        *tokens = NULL;  // Pour indiquer à parse_tokens() de stopper le parsing
+        return;
+    }
+    if ((*tokens)->type == REDIR_IN)
+        handle_redir_in(cmd, tokens);
+    else if ((*tokens)->type == REDIR_OUT)
+        handle_redir_out(cmd, tokens, 0);
+    else if ((*tokens)->type == APPEND)
+        handle_redir_out(cmd, tokens, 1);
+    else if ((*tokens)->type == HEREDOC)
+        handle_heredoc(cmd, tokens);
 }
+

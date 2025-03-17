@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/12 09:26:22 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 13:21:04 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	int				append;
+	int				invalid; // SI UNE COMMANDE EST MARQUÉE COMME INVALIDE(=1) ALORS NE PAS EXEC LE PIPE
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -75,14 +76,16 @@ char			*expand_env_var(char *token, int in_single_quotes);
 int				check_unclosed_quotes(char *input);
 
 //utils.c
-
 t_cmd			*create_cmd(void);
+int				is_builtin(char *cmd);
+void mark_invalid(t_cmd *cmd, char *error_msg);
+
 //parsing
 
 //parsing_utils.c
 void			handle_argument(t_cmd *cmd,
 					int *arg_count, size_t *args_size, char *value);
-void			handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size);
+void	handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size, t_token **tokens);
 void			handle_redirections(t_cmd *cmd, t_token **tokens);
 void			handle_redir_in(t_cmd *cmd, t_token **tokens);
 void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append);

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/11 16:21:51 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/12 16:10:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,19 @@ void	handle_argument(t_cmd *cmd, int *arg_count,
 	(*arg_count)++;
 }
 
-void	handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size)
+void	handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size, t_token **tokens)
 {
 	(*cmd)->args[*arg_count] = NULL;
+	if (!(*tokens)->next || (*tokens)->next->type == PIPE)
+	{
+		perror("Erreur de syntaxe : pipe sans commande après");
+		*tokens = NULL;
+		return ;
+	}
+	*tokens = (*tokens)->next;
 	(*cmd)->next = create_cmd();
+	if (!(*cmd)->next)
+		return ;
 	(*cmd) = (*cmd)->next;
 	*arg_count = 0;
 	*args_size = 2;

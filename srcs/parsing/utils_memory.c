@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/12 08:34:46 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 13:46:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,27 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
-void	free_cmds(t_cmd *cmds)
+void free_cmds(t_cmd *cmd)
 {
-	int	i;
+    t_cmd *tmp;
+    int i;
 
-	i = 0;
-	if (!cmds)
-		return ;
-	if (cmds->args)
-	{
-		while (cmds->args[i])
-		{
-			free(cmds->args[i]);
-			i++;
-		}
-		free(cmds->args);
-	}
-	free(cmds);
+    while (cmd)
+    {
+        tmp = cmd->next;
+        i = 0;
+        if (cmd->args)
+        {
+            while (cmd->args[i])
+                free(cmd->args[i++]);
+            free(cmd->args);
+        }
+        if (cmd->infile)
+            free(cmd->infile);
+        if (cmd->outfile)
+            free(cmd->outfile);
+        if(cmd)
+        	free(cmd);  // ✅ Vérifie que `cmd` existe avant de le libérer
+        cmd = tmp;
+    }
 }
