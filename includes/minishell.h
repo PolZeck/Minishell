@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/17 13:21:04 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 14:31:38 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 
 typedef enum e_token_type
 {
@@ -113,5 +114,22 @@ t_token_type	handle_quotes(t_quote *q);
 void			free_tokens(t_token *tokens);
 void			free_cmds(t_cmd *cmds);
 void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
+
+
+
+/********************************************************************************************************
+****																								*****
+****			\\\\\	\\\		\\\\\	 \\\   \\	  \\		\\									*****
+****			\\				\\		 \\	\  \\	 \\ \\		\\									*****
+****			\\\\\	\\\		\\ \\	 \\	 \ \\	\\	 \\		\\									*****		
+****			   \\	\\\		\\  \	 \\	  \\\	\\\\\\\		\\									*****		
+****			\\\\\	\\\   	\\\\\	 \\	   \\	\\   \\		\\\\\								*****						
+****																								*****
+*********************************************************************************************************/
+
+//signals.c
+void	setup_signals(void);
+void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
 
 #endif

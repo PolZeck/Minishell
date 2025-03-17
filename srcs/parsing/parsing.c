@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/17 13:47:57 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 14:12:07 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,16 @@ t_cmd	*parse_tokens(t_token *tokens)
 	{
 		if (tokens->type == PIPE)
 		{
-    		if (!tokens->next || tokens->next->type == PIPE) // ❌ Vérifie bien s'il y a un token après
+    		if (!tokens->next || tokens->next->type == PIPE)
 			{
 				perror("Erreur de syntaxe : pipe mal placé");
 				if(head)
-					free_cmds(head);  // ❌ On libère juste les commandes, pas `tokens` !
+					free_cmds(head);
 				return (NULL);
 			}
 			handle_pipe(&cmd, &arg_count, &args_size, &tokens);
 			continue;	
 		}
-
 		else if (tokens->type == WORD || tokens->type == QUOTE)
 		{
 			handle_argument(cmd, &arg_count, &args_size, tokens->value);
@@ -65,8 +64,8 @@ void	handle_redirections(t_cmd *cmd, t_token **tokens)
     if (!(*tokens)->next || (*tokens)->next->type != WORD)
     {
         ft_printf("Erreur : redirection sans fichier valide\n");
-        free_cmds(cmd);  // Ici, on libère toutes les commandes du pipeline
-        *tokens = NULL;  // Pour indiquer à parse_tokens() de stopper le parsing
+        free_cmds(cmd);
+        *tokens = NULL;
         return;
     }
     if ((*tokens)->type == REDIR_IN)

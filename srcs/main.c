@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/17 12:41:29 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 15:04:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,17 @@ int main(void)
     t_token *tokens;
     t_cmd *cmd;
 
+    setup_signals(); // ✅ Active la gestion des signaux
+
     while (1)
     {
         input = readline("minishell> ");
-        if (!input)
+        if (!input) // ✅ Gestion de Ctrl-D
+        {
+            write(1, "exit\n", 5);
+			rl_clear_history();
             break;
+        }
         add_history(input);
         if (check_unclosed_quotes(input))
         {
@@ -88,5 +94,6 @@ int main(void)
         free_cmds(cmd);
         free(input);
     }
+	rl_clear_history();
     return (0);
 }
