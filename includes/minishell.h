@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/17 16:10:29 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/18 08:45:02 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+#include <termios.h>
 
 typedef enum e_token_type
 {
@@ -59,7 +60,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	int				append;
-	int				invalid; // SI UNE COMMANDE EST MARQUÉE COMME INVALIDE(=1) ALORS NE PAS EXEC LE PIPE
+	int				invalid; // SI UNE COMMANDE EST MARQUÉE COMME INVALIDE (=1) ALORS NE PAS EXEC LE PIPE
 	struct s_cmd	*next;
 }	t_cmd;
 

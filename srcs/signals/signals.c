@@ -6,14 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:25:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/17 16:19:04 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/17 16:50:41 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-
-#include <termios.h>
 
 void	sigint_handler(int sig)
 {
@@ -44,3 +41,4 @@ void	setup_signals(void)
 	signal(SIGQUIT, sigquit_handler); // ✅ Empêcher Ctrl-\ de quitter le shell
 	disable_ctrl_backslash(); // ✅ Désactiver complètement `Ctrl-\`
 }
+	
