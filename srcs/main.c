@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/17 16:22:47 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/18 13:02:54 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,14 @@ void	display_parsed_commands(t_cmd *cmd)
 	}
 }
 
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
     char *input;
     t_token *tokens;
     t_cmd *cmd;
+
+    (void)argc;
+    (void)argv;
 
     setup_signals(); // Active la gestion des signaux
 
@@ -64,7 +67,7 @@ int main(void)
         if (!input) // Gestion de Ctrl-D
         {
             write(1, "exit\n", 5);
-			rl_clear_history();
+            rl_clear_history();
             break;
         }
         add_history(input);
@@ -76,24 +79,28 @@ int main(void)
         }
         tokens = tokenize(input);
         cmd = parse_tokens(tokens);
-		if (!cmd)
-		{
-			free_tokens(tokens);
-			free(input);
-			continue;
-		}
-		t_cmd *tmp = cmd;
-		while (tmp)
-		{
-			ft_printf("Commande : %s | Invalid : %d\n", tmp->args[0], tmp->invalid);
-			tmp = tmp->next;
-		}
 
-        display_parsed_commands(cmd);
+        if (cmd)
+            execute_pipeline(cmd, envp); // ✅ Maintenant `envp` est passé à l'exécution
+        if (!cmd)
+        {
+            free_tokens(tokens);
+            free(input);
+            continue;
+        }
+        
+        // t_cmd *tmp = cmd;
+        // while (tmp)
+        // {
+        //     ft_printf("Commande : %s | Invalid : %d\n", tmp->args[0], tmp->invalid);
+        //     tmp = tmp->next;
+        // }
+
+        // display_parsed_commands(cmd);
         free_tokens(tokens);
         free_cmds(cmd);
         free(input);
     }
-	rl_clear_history();
+    rl_clear_history();
     return (0);
 }

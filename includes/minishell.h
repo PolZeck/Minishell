@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/18 10:11:13 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/18 13:09:16 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,43 @@ void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 *****																								*****
 *********************************************************************************************************/
 
+
+
 //signals.c
 void	setup_signals(void);
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
 void	disable_ctrl_backslash(void);
+
+
+
+
+//exec
+
+
+
+
+/* Exécution principale */
+void	execute_pipeline(t_cmd *cmd_list, char **env);
+
+/* Gestion des commandes */
+void	execute_single_command(t_cmd *cmd, char **env);
+void	execute_builtin(t_cmd *cmd);
+
+/* Gestion des pipes */
+void	execute_piped_commands(t_cmd *cmd_list, char **env);
+
+/* Gestion des redirections */
+void	handle_redirections_exec(t_cmd *cmd);
+
+/* Recherche de commandes */
+char	*find_command_path(char *cmd);
+void	execute_command(t_cmd *cmd, char **envp);
+void builtin_cd(t_cmd *cmd);
+void builtin_echo(t_cmd *cmd);
+void builtin_exit(t_cmd *cmd);
+
+
+
+
 #endif

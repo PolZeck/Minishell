@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/12 11:33:36 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/18 10:54:37 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,58 @@
 
 t_token	*tokenize(char *input)
 {
-	t_token	*tokens;
-	t_token	*last;
-	int		i;
-	int		in_single_quotes;
-	int		in_double_quotes;
+	t_token	*tokens = NULL;
+	t_token	*last = NULL;
+	int		i = 0;
+	int		in_single_quotes = 0;
 
-	tokens = NULL;
-	last = NULL;
-	i = 0;
-	in_single_quotes = 0;
-	in_double_quotes = 0;
 	while (input[i])
 	{
 		if (input[i] == ' ')
+		{
 			i++;
+			continue;
+		}
+
+		char buffer[1024];
+		int j = 0;
+		t_token_type type = WORD;
+		if (input[i] == '$' && !in_single_quotes)
+		{
+			while (input[i] == '$')
+			{
+				char var_name[256];
+				int k = 0;
+				i++;
+				while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
+					var_name[k++] = input[i++];
+				var_name[k] = '\0';
+				char *expanded = getenv(var_name);
+				if (expanded)
+				{
+					int l = 0;
+					while (expanded[l])
+						buffer[j++] = expanded[l++];
+				}
+			}
+			type = WORD;
+		}
 		else
-			handle_token(&tokens, &last, input, &i);
+		{
+			while (input[i] && !is_operator(input[i]) && input[i] != ' ' && input[i] != '$')
+				buffer[j++] = input[i++];
+		}
+		buffer[j] = '\0';
+		t_token *new_token = create_token(buffer, type, in_single_quotes);
+		if (!tokens)
+			tokens = new_token;
+		else
+			last->next = new_token;
+		last = new_token;
 	}
-	return (tokens);
+	return tokens;
 }
+
 
 void	handle_token(t_token **tokens, t_token **last, char *input, int *i)
 {

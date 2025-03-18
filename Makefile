@@ -30,6 +30,8 @@ LIBFT_DIR	= libft
 SRC_DIR		= srcs
 PARSING_DIR	= $(SRC_DIR)/parsing
 SIGNALS_DIR	= $(SRC_DIR)/signals
+EXEC_DIR	= $(SRC_DIR)/exec
+BUILTINS_DIR	= $(SRC_DIR)/builtins
 OBJ_DIR		= obj
 DEP_DIR		= dep
 MSH_OBJ		= $(OBJ_DIR)/minishell
@@ -41,7 +43,9 @@ VALGRIND_SUPP = readline.supp
 # === Fichiers Sources Minishell ===
 MSH_SRCS	= main.c parsing/parsing.c parsing/tokenizer.c parsing/utils.c \
               parsing/tokenizer_utils.c parsing/parsing_utils.c parsing/utils_memory.c \
-              signals/signals.c signals/signals_utils.c
+              signals/signals.c signals/signals_utils.c \
+			  exec/exec_builtins.c exec/exec_pipes.c exec/exec_redirects.c exec/exec_utils.c exec/exec.c exec/exec_commands.c \
+			  builtins/cd.c builtins/echo.c builtins/exit.c
 MSH_OBJS	= $(patsubst %.c, $(MSH_OBJ)/%.o, $(MSH_SRCS))
 MSH_DEPS	= $(patsubst %.c, $(MSH_DEP)/%.d, $(MSH_SRCS))
 
@@ -82,23 +86,36 @@ $(MSH_OBJ)/signals/%.o: $(SIGNALS_DIR)/%.c | $(MSH_OBJ)/signals $(MSH_DEP)/signa
 	@echo "🔹 Compiling $<..."
 	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(SIGNALS_DIR)/%.c, $(MSH_DEP)/signals/%.d, $<)
 
+$(MSH_OBJ)/exec/%.o: $(EXEC_DIR)/%.c | $(MSH_OBJ)/exec $(MSH_DEP)/exec
+	@mkdir -p $(dir $@)
+	@echo "🔹 Compiling $<..."
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(EXEC_DIR)/%.c, $(MSH_DEP)/exec/%.d, $<)
+
+$(MSH_OBJ)/exec/%.o: $(BUILTINS_DIR)/%.c | $(MSH_OBJ)/builtins $(MSH_DEP)/builtins
+	@mkdir -p $(dir $@)
+	@echo "🔹 Compiling $<..."
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(builtins_DIR)/%.c, $(MSH_DEP)/builtins/%.d, $<)
+
 # === Création des dossiers nécessaires ===
 $(MSH_OBJ):
 	@mkdir -p $(MSH_OBJ)
 	@mkdir -p $(MSH_OBJ)/parsing
 	@mkdir -p $(MSH_OBJ)/signals
+	@mkdir -p $(MSH_OBJ)/exec
+	@mkdir -p $(MSH_OBJ)/builtins
 
 $(MSH_DEP):
 	@mkdir -p $(MSH_DEP)
 	@mkdir -p $(MSH_DEP)/parsing
 	@mkdir -p $(MSH_DEP)/signals
+	@mkdir -p $(MSH_DEP)/exec
+	@mkdir -p $(MSH_DEP)/builtins
 
 # === Clean ===
 clean:
 	@echo "🧹 Cleaning Minishell object files..."
 	@rm -rf $(OBJ_DIR) $(DEP_DIR) $(VALGRIND_SUPP)
 	@$(MAKE) -C $(LIBFT_DIR) clean
-
 
 fclean: clean
 	@echo "🧹 Removing $(NAME)..."
