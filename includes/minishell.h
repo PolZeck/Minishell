@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/18 08:45:02 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/18 10:11:13 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,5 +132,5 @@ void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void	setup_signals(void);
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
-void	ignore_all_signals(void);
+void	disable_ctrl_backslash(void);
 #endif
