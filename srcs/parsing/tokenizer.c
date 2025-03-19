@@ -6,9 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/18 10:54:37 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 10:20:00 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 #include "../../includes/minishell.h"
 
@@ -18,54 +20,75 @@ t_token	*tokenize(char *input)
 	t_token	*last = NULL;
 	int		i = 0;
 	int		in_single_quotes = 0;
+	int		start;
+	char	*buffer;
+	char	*temp;
+
+	buffer = ft_strdup(""); // Initialise un buffer vide pour accumuler les expansions
+	if (!buffer)
+		return (NULL);
 
 	while (input[i])
 	{
-		if (input[i] == ' ')
+		if (input[i] == ' ') // Ignorer les espaces
 		{
+			if (*buffer) // Si le buffer contient quelque chose, on en fait un token
+			{
+				t_token *new_token = create_token(buffer, WORD, in_single_quotes);
+				if (!tokens)
+					tokens = new_token;
+				else
+					last->next = new_token;
+				last = new_token;
+				free(buffer);
+				buffer = ft_strdup(""); // Réinitialiser le buffer
+			}
 			i++;
 			continue;
 		}
 
-		char buffer[1024];
-		int j = 0;
-		t_token_type type = WORD;
-		if (input[i] == '$' && !in_single_quotes)
+		start = i;
+		if (input[i] == '$' && !in_single_quotes) // Gestion des variables d’environnement
 		{
-			while (input[i] == '$')
-			{
-				char var_name[256];
-				int k = 0;
+			i++; // Passer le $
+			start = i;
+			while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
 				i++;
-				while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
-					var_name[k++] = input[i++];
-				var_name[k] = '\0';
-				char *expanded = getenv(var_name);
-				if (expanded)
-				{
-					int l = 0;
-					while (expanded[l])
-						buffer[j++] = expanded[l++];
-				}
+
+			char *var_name = ft_substr(input, start, i - start);
+			char *expanded = getenv(var_name);
+			free(var_name);
+
+			if (expanded)
+			{
+				temp = ft_strjoin(buffer, expanded); // On concatène la valeur de la variable au buffer
+				free(buffer);
+				buffer = temp;
 			}
-			type = WORD;
 		}
-		else
+		else // Autres caractères
 		{
 			while (input[i] && !is_operator(input[i]) && input[i] != ' ' && input[i] != '$')
-				buffer[j++] = input[i++];
+				i++;
+
+			char *word = ft_substr(input, start, i - start);
+			temp = ft_strjoin(buffer, word); // Concatène le texte brut au buffer
+			free(buffer);
+			free(word);
+			buffer = temp;
 		}
-		buffer[j] = '\0';
-		t_token *new_token = create_token(buffer, type, in_single_quotes);
+	}
+	if (*buffer)
+	{
+		t_token *new_token = create_token(buffer, WORD, in_single_quotes);
 		if (!tokens)
 			tokens = new_token;
 		else
 			last->next = new_token;
-		last = new_token;
+		free(buffer);
 	}
 	return tokens;
 }
-
 
 void	handle_token(t_token **tokens, t_token **last, char *input, int *i)
 {

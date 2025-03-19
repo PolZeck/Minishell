@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/18 13:09:16 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 10:59:46 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
-#include <termios.h>
+# include <termios.h>
 
 typedef enum e_token_type
 {
@@ -87,7 +87,7 @@ void mark_invalid(t_cmd *cmd, char *error_msg);
 //parsing_utils.c
 void			handle_argument(t_cmd *cmd,
 					int *arg_count, size_t *args_size, char *value);
-void	handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size, t_token **tokens);
+void			handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size, t_token **tokens);
 void			handle_redirections(t_cmd *cmd, t_token **tokens);
 void			handle_redir_in(t_cmd *cmd, t_token **tokens);
 void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append);
@@ -116,8 +116,6 @@ void			free_tokens(t_token *tokens);
 void			free_cmds(t_cmd *cmds);
 void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 
-
-
 /********************************************************************************************************
 *****																								*****
 *****			\\\\\	\\\		\\\\\	 \\\   \\	  \\		\\									*****
@@ -128,8 +126,6 @@ void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 *****																								*****
 *********************************************************************************************************/
 
-
-
 //signals.c
 void	setup_signals(void);
 void	sigint_handler(int sig);
@@ -137,12 +133,7 @@ void	sigquit_handler(int sig);
 void	disable_ctrl_backslash(void);
 
 
-
-
 //exec
-
-
-
 
 /* Exécution principale */
 void	execute_pipeline(t_cmd *cmd_list, char **env);

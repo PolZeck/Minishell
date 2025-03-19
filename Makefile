@@ -22,6 +22,13 @@ CFLAGS	= -Wall -Wextra -Werror -Iincludes -Ilibft
 DEPFLAGS = -MMD -MP
 AR		= ar rcs
 
+# === Couleurs ===
+GREEN   = \033[0;32m
+YELLOW  = \033[0;33m
+CYAN    = \033[0;36m
+RED     = \033[0;31m
+NC      = \033[0m
+
 # === Bibliothèques ===
 LIBS	= -lreadline -lncurses
 
@@ -52,8 +59,19 @@ MSH_DEPS	= $(patsubst %.c, $(MSH_DEP)/%.d, $(MSH_SRCS))
 LIBFT_NAME	= $(LIBFT_DIR)/libft.a
 
 # === Compilation Générale ===
-all: $(VALGRIND_SUPP) libft $(NAME)
-	@echo "✅ Build complete!"
+all: libft $(NAME) $(VALGRIND_SUPP) banner
+
+banner:
+	@printf "\033[H\033[J"
+	@echo "$(GREEN)\n\n\n\n"
+	@echo "			███╗   ███╗ ██╗ ███╗   ██╗ ██╗ ███████╗ ██╗  ██╗ ███████╗ ██╗      ██╗     "
+	@echo "			████╗ ████║ ██║ ████╗  ██║ ██║ ██╔════╝ ██║  ██║ ██╔════╝ ██║      ██║     "
+	@echo "			██╔████╔██║ ██║ ██╔██╗ ██║ ██║ ███████╗ ███████║ █████╗   ██║      ██║     "
+	@echo "			██║╚██╔╝██║ ██║ ██║╚██╗██║ ██║ ╚════██║ ██╔══██║ ██╔══╝   ██║      ██║     "
+	@echo "			██║ ╚═╝ ██║ ██║ ██║ ╚████║ ██║ ███████║ ██║  ██║ ███████╗ ███████╗ ███████╗"
+	@echo "			╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚═══╝ ╚═╝ ╚══════╝ ╚═╝  ╚═╝ ╚══════╝ ╚══════╝ ╚══════╝"
+	@echo "\n\n\n\n"
+	@echo "$(NC)"
 
 # Toujours exécuter `make -C libft` pour s'assurer que libft.a est à jour
 libft:

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 11:08:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/12 09:01:17 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 10:46:50 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int				ft_handle_pointer(void *ptr);
 int				ft_putchar(char c);
 int				ft_putstr(char *str);
 int				ft_handle_unsigned(unsigned int num);
+int				ft_strcmp(char *s1, char *s2);
 
 char			*ft_itoa_unsigned(unsigned int num);
 char			*ft_itoa_gnl(int n);

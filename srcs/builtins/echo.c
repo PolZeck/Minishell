@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:34 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/18 15:03:13 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 10:52:39 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void builtin_echo(t_cmd *cmd)
 {
     int i = 1;
 
-    if (cmd->args[1] && ft_strncmp(cmd->args[1], "-n", 2) == 0)
+    if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") == 0)
         i = 2;
 
     while (cmd->args[i])
@@ -26,6 +26,7 @@ void builtin_echo(t_cmd *cmd)
             ft_printf(" ");
         i++;
     }
-    if (cmd->args[1] && ft_strncmp(cmd->args[1], "-n", 2) != 0)
+    if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") != 0)
         ft_printf("\n");
+	
 }

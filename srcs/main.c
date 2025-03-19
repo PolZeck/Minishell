@@ -6,49 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/18 13:02:54 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 10:23:04 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	display_parsed_commands(t_cmd *cmd)
-{
-	t_cmd	*current;
-	int		i;
-
-	current = cmd;
-
-	while (current)
-	{
-		if (!current->args || !current->args[0])
-		{
-			current = current->next;
-			continue;
-		}
-		ft_printf("Commande : %s\n", current->args[0]);
-		i = 1;
-		while (current->args[i])
-		{
-			ft_printf("Arg[%d]: %s\n", i, current->args[i]);
-			i++;
-		}
-		if (current->infile)
-		{
-			if (current->append == -1)
-				ft_printf("Lecture depuis un HEREDOC avec délimiteur : %s\n",
-					current->infile);
-			else
-				ft_printf("Lecture depuis : %s\n", current->infile);
-		}
-		if (current->outfile)
-			ft_printf("Écriture vers : %s (Append : %d)\n",
-				current->outfile, current->append);
-		if (current->next)
-			ft_printf("⬇ Pipe vers la prochaine commande ⬇\n");
-		current = current->next;
-	}
-}
 
 int main(int argc, char **argv, char **envp)
 {
@@ -59,7 +21,7 @@ int main(int argc, char **argv, char **envp)
     (void)argc;
     (void)argv;
 
-    setup_signals(); // Active la gestion des signaux
+    setup_signals();
 
     while (1)
     {
@@ -79,7 +41,6 @@ int main(int argc, char **argv, char **envp)
         }
         tokens = tokenize(input);
         cmd = parse_tokens(tokens);
-
         if (cmd)
             execute_pipeline(cmd, envp); // ✅ Maintenant `envp` est passé à l'exécution
         if (!cmd)
@@ -88,15 +49,6 @@ int main(int argc, char **argv, char **envp)
             free(input);
             continue;
         }
-        
-        // t_cmd *tmp = cmd;
-        // while (tmp)
-        // {
-        //     ft_printf("Commande : %s | Invalid : %d\n", tmp->args[0], tmp->invalid);
-        //     tmp = tmp->next;
-        // }
-
-        // display_parsed_commands(cmd);
         free_tokens(tokens);
         free_cmds(cmd);
         free(input);

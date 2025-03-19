@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/17 13:51:54 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 10:48:54 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,24 @@ t_cmd	*create_cmd(void)
 	return (cmd);
 }
 
-
 int	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
 }
 
-
 int is_builtin(char *cmd)
 {
-    if (!cmd)
-        return (0);
-    if (ft_strncmp(cmd, "echo", 4) == 0
-        || ft_strncmp(cmd, "cd", 2) == 0
-        || ft_strncmp(cmd, "pwd", 3) == 0
-        || ft_strncmp(cmd, "export", 6) == 0
-        || ft_strncmp(cmd, "unset", 5) == 0
-        || ft_strncmp(cmd, "env", 3) == 0
-        || ft_strncmp(cmd, "exit", 4) == 0)
-        return (1);
-    return (0);
+	if (!cmd)
+		return (0);
+	if (ft_strcmp(cmd, "echo") == 0
+		|| ft_strcmp(cmd, "cd") == 0
+		|| ft_strcmp(cmd, "pwd") == 0
+		|| ft_strcmp(cmd, "export") == 0
+		|| ft_strcmp(cmd, "unset") == 0
+		|| ft_strcmp(cmd, "env") == 0
+		|| ft_strcmp(cmd, "exit") == 0)
+		return (1);
+	return (0);
 }
 
 void mark_invalid(t_cmd *cmd, char *error_msg)
