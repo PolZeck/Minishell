@@ -6,11 +6,9 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/19 10:20:00 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 15:07:24 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../../includes/minishell.h"
 
 #include "../../includes/minishell.h"
 
@@ -65,6 +63,22 @@ t_token	*tokenize(char *input)
 				free(buffer);
 				buffer = temp;
 			}
+		}
+		else if (input[i] == '"' || input[i] == '\'') // 🔥 Gestion des guillemets 🔥
+		{
+			char quote = input[i++]; // Stocke et avance après le guillemet ouvrant
+			start = i; // Commence après le guillemet ouvrant
+			while (input[i] && input[i] != quote) // Copie le texte sans guillemets
+				i++;
+
+			char *quoted_value = ft_substr(input, start, i - start); // Extrait sans les guillemets
+			temp = ft_strjoin(buffer, quoted_value); // Concatène le texte extrait au buffer
+			free(buffer);
+			free(quoted_value);
+			buffer = temp;
+
+			if (input[i] == quote) // Ignore le guillemet fermant
+				i++;
 		}
 		else // Autres caractères
 		{

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:25:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/19 10:22:26 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/19 11:28:56 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,27 @@ void	sigquit_handler(int sig)
 	(void)sig;
 }
 
+/*
+	Récupère les attributs du terminal
+	Désactive `Ctrl-\`
+	Applique les nouveaux attributs
+*/
 void	disable_ctrl_backslash(void)
 {
 	struct termios term;
 
-	tcgetattr(STDIN_FILENO, &term); // Récupère les attributs du terminal
-	term.c_cc[VQUIT] = _POSIX_VDISABLE; // Désactive `Ctrl-\`
-	tcsetattr(STDIN_FILENO, TCSANOW, &term); // Applique les nouveaux attributs
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_cc[VQUIT] = _POSIX_VDISABLE;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
-
+/*
+	Ctrl+C -> affiche un nouveau prompt
+	Empeche Ctrl-\ et le desactive
+*/
 void	setup_signals(void)
 {
-	signal(SIGINT, sigint_handler);  // ✅ Gérer Ctrl-C
-	signal(SIGQUIT, sigquit_handler); // ✅ Empêcher Ctrl-\ de quitter le shell
-	disable_ctrl_backslash(); // ✅ Désactiver complètement `Ctrl-\`
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, sigquit_handler);
+	disable_ctrl_backslash();
 }
 	

@@ -62,8 +62,8 @@ LIBFT_NAME	= $(LIBFT_DIR)/libft.a
 all: libft $(NAME) $(VALGRIND_SUPP) banner
 
 banner:
-	@printf "\033[H\033[J"
-	@echo "$(GREEN)\n\n\n\n"
+	@clear
+	@echo "$(CYAN)\n\n\n\n"
 	@echo "			███╗   ███╗ ██╗ ███╗   ██╗ ██╗ ███████╗ ██╗  ██╗ ███████╗ ██╗      ██╗     "
 	@echo "			████╗ ████║ ██║ ████╗  ██║ ██║ ██╔════╝ ██║  ██║ ██╔════╝ ██║      ██║     "
 	@echo "			██╔████╔██║ ██║ ██╔██╗ ██║ ██║ ███████╗ ███████║ █████╗   ██║      ██║     "
