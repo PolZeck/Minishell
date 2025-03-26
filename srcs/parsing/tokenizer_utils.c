@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:03:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/12 08:58:32 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 12:21:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,19 @@ t_token_type	handle_quotes(t_quote *q)
 		(*q->i)++;
 	type = QUOTE;
 	return (type);
+}
+
+t_token_type	get_token_type_from_op(char *op)
+{
+	if (ft_strcmp(op, "|") == 0)
+		return (PIPE);
+	if (ft_strcmp(op, "<") == 0)
+		return (REDIR_IN);
+	if (ft_strcmp(op, ">") == 0)
+		return (REDIR_OUT);
+	if (ft_strcmp(op, ">>") == 0)
+		return (APPEND);
+	if (ft_strcmp(op, "<<") == 0)
+		return (HEREDOC);
+	return (WORD);
 }

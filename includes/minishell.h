@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/19 10:59:46 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 12:21:29 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void			add_token(t_token **tokens, t_token **last, t_token_info info);
 t_token_type	handle_redirections_token(char *buffer,
 					char *input, int *i, int *j);
 t_token_type	handle_quotes(t_quote *q);
+t_token_type	get_token_type_from_op(char *op);
 
 //utils_memory.c
 void			free_tokens(t_token *tokens);

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:55:55 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/20 11:24:18 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 11:05:22 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ char	*find_command_path(char *cmd)
 	return (NULL);
 }
 
-
 void execute_command(t_cmd *cmd, char **envp)
 {
     pid_t pid;
@@ -61,21 +60,17 @@ void execute_command(t_cmd *cmd, char **envp)
 
     if (!cmd || !cmd->args[0])
         return;
-
     if (is_builtin(cmd->args[0])) // Vérifie si c'est un builtin
     {
         execute_builtin(cmd); // Cette fonction gérera les builtins
         return;
     }
-
-    // Pour les commandes externes
     cmd_path = find_command_path(cmd->args[0]);
     if (!cmd_path)
     {
         ft_printf("bash: %s: command not found\n", cmd->args[0]);
         return;
     }
-
     pid = fork();
     if (pid == 0) // Processus enfant
     {
@@ -85,6 +80,5 @@ void execute_command(t_cmd *cmd, char **envp)
     }
     else if (pid > 0) // Processus parent
         waitpid(pid, NULL, 0);
-
     free(cmd_path); // Libère le chemin de la commande
 }

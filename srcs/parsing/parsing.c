@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/19 10:51:17 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 12:28:34 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 			continue;	
 		}
 		else if (tokens->type == WORD || tokens->type == QUOTE)
-		{
 			handle_argument(cmd, &arg_count, &args_size, tokens->value);
-			// if (arg_count == 1 && !is_builtin(cmd->args[0]))
-    		// 	mark_invalid(cmd, "Commande non supportée");
-		}
 		else
 			handle_redirections(cmd, &tokens);
 		tokens = tokens->next;
