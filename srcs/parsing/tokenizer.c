@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/19 15:07:24 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/20 13:34:25 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ t_token	*tokenize(char *input)
 	buffer = ft_strdup(""); // Initialise un buffer vide pour accumuler les expansions
 	if (!buffer)
 		return (NULL);
-
 	while (input[i])
 	{
 		if (input[i] == ' ') // Ignorer les espaces
@@ -44,7 +43,6 @@ t_token	*tokenize(char *input)
 			i++;
 			continue;
 		}
-
 		start = i;
 		if (input[i] == '$' && !in_single_quotes) // Gestion des variables d’environnement
 		{

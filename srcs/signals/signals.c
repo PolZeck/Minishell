@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:25:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/19 11:28:56 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 09:46:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,3 @@ void	setup_signals(void)
 	signal(SIGQUIT, sigquit_handler);
 	disable_ctrl_backslash();
 }
-	

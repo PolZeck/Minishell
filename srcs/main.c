@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/19 11:19:26 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 09:36:54 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 	fonction main, entrée du programme,
 	gere qu'il n'ya bien pas d'input pour le ctrl + D
 	puis tokenize et parse l'input,
-	en enfin envoie execute_pipeline avec notre commande et l'envp
+	et enfin envoie execute_pipeline avec notre commande et l'envp
 */
 int	main(int argc, char **argv, char **envp)
 {
