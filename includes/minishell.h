@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 12:21:29 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 13:08:46 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,12 @@ typedef struct s_quote
 	int		in_single_quotes;
 }	t_quote;
 
+typedef struct s_token_list
+{
+	t_token	**tokens;
+	t_token	**last;
+}	t_token_list;
+
 t_cmd			*parse_tokens(t_token *tokens);
 char			*expand_env_var(char *token, int in_single_quotes);
 int				check_unclosed_quotes(char *input);
@@ -111,6 +117,14 @@ t_token_type	handle_redirections_token(char *buffer,
 					char *input, int *i, int *j);
 t_token_type	handle_quotes(t_quote *q);
 t_token_type	get_token_type_from_op(char *op);
+
+//tokenizer_utils2.c
+void	flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer);
+void	handle_operator_token(t_token **tokens, t_token **last, char *input, int *i);
+void	handle_quotes_in_token(char **buffer, char *input, int *i);
+void	handle_variable_expansion(char **buffer, char *input, int *i);
+void	append_word(char **buffer, char *input, int *i);
+
 
 //utils_memory.c
 void			free_tokens(t_token *tokens);

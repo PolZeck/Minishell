@@ -6,136 +6,63 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 12:21:45 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 13:23:52 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+static void	handle_input_token(t_token_list *tlist,
+	char **buffer, char *input, int *i)
+{
+	if (input[*i] == ' ')
+	{
+		flush_buffer_to_token(tlist->tokens, tlist->last, buffer);
+		(*i)++;
+		return ;
+	}
+	if (is_operator(input[*i]))
+	{
+		flush_buffer_to_token(tlist->tokens, tlist->last, buffer);
+		handle_operator_token(tlist->tokens, tlist->last, input, i);
+		return ;
+	}
+	if (input[*i] == '\'' || input[*i] == '\"')
+	{
+		handle_quotes_in_token(buffer, input, i);
+		return ;
+	}
+	if (input[*i] == '$')
+	{
+		handle_variable_expansion(buffer, input, i);
+		return ;
+	}
+	append_word(buffer, input, i);
+}
+
 t_token	*tokenize(char *input)
 {
-	t_token	*tokens = NULL;
-	t_token	*last = NULL;
-	int		i = 0;
-	int		start;
-	char	*buffer = ft_strdup("");
-	char	*temp;
+	t_token			*tokens;
+	t_token			*last;
+	t_token_list	tlist;
+	char			*buffer;
+	int				i;
 
+	i = 0;
+	tokens = NULL;
+	last = NULL;
+	tlist.tokens = &tokens;
+	tlist.last = &last;
+	buffer = ft_strdup("");
 	if (!buffer)
 		return (NULL);
 	while (input[i])
-	{
-		// Flush du buffer avant un espace
-		if (input[i] == ' ')
-		{
-			if (*buffer)
-			{
-				t_token *new_token = create_token(buffer, WORD, 0);
-				if (!tokens)
-					tokens = new_token;
-				else
-					last->next = new_token;
-				last = new_token;
-				free(buffer);
-				buffer = ft_strdup("");
-				if (!buffer)
-					return (NULL);
-			}
-			i++;
-			continue;
-		}
-
-		// Flush du buffer si on va traiter un opérateur
-		if (is_operator(input[i]) && *buffer)
-		{
-			t_token *new_token = create_token(buffer, WORD, 0);
-			if (!tokens)
-				tokens = new_token;
-			else
-				last->next = new_token;
-			last = new_token;
-			free(buffer);
-			buffer = ft_strdup("");
-			if (!buffer)
-				return (NULL);
-		}
-
-		// Gestion d’un opérateur
-		if (is_operator(input[i]))
-		{
-			t_token_type type;
-			char op[3] = {0};
-			op[0] = input[i++];
-			if ((op[0] == '<' || op[0] == '>') && input[i] == op[0])
-				op[1] = input[i++];
-			type = get_token_type_from_op(op);
-			t_token *op_token = create_token(op, type, 0);
-			if (!tokens)
-				tokens = op_token;
-			else
-				last->next = op_token;
-			last = op_token;
-			continue;
-		}
-
-		// Gestion des guillemets
-		if (input[i] == '"' || input[i] == '\'')
-		{
-			char quote = input[i++];
-			start = i;
-			while (input[i] && input[i] != quote)
-				i++;
-			char *quoted = ft_substr(input, start, i - start);
-			if (input[i] == quote)
-				i++;
-			temp = ft_strjoin(buffer, quoted);
-			free(buffer);
-			free(quoted);
-			buffer = temp;
-			continue;
-		}
-
-		// Gestion d’une variable $VAR
-		if (input[i] == '$')
-		{
-			int var_start = ++i;
-			while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
-				i++;
-			char *var_name = ft_substr(input, var_start, i - var_start);
-			char *expanded = getenv(var_name);
-			free(var_name);
-			temp = ft_strjoin(buffer, expanded ? expanded : "");
-			free(buffer);
-			buffer = temp;
-			continue;
-		}
-
-		// Lecture de mot normal
-		start = i;
-		while (input[i] && !is_operator(input[i])
-			&& input[i] != ' ' && input[i] != '$' && input[i] != '"' && input[i] != '\'')
-			i++;
-		char *chunk = ft_substr(input, start, i - start);
-		temp = ft_strjoin(buffer, chunk);
-		free(buffer);
-		free(chunk);
-		buffer = temp;
-	}
-
-	// Dernier flush s’il reste du contenu
+		handle_input_token(&tlist, &buffer, input, &i);
 	if (*buffer)
-	{
-		t_token *new_token = create_token(buffer, WORD, 0);
-		if (!tokens)
-			tokens = new_token;
-		else
-			last->next = new_token;
-		last = new_token;
-	}
+		flush_buffer_to_token(&tokens, &last, &buffer);
 	free(buffer);
-	return tokens;
+	return (tokens);
 }
-
 
 void	handle_token(t_token **tokens, t_token **last, char *input, int *i)
 {
@@ -187,32 +114,3 @@ t_token_type	handle_operator(char *buffer, char *input, int *i, int *j)
 		type = PIPE;
 	return (type);
 }
-
-void	handle_expansion(char *buffer, char *input, int *i, int *j)
-{
-	char	*var_name;
-	int		start;
-	int		k;
-	char	*expanded;
-
-	start = *i + 1;
-	while (input[start] && (ft_isalnum(input[start]) || input[start] == '_'))
-		start++;
-	var_name = malloc(sizeof(char) * (start - *i));
-	if (!var_name)
-		return ;
-	k = 0;
-	(*i)++;
-	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
-		var_name[k++] = input[(*i)++];
-	var_name[k] = '\0';
-	expanded = getenv(var_name);
-	free(var_name);
-	if (expanded)
-	{
-		k = 0;
-		while (expanded[k])
-			buffer[(*j)++] = expanded[k++];
-	}
-}
-

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 11:23:15 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 13:16:04 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	handle_argument(t_cmd *cmd, int *arg_count,
 	(*arg_count)++;
 }
 
-void	handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size, t_token **tokens)
+void	handle_pipe(t_cmd **cmd, int *arg_count,
+			size_t *args_size, t_token **tokens)
 {
 	(*cmd)->args[*arg_count] = NULL;
 	if (!(*tokens)->next || (*tokens)->next->type == PIPE)

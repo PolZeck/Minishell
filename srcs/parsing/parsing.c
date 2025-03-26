@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 12:28:34 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 14:52:01 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,15 @@ t_cmd	*parse_tokens(t_token *tokens)
 	{
 		if (tokens->type == PIPE)
 		{
-    		if (!tokens->next || tokens->next->type == PIPE)
+			if (!tokens->next || tokens->next->type == PIPE)
 			{
 				perror("Erreur de syntaxe : pipe mal placé");
-				if(head)
+				if (head)
 					free_cmds(head);
 				return (NULL);
 			}
 			handle_pipe(&cmd, &arg_count, &args_size, &tokens);
-			continue;	
+			continue ;
 		}
 		else if (tokens->type == WORD || tokens->type == QUOTE)
 			handle_argument(cmd, &arg_count, &args_size, tokens->value);
@@ -54,20 +54,19 @@ t_cmd	*parse_tokens(t_token *tokens)
 
 void	handle_redirections(t_cmd *cmd, t_token **tokens)
 {
-    if (!(*tokens)->next || (*tokens)->next->type != WORD)
-    {
-        ft_printf("Erreur : redirection sans fichier valide\n");
-        free_cmds(cmd);
-        *tokens = NULL;
-        return;
-    }
-    if ((*tokens)->type == REDIR_IN)
-        handle_redir_in(cmd, tokens);
-    else if ((*tokens)->type == REDIR_OUT)
-        handle_redir_out(cmd, tokens, 0);
-    else if ((*tokens)->type == APPEND)
-        handle_redir_out(cmd, tokens, 1);
-    else if ((*tokens)->type == HEREDOC)
-        handle_heredoc(cmd, tokens);
+	if (!(*tokens)->next || (*tokens)->next->type != WORD)
+	{
+		ft_printf("Erreur : redirection sans fichier valide\n");
+		free_cmds(cmd);
+		*tokens = NULL;
+		return ;
+	}
+	if ((*tokens)->type == REDIR_IN)
+		handle_redir_in(cmd, tokens);
+	else if ((*tokens)->type == REDIR_OUT)
+		handle_redir_out(cmd, tokens, 0);
+	else if ((*tokens)->type == APPEND)
+		handle_redir_out(cmd, tokens, 1);
+	else if ((*tokens)->type == HEREDOC)
+		handle_heredoc(cmd, tokens);
 }
-

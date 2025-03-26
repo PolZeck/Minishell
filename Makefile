@@ -48,8 +48,8 @@ MSH_DEP		= $(DEP_DIR)/minishell
 VALGRIND_SUPP = readline.supp
 
 # === Fichiers Sources Minishell ===
-MSH_SRCS	= main.c parsing/parsing.c parsing/tokenizer.c parsing/utils.c \
-              parsing/tokenizer_utils.c parsing/parsing_utils.c parsing/utils_memory.c \
+MSH_SRCS	= main.c parsing/parsing.c parsing/tokenizer.c parsing/utils.c parsing/tokenizer_utils.c\
+              parsing/tokenizer_utils2.c parsing/parsing_utils.c parsing/utils_memory.c parsing/tokenizer_utils3.c\
               signals/signals.c signals/signals_utils.c \
 			  exec/exec_builtins.c exec/exec_pipes.c exec/exec_redirects.c exec/exec_utils.c exec/exec.c exec/exec_commands.c \
 			  builtins/cd.c builtins/echo.c builtins/exit.c

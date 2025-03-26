@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 12:31:35 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/26 12:40:55 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,28 +85,6 @@ int	main(int argc, char **argv, char **envp)
 		cmd = parse_tokens(tokens);
 		if (cmd)
 			execute_pipeline(cmd, envp);
-		// cmd = parse_tokens(tokens);
-
-		// 🔥 DEBUG ONLY : Affichage des commandes parsées (en attendant exec)
-		// if (cmd)
-		// {
-		// 	t_cmd *tmp = cmd;
-		// 	int c = 1;
-		// 	while (tmp)
-		// 	{
-		// 		if (tmp->args && tmp->args[0])
-		// 		{
-		// 			ft_printf("🔹 Commande %d : %s\n", c, tmp->args[0]);
-		// 			for (int i = 1; tmp->args[i]; i++)
-		// 				ft_printf("   Arg[%d]: %s\n", i, tmp->args[i]);
-		// 		}
-		// 		else
-		// 			ft_printf("🔹 Commande %d vide\n", c);
-		// 		tmp = tmp->next;
-		// 		c++;
-		// 	}
-		// }
-
 		if (!cmd)
 		{
 			free_tokens(tokens);
