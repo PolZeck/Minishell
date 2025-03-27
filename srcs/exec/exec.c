@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 11:13:18 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:06:57 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	execute_pipeline(t_cmd *cmd_list, char **envp)
 {

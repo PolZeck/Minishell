@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 13:18:55 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:06:07 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 char	*expand_env_var(char *token, int in_single_quotes)
 {

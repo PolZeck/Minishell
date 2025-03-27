@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 13:15:48 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:06:04 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {

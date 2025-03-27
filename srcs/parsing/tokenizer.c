@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 13:23:52 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:05:47 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 static void	handle_input_token(t_token_list *tlist,
 	char **buffer, char *input, int *i)

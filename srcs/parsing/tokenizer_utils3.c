@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 13:22:40 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 13:23:57 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:06:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 t_token_type	get_token_type_from_op(char *op)
 {

@@ -6,15 +6,12 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:55:55 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 11:05:22 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:07:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include "minishell.h"
+
 
 char	*find_command_path(char *cmd)
 {

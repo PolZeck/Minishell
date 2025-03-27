@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/19 16:48:23 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:07:47 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void builtin_cd(t_cmd *cmd)
 {

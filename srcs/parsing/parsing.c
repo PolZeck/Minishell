@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 14:52:01 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:06:26 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 t_cmd	*parse_tokens(t_token *tokens)
 {
@@ -34,7 +34,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 		{
 			if (!tokens->next || tokens->next->type == PIPE)
 			{
-				perror("Erreur de syntaxe : pipe mal placé");
+				ft_printf("bash: syntax error near unexpected token `|'\n");
 				if (head)
 					free_cmds(head);
 				return (NULL);

@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 13:16:04 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:06:28 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	handle_argument(t_cmd *cmd, int *arg_count,
 		size_t *args_size, char *value)
@@ -33,7 +33,7 @@ void	handle_pipe(t_cmd **cmd, int *arg_count,
 	(*cmd)->args[*arg_count] = NULL;
 	if (!(*tokens)->next || (*tokens)->next->type == PIPE)
 	{
-		perror("Erreur de syntaxe : pipe sans commande après");
+		ft_printf("bash: syntax error near unexpected token '|'");
 		*tokens = NULL;
 		return ;
 	}

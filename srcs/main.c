@@ -6,49 +6,49 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 12:40:55 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:05:24 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-void	display_parsed_commands(t_cmd *cmd)
-{
-	t_cmd	*current;
-	int		i;
+// void	display_parsed_commands(t_cmd *cmd)
+// {
+// 	t_cmd	*current;
+// 	int		i;
 
-	current = cmd;
+// 	current = cmd;
 
-	while (current)
-	{
-		if (!current->args || !current->args[0])
-		{
-			current = current->next;
-			continue;
-		}
-		ft_printf("Commande : %s\n", current->args[0]);
-		i = 1;
-		while (current->args[i])
-		{
-			ft_printf("Arg[%d]: %s\n", i, current->args[i]);
-			i++;
-		}
-		if (current->infile)
-		{
-			if (current->append == -1)
-				ft_printf("Lecture depuis un HEREDOC avec délimiteur : %s\n",
-					current->infile);
-			else
-				ft_printf("Lecture depuis : %s\n", current->infile);
-		}
-		if (current->outfile)
-			ft_printf("Écriture vers : %s (Append : %d)\n",
-				current->outfile, current->append);
-		if (current->next)
-			ft_printf("⬇ Pipe vers la prochaine commande ⬇\n");
-		current = current->next;
-	}
-}
+// 	while (current)
+// 	{
+// 		if (!current->args || !current->args[0])
+// 		{
+// 			current = current->next;
+// 			continue;
+// 		}
+// 		ft_printf("Commande : %s\n", current->args[0]);
+// 		i = 1;
+// 		while (current->args[i])
+// 		{
+// 			ft_printf("Arg[%d]: %s\n", i, current->args[i]);
+// 			i++;
+// 		}
+// 		if (current->infile)
+// 		{
+// 			if (current->append == -1)
+// 				ft_printf("Lecture depuis un HEREDOC avec délimiteur : %s\n",
+// 					current->infile);
+// 			else
+// 				ft_printf("Lecture depuis : %s\n", current->infile);
+// 		}
+// 		if (current->outfile)
+// 			ft_printf("Écriture vers : %s (Append : %d)\n",
+// 				current->outfile, current->append);
+// 		if (current->next)
+// 			ft_printf("⬇ Pipe vers la prochaine commande ⬇\n");
+// 		current = current->next;
+// 	}
+// }
 
 /*
 	fonction main, entrée du programme,

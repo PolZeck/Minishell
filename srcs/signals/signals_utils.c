@@ -6,10 +6,10 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:27:09 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/24 11:46:08 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:07:50 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 

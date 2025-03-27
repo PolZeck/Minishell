@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 13:28:26 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 16:06:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer)
 {
