@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/26 12:57:19 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 13:28:26 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,42 @@ void	handle_quotes_in_token(char **buffer, char *input, int *i)
 	char	*tmp;
 
 	quote = input[(*i)++];
-	start = *i;
-	while (input[*i] && input[*i] != quote)
-		(*i)++;
-	sub = ft_substr(input, start, *i - start);
-	tmp = ft_strjoin(*buffer, sub);
-	free(*buffer);
-	free(sub);
-	*buffer = tmp;
-	if (input[*i] == quote)
-		(*i)++;
+	if (quote == '\'')
+	{
+		start = *i;
+		while (input[*i] && input[*i] != quote)
+			(*i)++;
+		sub = ft_substr(input, start, *i - start);
+		tmp = ft_strjoin(*buffer, sub);
+		free(*buffer);
+		free(sub);
+		*buffer = tmp;
+		if (input[*i] == quote)
+			(*i)++;
+	}
+	else if (quote == '"')
+	{
+		while (input[*i] && input[*i] != quote)
+		{
+			if (input[*i] == '$')
+				handle_variable_expansion(buffer, input, i);
+			else
+			{
+				start = *i;
+				while (input[*i] && input[*i] != '$' && input[*i] != quote)
+					(*i)++;
+				sub = ft_substr(input, start, *i - start);
+				tmp = ft_strjoin(*buffer, sub);
+				free(*buffer);
+				free(sub);
+				*buffer = tmp;
+			}
+		}
+		if (input[*i] == quote)
+			(*i)++;
+	}
 }
+
 
 void	handle_variable_expansion(char **buffer, char *input, int *i)
 {
