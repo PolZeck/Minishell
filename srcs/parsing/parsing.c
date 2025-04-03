@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 16:06:26 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/03 13:36:03 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@ t_cmd	*parse_tokens(t_token *tokens)
 	int		arg_count;
 	size_t	args_size;
 
-	if (!tokens || tokens->type == PIPE)
+	if (!tokens)
 		return (NULL);
+	if (tokens->type == PIPE)
+	{
+		ft_printf("bash: syntax error near unexpected token `|'\n");
+		return (NULL);
+	}
 	cmd = create_cmd();
 	head = cmd;
 	arg_count = 0;
