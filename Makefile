@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/11/11 11:49:00 by pledieu               #+#    #+#              #
-#    Updated: 2025/03/11 16:23:32 by pledieu          ###   ########lyon.fr    #
+#    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
+#    Updated: 2025/04/08 15:51:41 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRC_DIR		= srcs
 PARSING_DIR	= $(SRC_DIR)/parsing
 SIGNALS_DIR	= $(SRC_DIR)/signals
 EXEC_DIR	= $(SRC_DIR)/exec
+PIPEX_DIR	= $(SRC_DIR)/pipex
 BUILTINS_DIR	= $(SRC_DIR)/builtins
 OBJ_DIR		= obj
 DEP_DIR		= dep
@@ -51,8 +52,10 @@ VALGRIND_SUPP = readline.supp
 MSH_SRCS	= main.c parsing/parsing.c parsing/tokenizer.c parsing/utils.c parsing/tokenizer_utils.c\
               parsing/tokenizer_utils2.c parsing/parsing_utils.c parsing/utils_memory.c parsing/tokenizer_utils3.c\
               signals/signals.c signals/signals_utils.c \
-			  exec/exec_builtins.c exec/exec_pipes.c exec/exec_redirects.c exec/exec_utils.c exec/exec.c exec/exec_commands.c \
-			  builtins/cd.c builtins/echo.c builtins/exit.c
+			  exec/exec_builtins.c \
+			  exec/exec.c exec/exec_commands.c exec/exec_pipex_adapter.c \
+			  builtins/cd.c builtins/echo.c builtins/exit.c \
+			  pipex/checks_bonus.c pipex/commands_bonus.c pipex/exit_bonus.c pipex/init_bonus.c pipex/main_bonus.c pipex/pipex_bonus.c 
 MSH_OBJS	= $(patsubst %.c, $(MSH_OBJ)/%.o, $(MSH_SRCS))
 MSH_DEPS	= $(patsubst %.c, $(MSH_DEP)/%.d, $(MSH_SRCS))
 
@@ -112,7 +115,12 @@ $(MSH_OBJ)/exec/%.o: $(EXEC_DIR)/%.c | $(MSH_OBJ)/exec $(MSH_DEP)/exec
 $(MSH_OBJ)/exec/%.o: $(BUILTINS_DIR)/%.c | $(MSH_OBJ)/builtins $(MSH_DEP)/builtins
 	@mkdir -p $(dir $@)
 	@echo "🔹 Compiling $<..."
-	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(builtins_DIR)/%.c, $(MSH_DEP)/builtins/%.d, $<)
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(BUILTINS_DIR)/%.c, $(MSH_DEP)/builtins/%.d, $<)
+
+$(MSH_OBJ)/exec/%.o: $(PIPEX_DIR)/%.c | $(MSH_OBJ)/pipex $(MSH_DEP)/pipex
+	@mkdir -p $(dir $@)
+	@echo "🔹 Compiling $<..."
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(PIPEX_DIR)/%.c, $(MSH_DEP)/pipex/%.d, $<)
 
 # === Création des dossiers nécessaires ===
 $(MSH_OBJ):
@@ -121,6 +129,7 @@ $(MSH_OBJ):
 	@mkdir -p $(MSH_OBJ)/signals
 	@mkdir -p $(MSH_OBJ)/exec
 	@mkdir -p $(MSH_OBJ)/builtins
+	@mkdir -p $(MSH_OBJ)/pipex
 
 $(MSH_DEP):
 	@mkdir -p $(MSH_DEP)
@@ -128,6 +137,7 @@ $(MSH_DEP):
 	@mkdir -p $(MSH_DEP)/signals
 	@mkdir -p $(MSH_DEP)/exec
 	@mkdir -p $(MSH_DEP)/builtins
+	@mkdir -p $(MSH_DEP)/pipex
 
 # === Clean ===
 clean:
