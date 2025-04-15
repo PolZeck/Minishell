@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:47:21 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/07 11:48:45 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/08 15:20:52 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,48 +40,48 @@ int	ft_check_line(char	*str)
 	return (0);
 }
 
-static size_t	ft_strlcpy_gnl(char *dest, const char *src, size_t size)
-{
-	size_t	i;
+// static size_t	ft_strlcpy_gnl(char *dest, const char *src, size_t size)
+// {
+// 	size_t	i;
 
-	if (!src || !dest)
-		return (0);
-	if (size == 0)
-		return (ft_strlen_gnl(src));
-	i = 0;
-	while (src[i] && (i < (size - 1)))
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (ft_strlen_gnl(src));
-}
+// 	if (!src || !dest)
+// 		return (0);
+// 	if (size == 0)
+// 		return (ft_strlen_gnl(src));
+// 	i = 0;
+// 	while (src[i] && (i < (size - 1)))
+// 	{
+// 		dest[i] = src[i];
+// 		i++;
+// 	}
+// 	dest[i] = '\0';
+// 	return (ft_strlen_gnl(src));
+// }
 
-char	*ft_strjoin_gnl(char *s1, char *s2)
-{
-	char	*join;
-	size_t	len_s1;
-	size_t	len_s2;
+// char	*ft_strjoin_gnl(char *s1, char *s2)
+// {
+// 	char	*join;
+// 	size_t	len_s1;
+// 	size_t	len_s2;
 
-	if (!s1 && !s2)
-		return (NULL);
-	len_s1 = ft_strlen_gnl(s1);
-	len_s2 = 0;
-	while (s2[len_s2] != '\n' && s2[len_s2] != 0)
-		len_s2++;
-	if (s2[len_s2] == '\n')
-		len_s2++;
-	join = malloc(len_s1 + len_s2 + 1);
-	if (!join)
-		return (free(s1), NULL);
-	if (s1)
-		ft_strlcpy_gnl(join, s1, len_s1 + 1);
-	if (s2)
-		ft_strlcpy_gnl(join + len_s1, s2, len_s2 + 1);
-	free(s1);
-	return (join);
-}
+// 	if (!s1 && !s2)
+// 		return (NULL);
+// 	len_s1 = ft_strlen_gnl(s1);
+// 	len_s2 = 0;
+// 	while (s2[len_s2] != '\n' && s2[len_s2] != 0)
+// 		len_s2++;
+// 	if (s2[len_s2] == '\n')
+// 		len_s2++;
+// 	join = malloc(len_s1 + len_s2 + 1);
+// 	if (!join)
+// 		return (free(s1), NULL);
+// 	if (s1)
+// 		ft_strlcpy_gnl(join, s1, len_s1 + 1);
+// 	if (s2)
+// 		ft_strlcpy_gnl(join + len_s1, s2, len_s2 + 1);
+// 	free(s1);
+// 	return (join);
+// }
 
 char	*ft_strdup_gnl(const char *s)
 {

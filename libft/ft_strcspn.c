@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_strcspn.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/07 13:49:30 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/08 14:58:37 by pledieu          ###   ########lyon.fr   */
+/*   Created: 2025/03/24 14:24:29 by lcosson           #+#    #+#             */
+/*   Updated: 2025/03/27 13:59:06 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+size_t	ft_strcspn(const char *s, const char *reject)
 {
-	size_t	src_len;
+	size_t		count;
+	const char	*r;
 
-	src_len = ft_strlen(src);
-	if (dstsize > src_len + 1)
-		ft_memcpy(dst, src, src_len + 1);
-	else if (dstsize != 0)
+	count = 0;
+	while (*s)
 	{
-		ft_memcpy(dst, src, dstsize - 1);
-		dst[dstsize - 1] = 0;
+		r = reject;
+		while (*r)
+		{
+			if (*s == *r)
+				return (count);
+			r++;
+		}
+		count++;
+		s++;
 	}
-	return (src_len);
+	return (count);
 }

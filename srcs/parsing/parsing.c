@@ -6,11 +6,13 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/03 13:36:03 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 11:39:50 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	handle_redirections(t_cmd *cmd, t_token **tokens);
 
 t_cmd	*parse_tokens(t_token *tokens)
 {
@@ -19,20 +21,23 @@ t_cmd	*parse_tokens(t_token *tokens)
 	int		arg_count;
 	size_t	args_size;
 
-	if (!tokens)
-		return (NULL);
-	if (tokens->type == PIPE)
+	if (!tokens || tokens->type == PIPE)
 	{
 		ft_printf("bash: syntax error near unexpected token `|'\n");
 		return (NULL);
 	}
+
 	cmd = create_cmd();
+	if (!cmd)
+		return (NULL);
 	head = cmd;
 	arg_count = 0;
 	args_size = 2;
+
 	cmd->args = malloc(sizeof(char *) * args_size);
 	if (!cmd->args)
-		return (NULL);
+		return (free_cmds(head), NULL);
+
 	while (tokens)
 	{
 		if (tokens->type == PIPE)
@@ -40,8 +45,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 			if (!tokens->next || tokens->next->type == PIPE)
 			{
 				ft_printf("bash: syntax error near unexpected token `|'\n");
-				if (head)
-					free_cmds(head);
+				free_cmds(head);
 				return (NULL);
 			}
 			handle_pipe(&cmd, &arg_count, &args_size, &tokens);
@@ -49,22 +53,42 @@ t_cmd	*parse_tokens(t_token *tokens)
 		}
 		else if (tokens->type == WORD || tokens->type == QUOTE)
 			handle_argument(cmd, &arg_count, &args_size, tokens->value);
-		else
-			handle_redirections(cmd, &tokens);
+		else if (!handle_redirections(cmd, &tokens))
+		{
+			free_cmds(head);
+			return (NULL);
+		}
 		tokens = tokens->next;
 	}
-	cmd->args[arg_count] = NULL;
+
+	if (cmd && cmd->args)
+		cmd->args[arg_count] = NULL;
+
+	// 🔁 Expansion des variables d'environnement (comme $?, $HOME, etc)
+	if (cmd && cmd->args)
+	{
+		int i = 0;
+		while (cmd->args[i])
+		{
+			if (ft_strchr(cmd->args[i], '$'))
+			{
+				char *expanded = expand_env_var(cmd->args[i], 0);
+				free(cmd->args[i]);
+				cmd->args[i] = expanded;
+			}
+			i++;
+		}
+	}
+
 	return (head);
 }
 
-void	handle_redirections(t_cmd *cmd, t_token **tokens)
+static int	handle_redirections(t_cmd *cmd, t_token **tokens)
 {
 	if (!(*tokens)->next || (*tokens)->next->type != WORD)
 	{
 		ft_printf("Erreur : redirection sans fichier valide\n");
-		free_cmds(cmd);
-		*tokens = NULL;
-		return ;
+		return (0);
 	}
 	if ((*tokens)->type == REDIR_IN)
 		handle_redir_in(cmd, tokens);
@@ -74,4 +98,5 @@ void	handle_redirections(t_cmd *cmd, t_token **tokens)
 		handle_redir_out(cmd, tokens, 1);
 	else if ((*tokens)->type == HEREDOC)
 		handle_heredoc(cmd, tokens);
+	return (1);
 }

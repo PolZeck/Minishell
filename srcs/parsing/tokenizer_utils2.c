@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 16:06:20 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 11:46:40 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,22 +105,31 @@ void	handle_variable_expansion(char **buffer, char *input, int *i)
 	char	*to_append;
 	char	*tmp;
 
-	(*i)++;
-	start = *i;
-	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+	(*i)++; // saute le $
+	if (input[*i] == '?') // cas spécial $?
+	{
+		var = ft_strdup("$?");
 		(*i)++;
-	var = ft_substr(input, start, *i - start);
-	value = getenv(var);
-	if (value)
-		to_append = ft_strdup(value);
+	}
 	else
-		to_append = ft_strdup("");
+	{
+		start = *i;
+		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+			(*i)++;
+		var = ft_strjoin("$", ft_substr(input, start, *i - start));
+	}
+
+	value = expand_env_var(var, 0); // appelle ta fonction avec $ inclus
+	to_append = ft_strdup(value);
 	tmp = ft_strjoin(*buffer, to_append);
+
 	free(*buffer);
 	free(var);
 	free(to_append);
+	free(value);
 	*buffer = tmp;
 }
+
 
 void	append_word(char **buffer, char *input, int *i)
 {

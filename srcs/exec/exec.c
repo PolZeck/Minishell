@@ -6,42 +6,38 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 16:06:57 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 09:52:52 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+
 void	execute_pipeline(t_cmd *cmd_list, char **envp)
 {
-	t_cmd	*cmd;
+	t_cmd	*cmd_tmp;
 	int		count = 0;
 
-	cmd = cmd_list;
-	while (cmd)
+	cmd_tmp = cmd_list;
+	while (cmd_tmp)
 	{
 		count++;
-		cmd = cmd->next;
+		cmd_tmp = cmd_tmp->next;
 	}
+	// ft_printf("DEBUG: count = %d\n", count);
+
+	if (!cmd_list)
+	{
+		fprintf(stderr, "DEBUG: cmd_list == NULL dans execute_pipeline\n");
+		return ;
+	}
+	// else
+	// 	fprintf(stderr, "DEBUG: 1st cmd = %s\n", cmd_list->args ? cmd_list->args[0] : "NULL");
 
 	if (count == 1)
-	{
-		if (cmd_list->args && cmd_list->args[0])
-			execute_command(cmd_list, envp);
-	}
+		execute_command(cmd_list, envp);
 	else
-	{
-		ft_printf("🧪 Plusieurs commandes détectées, voici leur parsing :\n");
-		cmd = cmd_list;
-		int c = 1;
-		while (cmd)
-		{
-			ft_printf("🔸 Commande %d : %s\n", c, cmd->args[0]);
-			for (int i = 1; cmd->args[i]; i++)
-				ft_printf("   Arg[%d]: %s\n", i, cmd->args[i]);
-			cmd = cmd->next;
-			c++;
-		}
-		ft_printf("➡️  Pas d'exécution car plusieurs commandes (pipes) — en attente de pipex.\n");
-	}
+		execute_pipex_adapter(cmd_list, envp);
+	
 }
+

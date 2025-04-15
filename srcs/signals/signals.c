@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:25:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 16:07:53 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/09 15:42:59 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "signals.h"
 
 void	sigint_handler(int sig)
 {
