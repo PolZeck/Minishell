@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:47:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 12:45:48 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 15:36:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "minishell.h"
 
 // Builtins : CD
-void builtin_cd(t_cmd *cmd);
+int	builtin_cd(t_cmd *cmd);
 
 // Builtins : ECHO
 int	builtin_echo(t_cmd *cmd);

@@ -6,25 +6,33 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 16:07:47 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 15:36:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void builtin_cd(t_cmd *cmd)
+int	builtin_cd(t_cmd *cmd)
 {
 	if (cmd->args[2])
 	{
-		ft_printf("bash: cd: too many arguments\n");
-		return ;
+		ft_putstr_fd("bash: cd: too many arguments\n", STDERR_FILENO);
+		*get_exit_status() = 1;
+		return (1);
 	}
 	else if (cmd->args[1] == NULL)
 	{
-		ft_printf("minishell: cd: missing argument\n");
-		return ;
+		ft_putstr_fd("minishell: cd: missing argument\n", STDERR_FILENO);
+		*get_exit_status() = 1;
+		return (1);
 	}
 	else if (chdir(cmd->args[1]) != 0)
-		perror("minishell: cd");
-	return ;
+	{
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		perror(cmd->args[1]); // perror écrit déjà sur stderr
+		*get_exit_status() = 1;
+		return (1);
+	}
+	*get_exit_status() = 0;
+	return (0);
 }
