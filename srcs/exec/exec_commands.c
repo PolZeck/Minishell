@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:55:55 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 12:00:31 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 15:19:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,15 @@ void execute_command(t_cmd *cmd, char **envp)
     }
 
     cmd_path = find_command_path(cmd->args[0]);
-    if (!cmd_path)
-    {
-        ft_printf("bash: %s: command not found\n", cmd->args[0]);
+	if (!cmd_path)
+	{
+		ft_putstr_fd("bash: ", 2);
+		ft_putstr_fd(cmd->args[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		*get_exit_status() = 127;
-        return;
-    }
+		return;
+	}
+
 
     pid = fork();
     if (pid == 0)
