@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 16:06:28 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 13:45:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 	}
 	cmd->outfile = ft_strdup((*tokens)->value);
 	cmd->append = append;
-	if (append)
-		ft_printf("Écriture en mode APPEND vers : %s\n", cmd->outfile);
+	// if (append)
+	// 	ft_printf("Écriture en mode APPEND vers : %s\n", cmd->outfile);
 }
 
 void	handle_heredoc(t_cmd *cmd, t_token **tokens)

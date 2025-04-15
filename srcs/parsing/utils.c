@@ -6,35 +6,27 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 12:00:07 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 13:28:52 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-char *expand_env_var(char *token, int in_single_quotes)
+char	*expand_env_var(char *token, int in_single_quotes)
 {
-	char *env_value;
+	char	*env_value;
 
 	if (in_single_quotes)
 		return (ft_strdup(token));
-
-	if (!token || token[0] != '$') // <-- Ajout ici : si ce n’est pas une variable, on renvoie tel quel
+	if (!token || token[0] != '$')
 		return (ft_strdup(token));
-
 	if (ft_strcmp(token, "$?") == 0)
 		return (ft_itoa(*get_exit_status()));
-
 	env_value = getenv(token + 1);
 	if (env_value)
 		return (ft_strdup(env_value));
-
 	return (ft_strdup(""));
 }
-
-
-
 
 t_cmd	*create_cmd(void)
 {
