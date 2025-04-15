@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:55:55 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 11:48:06 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 12:00:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ char	*find_command_path(char *cmd)
 	return (NULL);
 }
 
-extern int g_exit_status;
 
 void execute_command(t_cmd *cmd, char **envp)
 {
@@ -74,7 +73,7 @@ void execute_command(t_cmd *cmd, char **envp)
     if (cmd->args[0][0] == '\0') // Si commande vide ""
     {
         ft_printf("bash: : command not found\n");
-        g_exit_status = 127;
+		*get_exit_status() = 127;
         return;
     }
 
@@ -82,7 +81,7 @@ void execute_command(t_cmd *cmd, char **envp)
     if (!cmd_path)
     {
         ft_printf("bash: %s: command not found\n", cmd->args[0]);
-        g_exit_status = 127;
+		*get_exit_status() = 127;
         return;
     }
 
@@ -100,9 +99,9 @@ void execute_command(t_cmd *cmd, char **envp)
         int status;
         waitpid(pid, &status, 0);
         if (WIFEXITED(status))
-            g_exit_status = WEXITSTATUS(status);
+			*get_exit_status() = WEXITSTATUS(status);
         else if (WIFSIGNALED(status))
-            g_exit_status = 128 + WTERMSIG(status);
+			*get_exit_status() = 128 + WTERMSIG(status);
     }
 
     free(cmd_path); // Libère le chemin de la commande

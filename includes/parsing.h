@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 11:08:47 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 11:55:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define PARSING_H
 
 # include "minishell.h"
-
-extern int g_exit_status;
 
 
 typedef enum e_token_type
