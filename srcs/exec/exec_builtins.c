@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 11:59:44 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 12:45:21 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ void	execute_builtin(t_cmd *cmd)
 	else if (ft_strcmp(cmd->args[0], "echo") == 0)
 		*get_exit_status() = builtin_echo(cmd);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		// g_exit_status = 
-		builtin_exit(cmd);
+		*get_exit_status() = builtin_exit(cmd);
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
 	{
 		ft_printf("bientôt : pwd\n");
