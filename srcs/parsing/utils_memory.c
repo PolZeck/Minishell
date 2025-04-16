@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 16:06:04 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/16 12:26:34 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,16 @@ void	free_cmds(t_cmd *cmd)
 			free(cmd);
 		cmd = tmp;
 	}
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	if (!split)
+		return ;
+	i = 0;
+	while (split[i])
+		free(split[i++]);
+	free(split);
 }

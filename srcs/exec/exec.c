@@ -6,14 +6,14 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 09:52:52 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/16 12:03:38 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-void	execute_pipeline(t_cmd *cmd_list, char **envp)
+void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 {
 	t_cmd	*cmd_tmp;
 	int		count = 0;
@@ -35,9 +35,9 @@ void	execute_pipeline(t_cmd *cmd_list, char **envp)
 	// 	fprintf(stderr, "DEBUG: 1st cmd = %s\n", cmd_list->args ? cmd_list->args[0] : "NULL");
 
 	if (count == 1)
-		execute_command(cmd_list, envp);
+		execute_command(cmd_list, data);
 	else
-		execute_pipex_adapter(cmd_list, envp);
+		execute_pipex_adapter(cmd_list, data->env);
 	
 }
 

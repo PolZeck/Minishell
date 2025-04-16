@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 11:55:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/16 12:26:45 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,19 @@ typedef struct s_token_list
 	t_token	**last;
 }	t_token_list;
 
+typedef struct s_data
+{
+	char	**env;
+}	t_data;
+
 int				check_unclosed_quotes(char *input);
 int				is_builtin(char *cmd);
 int				is_operator(char c);
 int				check_unclosed_quotes(char *input);
 
 char			*expand_env_var(char *token, int in_single_quotes);
+char			**dup_env(char **envp);
+
 
 t_cmd			*parse_tokens(t_token *tokens);
 t_cmd			*create_cmd(void);
@@ -97,6 +104,7 @@ void			append_word(char **buffer, char *input, int *i);
 void			free_tokens(t_token *tokens);
 void			free_cmds(t_cmd *cmds);
 void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
+void	free_split(char **split);
 
 t_token			*tokenize(char *input);
 t_token			*create_token(char *value,

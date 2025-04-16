@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 15:47:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/16 12:09:08 by pledieu          ###   ########lyon.fr   */
+/*   Created: 2025/04/16 11:20:10 by pledieu           #+#    #+#             */
+/*   Updated: 2025/04/16 11:34:11 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTINS_H
-# define BUILTINS_H
+#include "minishell.h"
 
-# include "minishell.h"
+int	builtin_env(t_cmd *cmd, t_data *data)
+{
+	int	i;
 
-// Builtins : CD
-int	builtin_cd(t_cmd *cmd);
+	if (cmd->args[1])
+	{
+		ft_putstr_fd("env: No arguments allowed\n", 2);
+		*get_exit_status() = 1;
+		return (1);
+	}
 
-// Builtins : ECHO
-int	builtin_echo(t_cmd *cmd);
+	i = 0;
+	while (data->env[i])
+	{
+		ft_printf("%s\n", data->env[i]);
+		i++;
+	}
 
-// Builtins : EXIT
-int	builtin_exit(t_cmd *cmd);
-int	builtin_pwd(t_cmd *cmd);
-int	builtin_env(t_cmd *cmd, t_data *data);
-int	builtin_unset(t_cmd *cmd, t_data *data);
-
-#endif
+	*get_exit_status() = 0;
+	return (0);
+}

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:55:55 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 15:19:15 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/16 12:04:26 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*find_command_path(char *cmd)
 }
 
 
-void execute_command(t_cmd *cmd, char **envp)
+void execute_command(t_cmd *cmd, t_data *data)
 {
     pid_t   pid;
     char    *cmd_path;
@@ -66,7 +66,7 @@ void execute_command(t_cmd *cmd, char **envp)
 
     if (is_builtin(cmd->args[0])) // Vérifie si c'est un builtin
     {
-        execute_builtin(cmd); // Les builtins doivent eux aussi mettre à jour g_exit_status !
+        execute_builtin(cmd, data); // Les builtins doivent eux aussi mettre à jour g_exit_status !
         return;
     }
 
@@ -91,7 +91,7 @@ void execute_command(t_cmd *cmd, char **envp)
     pid = fork();
     if (pid == 0)
     {
-        if (execve(cmd_path, cmd->args, envp) == -1)
+        if (execve(cmd_path, cmd->args, data->env) == -1)
         {
             perror("execve");
             exit(1);
