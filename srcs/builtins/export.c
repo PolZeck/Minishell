@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/17 13:12:05 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/17 15:10:57 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 	i = 1;
 	while (cmd->args[i])
 	{
+		//printf("cmd = %d\n", i);
 		if (!is_valid_identifier(cmd->args[i]))
 		{
 			// ✅ erreur sur stderr
@@ -97,7 +98,7 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			*get_exit_status() = 1;
 			i++;
-			continue ;
+			continue ;	
 		}
 		eq = ft_strchr(cmd->args[i], '=');
 		if (eq)
@@ -113,6 +114,5 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 		}
 		i++;
 	}
-	*get_exit_status() = 0;
-	return (0);
+	return(*get_exit_status());
 }
