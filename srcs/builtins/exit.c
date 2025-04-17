@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 12:49:32 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/17 13:10:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 #include <limits.h>
 
 int	is_numeric_arg(char *str)
@@ -32,16 +32,16 @@ int	is_numeric_arg(char *str)
 
 static void	print_numeric_error(char *arg)
 {
-	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-	ft_putstr_fd(arg, STDERR_FILENO);
-	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
 }
 
 int	builtin_exit(t_cmd *cmd)
 {
 	int	exit_code;
 
-	ft_printf("exit\n");
+	ft_putstr_fd("exit\n", 1); // ✅ stdout comme Bash
 
 	if (cmd->args[1] && !is_numeric_arg(cmd->args[1]))
 	{
@@ -53,9 +53,9 @@ int	builtin_exit(t_cmd *cmd)
 
 	if (cmd->args[1] && cmd->args[2])
 	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		*get_exit_status() = 1;
-		return (1); // ne quitte pas
+		return (1); // Ne quitte pas
 	}
 
 	exit_code = 0;

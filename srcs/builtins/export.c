@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/16 13:36:54 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/17 13:12:05 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,15 @@ static int	is_valid_identifier(char *str)
 			return (0);
 		i++;
 	}
-	// Si y'a un '=', on vérifie qu'il ne précède pas un identifiant invalide
 	if (str[i] == '=' && i == 0)
 		return (0);
 	return (1);
 }
 
-
 static int	var_exists(char **env, char *name)
 {
-	int		len;
-	int		i;
+	int	len;
+	int	i;
 
 	len = ft_strlen(name);
 	i = 0;
@@ -82,14 +80,18 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 	char	*eq;
 	int		idx;
 
-	if (!cmd->args[1]) // Pas d'argument : rien à faire
-		return (*get_exit_status() = 0, 0);
+	if (!cmd->args[1]) // Pas d'argument : ne rien afficher
+	{
+		*get_exit_status() = 0;
+		return (0);
+	}
 
 	i = 1;
 	while (cmd->args[i])
 	{
 		if (!is_valid_identifier(cmd->args[i]))
 		{
+			// ✅ erreur sur stderr
 			ft_putstr_fd("minishell: export: `", 2);
 			ft_putstr_fd(cmd->args[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
