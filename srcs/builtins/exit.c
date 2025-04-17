@@ -6,12 +6,12 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/17 13:10:20 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/17 15:06:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include <limits.h>
+#include "builtins.h"
+
 
 int	is_numeric_arg(char *str)
 {
