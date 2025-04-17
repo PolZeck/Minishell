@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:55:55 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/17 13:17:17 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:19:08 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ void execute_command(t_cmd *cmd, t_data *data)
 
     if (cmd->args[0][0] == '\0') // Si commande vide ""
     {
-        ft_printf("bash: : command not found\n");
+        ft_putstr_fd("bash: : command not found", 2);
+		ft_putstr_fd("\n", 2);
 		*get_exit_status() = 127;
         return;
     }
