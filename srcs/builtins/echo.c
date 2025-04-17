@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:34 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/17 13:08:01 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/17 15:06:37 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "builtins.h"
 
 int	builtin_echo(t_cmd *cmd)
 {
@@ -26,13 +26,12 @@ int	builtin_echo(t_cmd *cmd)
 	}
 	while (cmd->args[i])
 	{
-		ft_putstr_fd(cmd->args[i], 1); // ✅ sortie sur stdout
+		ft_printf("%s", cmd->args[i]);
 		if (cmd->args[i + 1])
-			ft_putstr_fd(" ", 1);
+			ft_printf(" ");
 		i++;
 	}
 	if (newline)
-		ft_putstr_fd("\n", 1);
-	*get_exit_status() = 0;
+		ft_printf("\n");
 	return (0);
 }
