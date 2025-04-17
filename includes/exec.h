@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/16 11:59:48 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/17 13:13:47 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define EXEC_H
 
 # include "minishell.h"
-
+# include "pipex_bonus.h"
 
 void	execute_builtin(t_cmd *cmd,  t_data *data);
 void	execute_pipeline(t_cmd *cmd_list, t_data *data);

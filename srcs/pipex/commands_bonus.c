@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:42:11 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/16 14:38:05 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/17 13:10:32 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	execute_cmd(char *cmd, char **envp, t_pipex *pipex)
 		close_fds(pipex);
 		my_perr(ERR_SPLIT, true);
 	}
+	if (is_builtin(tokenized_cmd[0]))
+		execute_pipex_builtin(tokenized_cmd, envp, pipex);
 	path_cmd = check_addpath_cmd_bonus(tokenized_cmd[0], envp, pipex);
 	if (!path_cmd)
 	{
