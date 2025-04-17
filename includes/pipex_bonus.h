@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/17 13:14:01 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/17 16:37:01 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	write_here_doc(char *limiter, t_pipex *pipex);
 int		my_pipex(char **argv, char **envp, t_pipex *pipex);
 
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex);
-void	execute_pipex_adapter(t_cmd *cmds, char **envp);
+int	execute_pipex_adapter(t_cmd *cmds, char **envp);
 int	main_bonus(int argc, char **argv, char **envp);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipex_adapter.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:50:45 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/14 15:56:18 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/17 16:39:03 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,23 +84,25 @@ char	**build_fake_argv(t_cmd *cmds)
 	return argv;
 }
 
-void	execute_pipex_adapter(t_cmd *cmds, char **envp)
+int	execute_pipex_adapter(t_cmd *cmds, char **envp)
 {
 	char	**argv;
 	int		argc;
 	int		i;
+	int		status = 0;
 
 	argv = build_fake_argv(cmds);
 	if (!argv)
 	{
 		perror("malloc");
-		return ;
+		return (1);
 	}
 	for (argc = 0; argv[argc]; argc++) ;
-	main_bonus(argc, argv, envp);
+	status = main_bonus(argc, argv, envp);
 	// clean
 	i = 0;
 	while (argv[i])
 		free(argv[i++]);
 	free(argv);
+	return (status);
 }
