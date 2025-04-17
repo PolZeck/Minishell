@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/16 11:33:35 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/17 12:32:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,14 @@ char	*expand_env_var(char *token, int in_single_quotes)
 		return (ft_strdup(token));
 	if (ft_strcmp(token, "$?") == 0)
 		return (ft_itoa(*get_exit_status()));
+	if (token[1] == '\0') // cas de "$" seul
+		return (ft_strdup("$"));
 	env_value = getenv(token + 1);
 	if (env_value)
 		return (ft_strdup(env_value));
 	return (ft_strdup(""));
 }
+
 
 t_cmd	*create_cmd(void)
 {
