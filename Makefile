@@ -6,7 +6,7 @@
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/04/16 12:33:00 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/04/21 14:12:59 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,7 @@ MSH_SRCS	= main.c parsing/parsing.c parsing/tokenizer.c parsing/utils.c parsing/
               parsing/tokenizer_utils2.c parsing/parsing_utils.c parsing/utils_memory.c parsing/tokenizer_utils3.c\
               signals/signals.c signals/signals_utils.c signals/exit_status.c\
 			  exec/exec_builtins.c \
-			  exec/exec.c exec/exec_commands.c\
+			  exec/exec.c\
 			  builtins/cd.c builtins/echo.c builtins/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export.c\
 			  pipex/checks_bonus.c pipex/commands_bonus.c pipex/exit_bonus.c pipex/init_bonus.c pipex/main_bonus.c pipex/pipex_bonus.c  pipex/execute_pipex_adapter.c
 MSH_OBJS	= $(patsubst %.c, $(MSH_OBJ)/%.o, $(MSH_SRCS))
