@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 16:10:44 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/21 16:37:43 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*find_command_path(char *cmd)
 	{
 		full_path = ft_strjoin(paths[i], "/");
 		full_path = ft_strjoin(full_path, cmd);
-		if (access(full_path, X_OK) == 0)
+		if (access(full_path, X_OK) == 0)			
 		{
 			while (paths[i]) // Libérer `split()`
 				free(paths[i++]);
@@ -59,9 +59,9 @@ void print_error(char *prefix, char *cmd, char *message)
 
 void	execute_command(t_cmd *cmd, t_data *data)
 {
-	pid_t   pid;
-	char    *cmd_path;
-	struct stat st;
+	pid_t	pid;
+	char	*cmd_path;
+	struct stat	st;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return;
