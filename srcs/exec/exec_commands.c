@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 14:25:13 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/21 16:10:44 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return;
 
-	// Commande vide (après expansion)
 	if (cmd->args[0][0] == '\0')
 	{
 		print_error("bash: ", "", ": command not found\n");
@@ -74,14 +73,12 @@ void	execute_command(t_cmd *cmd, t_data *data)
 		return;
 	}
 
-	// Si builtin : exécuter directement
 	if (is_builtin(cmd->args[0]))
 	{
 		execute_builtin(cmd, data);
 		return;
 	}
 
-	// Vérifier si c'est un chemin absolu/relatif avant de chercher dans PATH
 	if (ft_strchr(cmd->args[0], '/'))
 	{
 		if (stat(cmd->args[0], &st) == 0)
@@ -121,39 +118,44 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	pid = fork();
 	if (pid == 0)
 	{
-		// Gestion de redirection infile
-		if (cmd->infile)
+		t_list *node = cmd->redirs;
+		while (node)
 		{
-			int fd = open(cmd->infile, O_RDONLY);
-			if (fd == -1)
-			{
-				print_error("bash: ", cmd->infile, ": ");
-				perror("");
-				exit(1);
-			}
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
-
-		// Gestion de redirection outfile
-		if (cmd->outfile)
-		{
+			t_redir *redir = (t_redir *)node->content;
 			int fd;
-			if (cmd->append)
-				fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			else
-				fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd == -1)
+
+			if (redir->type == REDIR_IN || redir->type == HEREDOC)
 			{
-				print_error("bash: ", cmd->outfile, ": ");
-				perror("");
-				exit(1);
+				fd = open(redir->file, O_RDONLY);
+				if (fd == -1)
+				{
+					print_error("bash: ", redir->file, ": ");
+					perror("");
+					exit(1);
+				}
+				dup2(fd, STDIN_FILENO);
+				close(fd);
 			}
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
+			else if (redir->type == REDIR_OUT || redir->type == APPEND)
+			{
+				int flags = O_WRONLY | O_CREAT;
+				if (redir->type == APPEND)
+					flags |= O_APPEND;
+				else
+					flags |= O_TRUNC;
+				fd = open(redir->file, flags, 0644);
+				if (fd == -1)
+				{
+					print_error("bash: ", redir->file, ": ");
+					perror("");
+					exit(1);
+				}
+				dup2(fd, STDOUT_FILENO);
+				close(fd);
+			}
+			node = node->next;
 		}
 
-		// Exécution de la commande
 		if (execve(cmd_path, cmd->args, data->env) == -1)
 		{
 			print_error("bash: ", cmd_path, ": ");

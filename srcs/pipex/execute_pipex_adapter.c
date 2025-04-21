@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipex_adapter.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:50:45 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/17 16:39:03 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/21 16:12:04 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,22 +47,39 @@ static char	*join_args(char **args)
 	return result;
 }
 
+char	*get_last_file_of_type(t_list *redirs, int type1, int type2)
+{
+	t_redir	*redir;
+	char	*last = NULL;
+
+	while (redirs)
+	{
+		redir = (t_redir *)redirs->content;
+		if (redir->type == type1 || redir->type == type2)
+			last = redir->file;
+		redirs = redirs->next;
+	}
+	return last;
+}
+
 char	**build_fake_argv(t_cmd *cmds)
 {
 	int		nb_cmds = count_cmds(cmds);
 	char	**argv = malloc(sizeof(char *) * (nb_cmds + 4));
 	int		i = 0;
 	t_cmd	*tmp = cmds;
+	char	*file;
 
 	if (!argv)
 		return NULL;
 	argv[i++] = ft_strdup("minishell");
 
 	// infile
-	if (cmds->infile)
-		argv[i++] = ft_strdup(cmds->infile);
+	file = get_last_file_of_type(cmds->redirs, REDIR_IN, HEREDOC);
+	if (file)
+		argv[i++] = ft_strdup(file);
 	else
-		argv[i++] = ft_strdup("/dev/stdin"); // fallback
+		argv[i++] = ft_strdup("/dev/stdin");
 
 	// commands
 	while (tmp)
@@ -71,18 +88,20 @@ char	**build_fake_argv(t_cmd *cmds)
 		tmp = tmp->next;
 	}
 
-	// outfile
+	// outfile (dans la dernière commande)
 	tmp = cmds;
 	while (tmp->next)
 		tmp = tmp->next;
-	if (tmp->outfile)
-		argv[i++] = ft_strdup(tmp->outfile);
+	file = get_last_file_of_type(tmp->redirs, REDIR_OUT, APPEND);
+	if (file)
+		argv[i++] = ft_strdup(file);
 	else
-		argv[i++] = ft_strdup("/dev/stdout"); // fallback
+		argv[i++] = ft_strdup("/dev/stdout");
 
 	argv[i] = NULL;
 	return argv;
 }
+
 
 int	execute_pipex_adapter(t_cmd *cmds, char **envp)
 {
