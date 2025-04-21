@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/16 12:26:34 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/21 16:04:43 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,30 +52,52 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
+#include "parsing.h"
+#include <stdlib.h>
+
 void	free_cmds(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 	int		i;
+	t_list	*node;
+	t_list	*next;
+	t_redir	*redir;
 
 	while (cmd)
 	{
 		tmp = cmd->next;
-		i = 0;
+
+		// Free args
 		if (cmd->args)
 		{
+			i = 0;
 			while (cmd->args[i])
 				free(cmd->args[i++]);
 			free(cmd->args);
 		}
-		if (cmd->infile)
-			free(cmd->infile);
-		if (cmd->outfile)
-			free(cmd->outfile);
-		if (cmd)
-			free(cmd);
+
+		// Free redirections
+		node = cmd->redirs;
+		while (node)
+		{
+			next = node->next;
+			redir = (t_redir *)node->content;
+			if (redir)
+			{
+				if (redir->file)
+					free(redir->file);
+				free(redir);
+			}
+			free(node);
+			node = next;
+		}
+
+		// Free the command itself
+		free(cmd);
 		cmd = tmp;
 	}
 }
+
 
 void	free_split(char **split)
 {

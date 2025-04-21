@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/21 11:22:53 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/21 16:12:10 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	close_and_perr_fork(t_pipex *pipex);
 
 void	write_here_doc(char *limiter, t_pipex *pipex);
 int		my_pipex(char **argv, char **envp, t_pipex *pipex);
+char	*get_last_file_of_type(t_list *redirs, int type1, int type2);
 
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex);
 int	execute_pipex_adapter(t_cmd *cmds, char **envp);

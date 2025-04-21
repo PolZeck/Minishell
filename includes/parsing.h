@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/16 12:26:45 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/21 16:03:50 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,20 @@ typedef struct s_token_info
 	int				in_single_quotes;
 }	t_token_info;
 
+typedef struct s_redir
+{
+	int		type;  // REDIR_IN, REDIR_OUT, APPEND, HEREDOC
+	char	*file;
+}	t_redir;
+
 typedef struct s_cmd
 {
 	char			**args;
-	char			*infile;
-	char			*outfile;
-	int				append;
+	t_list			*redirs;  // 🔥 Nouvelle liste de redirections
 	int				invalid;
 	struct s_cmd	*next;
 }	t_cmd;
+
 
 typedef struct s_quote
 {
@@ -72,6 +77,10 @@ typedef struct s_data
 {
 	char	**env;
 }	t_data;
+
+t_redir	*create_redir(int type, char *file);
+void	add_redir(t_cmd *cmd, int type, char *file);
+
 
 int				check_unclosed_quotes(char *input);
 int				is_builtin(char *cmd);

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/17 13:53:38 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/21 16:03:22 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,19 @@ t_cmd	*create_cmd(void)
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->args = malloc(sizeof(char *) * 10);
+
+	cmd->args = malloc(sizeof(char *) * 10); // tu pourras passer à realloc plus tard si tu veux
 	if (!cmd->args)
 	{
 		free(cmd);
 		return (NULL);
 	}
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->append = 0;
+
+	cmd->redirs = NULL;    // 🔥 nouvelle initialisation
 	cmd->invalid = 0;
 	cmd->next = NULL;
 	return (cmd);
 }
-
 int	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
