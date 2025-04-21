@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/17 16:37:01 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/21 11:22:53 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <string.h>
 # include <stdio.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <fcntl.h>
 # include <stdbool.h>
 # include <errno.h>

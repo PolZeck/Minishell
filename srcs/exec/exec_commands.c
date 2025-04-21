@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:55:55 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/17 16:49:03 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/21 12:20:38 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,18 @@ char	*find_command_path(char *cmd)
 	return (NULL);
 }
 
+void print_error(char *prefix, char *cmd, char *message)
+{
+    ft_putstr_fd(prefix, STDERR_FILENO);
+    ft_putstr_fd(cmd, STDERR_FILENO);
+    ft_putstr_fd(message, STDERR_FILENO);
+}
 
 void	execute_command(t_cmd *cmd, t_data *data)
 {
-	pid_t	pid;
-	char	*cmd_path;
+	pid_t   pid;
+	char    *cmd_path;
+	struct stat st;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return;
@@ -62,7 +69,7 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	// Commande vide (après expansion)
 	if (cmd->args[0][0] == '\0')
 	{
-		ft_putstr_fd("bash: : command not found\n", 2);
+		print_error("bash: ", "", ": command not found\n");
 		*get_exit_status() = 127;
 		return;
 	}
@@ -74,33 +81,61 @@ void	execute_command(t_cmd *cmd, t_data *data)
 		return;
 	}
 
-	cmd_path = find_command_path(cmd->args[0]);
-	if (!cmd_path)
+	// Vérifier si c'est un chemin absolu/relatif avant de chercher dans PATH
+	if (ft_strchr(cmd->args[0], '/'))
 	{
-		ft_putstr_fd("bash: ", 2);
-		ft_putstr_fd(cmd->args[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		*get_exit_status() = 127;
-		return;
+		if (stat(cmd->args[0], &st) == 0)
+		{
+			if (S_ISDIR(st.st_mode))
+			{
+				print_error("bash: ", cmd->args[0], ": Is a directory\n");
+				*get_exit_status() = 126;
+				return;
+			}
+			if (access(cmd->args[0], X_OK) != 0)
+			{
+				print_error("bash: ", cmd->args[0], ": Permission denied\n");
+				*get_exit_status() = 126;
+				return;
+			}
+			cmd_path = ft_strdup(cmd->args[0]);
+		}
+		else
+		{
+			print_error("bash: ", cmd->args[0], ": No such file or directory\n");
+			*get_exit_status() = 127;
+			return;
+		}
+	}
+	else
+	{
+		cmd_path = find_command_path(cmd->args[0]);
+		if (!cmd_path)
+		{
+			print_error("bash: ", cmd->args[0], ": command not found\n");
+			*get_exit_status() = 127;
+			return;
+		}
 	}
 
 	pid = fork();
 	if (pid == 0)
 	{
-		// 🔁 Gestion de redirection infile
+		// Gestion de redirection infile
 		if (cmd->infile)
 		{
 			int fd = open(cmd->infile, O_RDONLY);
 			if (fd == -1)
 			{
-				perror(cmd->infile);
+				print_error("bash: ", cmd->infile, ": ");
+				perror("");
 				exit(1);
 			}
 			dup2(fd, STDIN_FILENO);
 			close(fd);
 		}
 
-		// 🔁 Gestion de redirection outfile
+		// Gestion de redirection outfile
 		if (cmd->outfile)
 		{
 			int fd;
@@ -110,7 +145,8 @@ void	execute_command(t_cmd *cmd, t_data *data)
 				fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (fd == -1)
 			{
-				perror(cmd->outfile);
+				print_error("bash: ", cmd->outfile, ": ");
+				perror("");
 				exit(1);
 			}
 			dup2(fd, STDOUT_FILENO);
@@ -120,18 +156,24 @@ void	execute_command(t_cmd *cmd, t_data *data)
 		// Exécution de la commande
 		if (execve(cmd_path, cmd->args, data->env) == -1)
 		{
-			perror("execve");
-			exit(1);
+			print_error("bash: ", cmd_path, ": ");
+			perror("");
+			exit(126);
 		}
 	}
-	else
+	else if (pid > 0)
 	{
-		int	status;
+		int status;
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			*get_exit_status() = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			*get_exit_status() = 128 + WTERMSIG(status);
+	}
+	else
+	{
+		perror("fork");
+		*get_exit_status() = 1;
 	}
 
 	free(cmd_path);
