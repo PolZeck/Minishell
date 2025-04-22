@@ -6,30 +6,34 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 16:05:47 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/22 13:47:10 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	handle_input_token(t_token_list *tlist,
+void	handle_input_token(t_token_list *tlist,
 	char **buffer, char *input, int *i)
 {
+	static t_quote_type current_quote_type = NO_QUOTE;
+
 	if (input[*i] == ' ')
 	{
-		flush_buffer_to_token(tlist->tokens, tlist->last, buffer);
+		flush_buffer_to_token(tlist->tokens, tlist->last, buffer, current_quote_type);
+		current_quote_type = NO_QUOTE;
 		(*i)++;
 		return ;
 	}
 	if (is_operator(input[*i]))
 	{
-		flush_buffer_to_token(tlist->tokens, tlist->last, buffer);
+		flush_buffer_to_token(tlist->tokens, tlist->last, buffer, current_quote_type);
+		current_quote_type = NO_QUOTE;
 		handle_operator_token(tlist->tokens, tlist->last, input, i);
 		return ;
 	}
 	if (input[*i] == '\'' || input[*i] == '\"')
 	{
-		handle_quotes_in_token(buffer, input, i);
+		handle_quotes_in_token(buffer, input, i, &current_quote_type);
 		return ;
 	}
 	if (input[*i] == '$')
@@ -39,6 +43,10 @@ static void	handle_input_token(t_token_list *tlist,
 	}
 	append_word(buffer, input, i);
 }
+
+
+
+
 
 t_token	*tokenize(char *input)
 {
@@ -59,10 +67,11 @@ t_token	*tokenize(char *input)
 	while (input[i])
 		handle_input_token(&tlist, &buffer, input, &i);
 	if (*buffer)
-		flush_buffer_to_token(&tokens, &last, &buffer);
+		flush_buffer_to_token(&tokens, &last, &buffer, NO_QUOTE);
 	free(buffer);
 	return (tokens);
 }
+
 
 void	handle_token(t_token **tokens, t_token **last, char *input, int *i)
 {

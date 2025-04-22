@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 14:09:34 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/22 13:34:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,21 +64,6 @@ t_cmd	*parse_tokens(t_token *tokens)
 	if (cmd && cmd->args)
 		cmd->args[arg_count] = NULL;
 
-	// 🔁 Expansion des variables d'environnement (comme $?, $HOME, etc)
-	if (cmd && cmd->args)
-	{
-		int i = 0;
-		while (cmd->args[i])
-		{
-			if (ft_strchr(cmd->args[i], '$'))
-			{
-				char *expanded = expand_env_var(cmd->args[i], 0);
-				free(cmd->args[i]);
-				cmd->args[i] = expanded;
-			}
-			i++;
-		}
-	}
 
 	return (head);
 }
