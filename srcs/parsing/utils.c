@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 13:08:15 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/22 15:14:12 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,28 +39,50 @@ char	*expand_env_var(char *token, t_quote_type quote_type)
 	return (ft_strdup(""));
 }
 
+int	count_args(t_token *tokens)
+{
+	int	count = 0;
+
+	while (tokens && tokens->type != PIPE)
+	{
+		if (tokens->type == WORD || tokens->type == QUOTE)
+			count++;
+		else if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT
+			|| tokens->type == HEREDOC || tokens->type == APPEND)
+		{
+			if (tokens->next)
+				tokens = tokens->next; // skip redir target
+		}
+		tokens = tokens->next;
+	}
+	return (count);
+}
 
 
-t_cmd	*create_cmd(void)
+t_cmd	*create_cmd(t_token *tokens)
 {
 	t_cmd	*cmd;
+	int		nb_args;
 
+	nb_args = count_args(tokens); // on compte dynamiquement
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 
-	cmd->args = malloc(sizeof(char *) * 10); // tu pourras passer à realloc plus tard si tu veux
+	cmd->args = malloc(sizeof(char *) * (nb_args + 1));
+	// printf("DEBUG: nb_args = %d\n", nb_args);
 	if (!cmd->args)
 	{
 		free(cmd);
 		return (NULL);
 	}
-
-	cmd->redirs = NULL;    // 🔥 nouvelle initialisation
+	cmd->args[0] = NULL;
+	cmd->redirs = NULL;
 	cmd->invalid = 0;
 	cmd->next = NULL;
 	return (cmd);
 }
+
 int	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
