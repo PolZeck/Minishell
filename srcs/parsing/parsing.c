@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 15:10:35 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/22 17:37:38 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,6 @@ t_cmd	*parse_tokens(t_token *tokens)
 	head = cmd;
 	arg_count = 0;
 	args_size = 2;
-
-	cmd->args = malloc(sizeof(char *) * args_size);
-	if (!cmd->args)
-		return (free_cmds(head), NULL);
 
 	while (tokens)
 	{

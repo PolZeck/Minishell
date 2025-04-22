@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 15:14:12 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/22 17:38:18 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,11 @@ int	count_args(t_token *tokens)
 
 t_cmd	*create_cmd(t_token *tokens)
 {
-	t_cmd	*cmd;
-	int		nb_args;
-
-	nb_args = count_args(tokens); // on compte dynamiquement
-	cmd = malloc(sizeof(t_cmd));
+	t_cmd *cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-
-	cmd->args = malloc(sizeof(char *) * (nb_args + 1));
-	// printf("DEBUG: nb_args = %d\n", nb_args);
+	int arg_count = count_args(tokens);
+	cmd->args = malloc(sizeof(char *) * (arg_count + 1));
 	if (!cmd->args)
 	{
 		free(cmd);
@@ -82,6 +77,7 @@ t_cmd	*create_cmd(t_token *tokens)
 	cmd->next = NULL;
 	return (cmd);
 }
+
 
 int	is_operator(char c)
 {

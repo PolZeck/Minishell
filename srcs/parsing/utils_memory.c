@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 16:04:43 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/22 15:33:11 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,6 @@ void	free_tokens(t_token *tokens)
 		tokens = tmp;
 	}
 }
-
-#include "parsing.h"
-#include <stdlib.h>
 
 void	free_cmds(t_cmd *cmd)
 {
@@ -109,4 +106,14 @@ void	free_split(char **split)
 	while (split[i])
 		free(split[i++]);
 	free(split);
+}
+
+void	free_env(char **env)
+{
+	int i = 0;
+	if (!env)
+		return;
+	while (env[i])
+		free(env[i++]);
+	free(env);
 }

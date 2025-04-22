@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 16:28:01 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/22 17:28:52 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ int	main(int argc, char **argv, char **envp)
 	t_cmd	*cmd;
 	t_data	data;
 
-	((void)argc, (void)argv);
-	(void) envp;
+	(void)argc;
+	(void)argv;
 
 	data.env = dup_env(envp);
 	if (!data.env)
@@ -116,6 +116,7 @@ int	main(int argc, char **argv, char **envp)
 		if (!input)
 		{
 			write(1, "exit\n", 5);
+			free_env(data.env); // ✅ ici seulement
 			rl_clear_history();
 			break ;
 		}
@@ -128,18 +129,15 @@ int	main(int argc, char **argv, char **envp)
 		}
 		tokens = tokenize(input);
 		cmd = parse_tokens(tokens);
-		// debug_print_commands(cmd);
-
 		if (cmd)
 			execute_pipeline(cmd, &data);
-		if (!cmd)
-		{
-			(free_tokens(tokens), free(input));
-			continue ;
-		}
-		(free_tokens(tokens), free_cmds(cmd), free(input));
+		
+		free_tokens(tokens);
+		free_cmds(cmd);
+		free(input);
 	}
 	rl_clear_history();
 	return (0);
 }
+
 

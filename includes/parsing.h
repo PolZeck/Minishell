@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 15:08:27 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/22 15:33:19 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void			handle_variable_expansion(char **buffer, char *input, int *i);
 void			append_word(char **buffer, char *input, int *i);
 void			free_tokens(t_token *tokens);
 void			free_cmds(t_cmd *cmds);
+void	free_env(char **env);
 void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void	free_split(char **split);
 
