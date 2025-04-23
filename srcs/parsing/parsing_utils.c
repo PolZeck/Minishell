@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 16:25:57 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/22 15:11:07 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	handle_pipe(t_cmd **cmd, int *arg_count,
 		return ;
 	}
 	*tokens = (*tokens)->next;
-	(*cmd)->next = create_cmd();
+	(*cmd)->next = create_cmd(*tokens);
 	if (!(*cmd)->next)
 		return ;
 	(*cmd) = (*cmd)->next;

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/17 15:06:40 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 13:08:36 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	builtin_cd(t_cmd *cmd)
 	else if (chdir(cmd->args[1]) != 0)
 	{
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-		perror(cmd->args[1]); // perror écrit déjà sur stderr
+		perror(cmd->args[1]);
 		*get_exit_status() = 1;
 		return (1);
 	}

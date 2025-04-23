@@ -35,7 +35,7 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 			{
 				perror(redir->file);
 				*get_exit_status() = 1;
-				exit(EXIT_FAILURE) ;
+				exit(EXIT_FAILURE);
 			}
 			if (save_stdin != -1)
 				close(save_stdin);
@@ -96,7 +96,6 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		close(save_stdout);
 	}
 }
-
 
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex)
 {

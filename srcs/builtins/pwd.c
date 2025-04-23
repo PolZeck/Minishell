@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:49:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 13:28:14 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:15:05 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	builtin_pwd(t_cmd *cmd)
 	char	*cwd;
 
 	(void)cmd;
-
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
@@ -25,11 +24,9 @@ int	builtin_pwd(t_cmd *cmd)
 		*get_exit_status() = 1;
 		return (1);
 	}
-
-	ft_putstr_fd(cwd, 1);      // ✅ stdout
-	ft_putstr_fd("\n", 1);     // newline séparé
+	ft_putstr_fd(cwd, 1);
+	ft_putstr_fd("\n", 1);
 	free(cwd);
-
 	*get_exit_status() = 0;
 	return (0);
 }

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
 /*   Updated: 2025/04/23 13:05:42 by lcosson          ###   ########.fr       */
@@ -12,43 +12,40 @@
 
 #include "minishell.h"
 
-
 char	*find_command_path(char *cmd)
 {
 	char	*path;
 	char	**paths;
+	char	*prefix;
 	char	*full_path;
 	int		i;
 
 	if (!cmd || !*cmd)
 		return (NULL);
-	path = getenv("PATH"); // Récupérer la variable PATH
+	path = getenv("PATH");
 	if (!path)
 		return (NULL);
-	paths = ft_split(path, ':'); // Diviser les chemins par ':'
+	paths = ft_split(path, ':');
 	if (!paths)
 		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
-		full_path = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(full_path, cmd);
-		if (access(full_path, X_OK) == 0)			
+		prefix = ft_strjoin(paths[i], "/");             // chemin/
+		full_path = ft_strjoin(prefix, cmd);            // chemin/cmd
+		free(prefix);                                   // ✅ libération du intermédiaire
+		if (access(full_path, X_OK) == 0)
 		{
-			while (paths[i]) // Libérer `split()`
-				free(paths[i++]);
-			free(paths);
-			return (full_path);
+			free_split(paths);                          //  libération du split complet
+			return (full_path);                         // on garde le bon path
 		}
-		free(full_path);
+		free(full_path);                                //  sinon on le libère
 		i++;
 	}
-	i = 0;
-	while (paths[i]) // Libérer `split()`
-		free(paths[i++]);
-	free(paths);
+	free_split(paths); // libère tout
 	return (NULL);
 }
+
 
 void print_error(char *prefix, char *cmd, char *message)
 {
