@@ -6,24 +6,15 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 15:11:07 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 16:50:55 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_argument(t_cmd *cmd, int *arg_count,
-		size_t *args_size, char *value)
+void	handle_argument(t_cmd *cmd, int *arg_count, char *arg)
 {
-	if (*arg_count + 1 >= (int)*args_size)
-	{
-		*args_size *= 2;
-		cmd->args = ft_realloc(cmd->args, sizeof(char *) * (*arg_count + 1),
-				sizeof(char *) * (*args_size));
-		if (!cmd->args)
-			return ;
-	}
-	cmd->args[*arg_count] = ft_strdup(value);
+	cmd->args[*arg_count] = ft_strdup(arg);
 	(*arg_count)++;
 }
 

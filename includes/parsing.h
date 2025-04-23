@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 15:33:19 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 16:51:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_cmd	*create_cmd(t_token *tokens);
 
 void			add_token(t_token **tokens, t_token **last, t_token_info info);
 void			handle_argument(t_cmd *cmd,
-					int *arg_count, size_t *args_size, char *value);
+					int *arg_count, char *value);
 void			handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size, t_token **tokens);
 void			handle_redir_in(t_cmd *cmd, t_token **tokens);
 void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append);

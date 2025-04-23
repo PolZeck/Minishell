@@ -6,33 +6,62 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 13:08:36 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 17:01:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	builtin_cd(t_cmd *cmd)
+static int	cd_too_many_args(char **args)
 {
-	if (cmd->args[2])
+	if (args[1] && args[2])
 	{
 		ft_putstr_fd("bash: cd: too many arguments\n", STDERR_FILENO);
 		*get_exit_status() = 1;
 		return (1);
 	}
-	else if (cmd->args[1] == NULL)
+	return (0);
+}
+
+static char	*get_cd_target(char **args)
+{
+	char	*home;
+
+	if (args[1] == NULL)
 	{
-		ft_putstr_fd("minishell: cd: missing argument\n", STDERR_FILENO);
-		*get_exit_status() = 1;
-		return (1);
+		home = getenv("HOME");
+		if (!home)
+		{
+			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
+			*get_exit_status() = 1;
+			return (NULL);
+		}
+		return (home);
 	}
-	else if (chdir(cmd->args[1]) != 0)
+	return (args[1]);
+}
+
+static int	cd_change_directory(char *target)
+{
+	if (chdir(target) != 0)
 	{
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-		perror(cmd->args[1]);
+		perror(target);
 		*get_exit_status() = 1;
 		return (1);
 	}
 	*get_exit_status() = 0;
 	return (0);
+}
+
+int	builtin_cd(t_cmd *cmd)
+{
+	char	*target;
+
+	if (cd_too_many_args(cmd->args))
+		return (1);
+	target = get_cd_target(cmd->args);
+	if (!target)
+		return (1);
+	return (cd_change_directory(target));
 }
