@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:34:28 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/14 14:58:52 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 12:56:10 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	check_in_and_outfile_bonus(int argc, char **argv, t_pipex *pipex)
 	}
 }
 
-int	main_bonus(int argc, char **argv, char **envp)
+/* int	main_bonus(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
 	int		status;
@@ -72,4 +72,4 @@ int	main_bonus(int argc, char **argv, char **envp)
 	status = my_pipex(argv, envp, &pipex);
 	close_fds(&pipex);
 	return (status);
-}
+} */

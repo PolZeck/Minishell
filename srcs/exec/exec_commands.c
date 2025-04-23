@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 16:37:43 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:05:42 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,32 @@ void print_error(char *prefix, char *cmd, char *message)
     ft_putstr_fd(message, STDERR_FILENO);
 }
 
+int	validate_redirections(t_cmd *cmd)
+{
+	t_list	*node = cmd->redirs;
+	t_redir	*redir;
+	int		fd;
+
+	while (node)
+	{
+		redir = (t_redir *)node->content;
+		if (redir->type == REDIR_IN || redir->type == HEREDOC)
+			fd = open(redir->file, O_RDONLY);
+		else
+			fd = open(redir->file,
+				O_WRONLY | O_CREAT | (redir->type == APPEND ? O_APPEND : O_TRUNC),
+				0644);
+		if (fd == -1)
+		{
+			perror(redir->file);
+			return (1);
+		}
+		close(fd);
+		node = node->next;
+	}
+	return (0);
+}
+
 void	execute_command(t_cmd *cmd, t_data *data)
 {
 	pid_t	pid;
@@ -65,6 +91,12 @@ void	execute_command(t_cmd *cmd, t_data *data)
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return;
+
+	if (validate_redirections(cmd))
+	{
+		*get_exit_status() = 1;
+		return;
+	}
 
 	if (cmd->args[0][0] == '\0')
 	{
@@ -114,7 +146,7 @@ void	execute_command(t_cmd *cmd, t_data *data)
 			return;
 		}
 	}
-
+	
 	pid = fork();
 	if (pid == 0)
 	{
