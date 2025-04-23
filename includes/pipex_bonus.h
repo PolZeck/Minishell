@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/21 16:12:10 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 12:48:26 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_pipex
 	int		num_cmds;
 	pid_t	*pid;
 	int		here_doc_flag;
+	t_cmd *current_cmd; 
 }			t_pipex;
 
 # define TRUE 1
@@ -69,7 +70,7 @@ void	close_and_perr_dup2(t_pipex *pipex);
 void	close_and_perr_fork(t_pipex *pipex);
 
 void	write_here_doc(char *limiter, t_pipex *pipex);
-int		my_pipex(char **argv, char **envp, t_pipex *pipex);
+int		my_pipex(char **argv, char **envp, t_pipex *pipex, t_cmd *cmd_list);
 char	*get_last_file_of_type(t_list *redirs, int type1, int type2);
 
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex);

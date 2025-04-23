@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipex_adapter.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:50:45 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 16:12:04 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 12:55:50 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int	execute_pipex_adapter(t_cmd *cmds, char **envp)
 	int		argc;
 	int		i;
 	int		status = 0;
+	t_pipex	pipex;
 
 	argv = build_fake_argv(cmds);
 	if (!argv)
@@ -116,12 +117,26 @@ int	execute_pipex_adapter(t_cmd *cmds, char **envp)
 		perror("malloc");
 		return (1);
 	}
+
+	// 🔧 Compte les arguments
 	for (argc = 0; argv[argc]; argc++) ;
-	status = main_bonus(argc, argv, envp);
-	// clean
+
+	// 🔧 Initialisation manuelle de pipex
+	init_struct(argc, argv, &pipex);
+	init_pipes(&pipex);
+	if (pipex.here_doc_flag == FALSE)
+		init_files(argc, argv, &pipex);
+	else
+		init_files_heredoc(argc, argv, &pipex);
+
+	// 🔧 Appel direct de my_pipex avec la liste de commandes
+	status = my_pipex(argv, envp, &pipex, cmds);
+
+	// 🔁 Clean argv
 	i = 0;
 	while (argv[i])
 		free(argv[i++]);
 	free(argv);
+
 	return (status);
 }
