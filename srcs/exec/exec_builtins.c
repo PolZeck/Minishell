@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 16:06:49 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 12:30:13 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 			{
 				perror(redir->file);
 				*get_exit_status() = 1;
-				return ;
+				exit(EXIT_FAILURE);
 			}
 			if (save_stdin != -1)
 				close(save_stdin);
