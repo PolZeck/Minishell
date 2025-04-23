@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 17:38:18 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 12:19:50 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ t_cmd	*create_cmd(t_token *tokens)
 	t_cmd *cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
+
 	int arg_count = count_args(tokens);
 	cmd->args = malloc(sizeof(char *) * (arg_count + 1));
 	if (!cmd->args)
@@ -71,12 +72,17 @@ t_cmd	*create_cmd(t_token *tokens)
 		free(cmd);
 		return (NULL);
 	}
-	cmd->args[0] = NULL;
+
+	for (int i = 0; i <= arg_count; i++) // ✅ ici, on corrige le nom
+		cmd->args[i] = NULL;
+
 	cmd->redirs = NULL;
 	cmd->invalid = 0;
 	cmd->next = NULL;
+
 	return (cmd);
 }
+
 
 
 int	is_operator(char c)
