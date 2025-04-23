@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 12:30:13 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/23 12:31:55 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		close(save_stdout);
 	}
 }
-
 
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex)
 {
