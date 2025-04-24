@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 12:40:33 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 12:43:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,32 +81,35 @@ t_token	*tokenize(char *input, t_data *data)
 }
 
 
-void	handle_token(t_token **tokens, t_token **last, char *input, int *i, t_data *data)
-{
-	char			*buffer;
-	int				j;
-	t_token_info	info;
-	t_quote			q;
+// void	handle_token(t_token **tokens, t_token **last, t_parseinfo *info)
+// {
+// 	char			*buffer;
+// 	int				j;
+// 	t_token_info	info_token;
+// 	t_quote			q;
 
-	buffer = malloc(sizeof(char) * (ft_strlen(input) + 1));
-	if (!buffer)
-		return ;
-	j = 0;
-	info.type = WORD;
-	info.in_single_quotes = 0;
-	q.buffer = buffer;
-	q.input = input;
-	q.i = i;
-	q.j = &j;
-	if (is_operator(input[*i]))
-		info.type = handle_operator(buffer, input, i, &j);
-	else
-		process_word_or_quote(&q, &info);
-	buffer[j] = '\0';
-	info.buffer = buffer;
-	add_token(tokens, last, info, data);
-	free(buffer);
-}
+// 	buffer = malloc(sizeof(char) * (ft_strlen(info->input) + 1));
+// 	if (!buffer)
+// 		return ;
+// 	j = 0;
+// 	info_token.type = WORD;
+// 	info_token.in_single_quotes = 0;
+// 	q.buffer = buffer;
+// 	q.input = info->input;
+// 	q.i = info->i;
+// 	q.j = &j;
+
+// 	if (is_operator(info->input[*(info->i)]))
+// 		info_token.type = handle_operator(buffer, info->input, info->i, &j);
+// 	else
+// 		process_word_or_quote(&q, &info_token);
+
+// 	buffer[j] = '\0';
+// 	info_token.buffer = buffer;
+// 	add_token(tokens, last, info_token, info->data);
+// 	free(buffer);
+// }
+
 
 void	process_word_or_quote(t_quote *q, t_token_info *info)
 {

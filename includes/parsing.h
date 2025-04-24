@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 12:38:21 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 12:42:40 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,7 @@ void			handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size, t_token **tok
 void			handle_redir_in(t_cmd *cmd, t_token **tokens);
 void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append);
 void			handle_heredoc(t_cmd *cmd, t_token **tokens);
-void			handle_token(t_token **tokens, t_token **last, char *input, int *i, t_data *data);
-
+void			handle_token(t_token **tokens, t_token **last, t_parseinfo *info);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
 void			process_word_or_quote(t_quote *q, t_token_info *info);
 void			flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type);
