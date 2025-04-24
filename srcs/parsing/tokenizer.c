@@ -6,46 +6,44 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 11:06:10 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 12:40:33 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_input_token(t_token_list *tlist,
-	char **buffer, char *input, int *i, t_data *data)
+static void	handle_input_token(t_token_list *tlist, char **buffer, t_parseinfo *info)
 {
 	static t_quote_type current_quote_type = NO_QUOTE;
 
-	if (input[*i] == ' ')
+	if (info->input[*(info->i)] == ' ')
 	{
 		flush_buffer_to_token(tlist->tokens, tlist->last, buffer, current_quote_type);
 		current_quote_type = NO_QUOTE;
-		(*i)++;
+		(*(info->i))++;
 		return ;
 	}
-	if (is_operator(input[*i]))
+	if (is_operator(info->input[*(info->i)]))
 	{
 		flush_buffer_to_token(tlist->tokens, tlist->last, buffer, current_quote_type);
 		current_quote_type = NO_QUOTE;
-		handle_operator_token(tlist->tokens, tlist->last, input, i, data);
+		info->quote = 0;
+		handle_operator_token(tlist->tokens, tlist->last, info);
 		return ;
 	}
-	if (input[*i] == '\'' || input[*i] == '\"')
+	if (info->input[*(info->i)] == '\'' || info->input[*(info->i)] == '\"')
 	{
-		handle_quotes_in_token(buffer, input, i, &current_quote_type, data);
+		info->quote_type = &current_quote_type;
+		handle_quotes_in_token(buffer, info);
 		return ;
 	}
-	if (input[*i] == '$')
+	if (info->input[*(info->i)] == '$')
 	{
-		handle_variable_expansion(buffer, input, i, data);
+		handle_variable_expansion(buffer, info->input, info->i, info->data);
 		return ;
 	}
-	append_word(buffer, input, i);
+	append_word(buffer, info->input, info->i);
 }
-
-
-
 
 
 t_token	*tokenize(char *input, t_data *data)
@@ -55,6 +53,7 @@ t_token	*tokenize(char *input, t_data *data)
 	t_token_list	tlist;
 	char			*buffer;
 	int				i;
+	t_parseinfo		info;
 
 	i = 0;
 	tokens = NULL;
@@ -64,8 +63,17 @@ t_token	*tokenize(char *input, t_data *data)
 	buffer = ft_strdup("");
 	if (!buffer)
 		return (NULL);
+
+	// Initialisation de info
+	info.data = data;
+	info.input = input;
+	info.i = &i;
+	info.quote = 0;
+	info.quote_type = NULL;
+
 	while (input[i])
-		handle_input_token(&tlist, &buffer, input, &i, data);
+		handle_input_token(&tlist, &buffer, &info);
+
 	if (*buffer)
 		flush_buffer_to_token(&tokens, &last, &buffer, NO_QUOTE);
 	free(buffer);
