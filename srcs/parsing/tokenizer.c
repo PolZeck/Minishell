@@ -6,14 +6,14 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 13:47:10 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 11:06:10 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void	handle_input_token(t_token_list *tlist,
-	char **buffer, char *input, int *i)
+	char **buffer, char *input, int *i, t_data *data)
 {
 	static t_quote_type current_quote_type = NO_QUOTE;
 
@@ -28,17 +28,17 @@ void	handle_input_token(t_token_list *tlist,
 	{
 		flush_buffer_to_token(tlist->tokens, tlist->last, buffer, current_quote_type);
 		current_quote_type = NO_QUOTE;
-		handle_operator_token(tlist->tokens, tlist->last, input, i);
+		handle_operator_token(tlist->tokens, tlist->last, input, i, data);
 		return ;
 	}
 	if (input[*i] == '\'' || input[*i] == '\"')
 	{
-		handle_quotes_in_token(buffer, input, i, &current_quote_type);
+		handle_quotes_in_token(buffer, input, i, &current_quote_type, data);
 		return ;
 	}
 	if (input[*i] == '$')
 	{
-		handle_variable_expansion(buffer, input, i);
+		handle_variable_expansion(buffer, input, i, data);
 		return ;
 	}
 	append_word(buffer, input, i);
@@ -48,7 +48,7 @@ void	handle_input_token(t_token_list *tlist,
 
 
 
-t_token	*tokenize(char *input)
+t_token	*tokenize(char *input, t_data *data)
 {
 	t_token			*tokens;
 	t_token			*last;
@@ -65,7 +65,7 @@ t_token	*tokenize(char *input)
 	if (!buffer)
 		return (NULL);
 	while (input[i])
-		handle_input_token(&tlist, &buffer, input, &i);
+		handle_input_token(&tlist, &buffer, input, &i, data);
 	if (*buffer)
 		flush_buffer_to_token(&tokens, &last, &buffer, NO_QUOTE);
 	free(buffer);
@@ -73,7 +73,7 @@ t_token	*tokenize(char *input)
 }
 
 
-void	handle_token(t_token **tokens, t_token **last, char *input, int *i)
+void	handle_token(t_token **tokens, t_token **last, char *input, int *i, t_data *data)
 {
 	char			*buffer;
 	int				j;
@@ -96,7 +96,7 @@ void	handle_token(t_token **tokens, t_token **last, char *input, int *i)
 		process_word_or_quote(&q, &info);
 	buffer[j] = '\0';
 	info.buffer = buffer;
-	add_token(tokens, last, info);
+	add_token(tokens, last, info, data);
 	free(buffer);
 }
 

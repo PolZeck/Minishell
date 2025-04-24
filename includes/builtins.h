@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:47:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 13:26:27 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 11:10:19 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 # define BUILTINS_H
 
 # include "minishell.h"
+
+typedef struct s_cmd t_cmd;
+typedef struct s_data t_data;
+
 
 // Builtins : CD
 int	builtin_cd(t_cmd *cmd);

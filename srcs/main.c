@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 17:28:52 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 11:03:02 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	main(int argc, char **argv, char **envp)
 			free(input);
 			continue ;
 		}
-		tokens = tokenize(input);
+		tokens = tokenize(input, &data);
 		cmd = parse_tokens(tokens);
 		if (cmd)
 			execute_pipeline(cmd, &data);

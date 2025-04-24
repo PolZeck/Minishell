@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 13:48:06 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 11:05:06 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_qu
 
 
 void	handle_operator_token(t_token **tokens,
-	t_token **last, char *input, int *i)
+	t_token **last, char *input, int *i, t_data *data)
 {
 	char			op[3];
 	int				j;
@@ -53,7 +53,7 @@ void	handle_operator_token(t_token **tokens,
 		op[j++] = input[(*i)++];
 	op[j] = '\0';
 	type = get_token_type_from_op(op);
-	new = create_token(op, type, NO_QUOTE);
+	new = create_token(op, type, NO_QUOTE, data);
 	if (!*tokens)
 		*tokens = new;
 	else
@@ -61,7 +61,7 @@ void	handle_operator_token(t_token **tokens,
 	*last = new;
 }
 
-void	handle_quotes_in_token(char **buffer, char *input, int *i, t_quote_type *quote_type)
+void	handle_quotes_in_token(char **buffer, char *input, int *i, t_quote_type *quote_type, t_data *data)
 {
 	char	quote;
 	int		start;
@@ -89,7 +89,7 @@ void	handle_quotes_in_token(char **buffer, char *input, int *i, t_quote_type *qu
 		while (input[*i] && input[*i] != quote)
 		{
 			if (input[*i] == '$')
-				handle_variable_expansion(&sub, input, i);
+				handle_variable_expansion(&sub, input, i, data);
 			else
 			{
 				start = *i;
@@ -114,7 +114,7 @@ void	handle_quotes_in_token(char **buffer, char *input, int *i, t_quote_type *qu
 
 
 
-void	handle_variable_expansion(char **buffer, char *input, int *i)
+void	handle_variable_expansion(char **buffer, char *input, int *i, t_data *data)
 {
 	int		start;
 	char	*var;
@@ -136,7 +136,7 @@ void	handle_variable_expansion(char **buffer, char *input, int *i)
 		var = ft_strjoin("$", ft_substr(input, start, *i - start));
 	}
 
-	value = expand_env_var(var, 0); // appelle ta fonction avec $ inclus
+	value = expand_env_var(var, 0, data); // appelle ta fonction avec $ inclus
 	to_append = ft_strdup(value);
 	tmp = ft_strjoin(*buffer, to_append);
 

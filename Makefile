@@ -6,7 +6,7 @@
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/04/23 13:26:45 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/04/24 10:52:32 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,8 @@ VALGRIND_SUPP = readline.supp
 # === Fichiers Sources Minishell ===
 MSH_SRCS	= main.c parsing/parsing.c parsing/tokenizer.c parsing/utils.c parsing/tokenizer_utils.c\
               parsing/tokenizer_utils2.c parsing/parsing_utils.c parsing/utils_memory.c parsing/tokenizer_utils3.c\
-              signals/signals.c signals/signals_utils.c signals/exit_status.c\
+              parsing/env_utils.c\
+			  signals/signals.c signals/signals_utils.c signals/exit_status.c\
 			  exec/exec_builtins.c \
 			  exec/exec.c exec/exec_commands.c\
 			  builtins/cd.c builtins/echo.c builtins/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export.c builtins/export_utils.c\
