@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/23 12:48:26 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/24 15:27:04 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_pipex
 	int		num_cmds;
 	pid_t	*pid;
 	int		here_doc_flag;
-	t_cmd *current_cmd; 
+	t_cmd 	*current_cmd; 
 }			t_pipex;
 
 # define TRUE 1
@@ -50,7 +50,7 @@ char	*check_addpath_cmd_bonus(char *cmd, char **envp, t_pipex *pipex);
 char	*my_addpath_cmd(char *cmd, char *path, t_pipex *pipex);
 char	*my_getpath(char **envp);
 
-void	execute_cmd(char *cmd, char **envp, t_pipex *pipex);
+void	execute_cmd(t_cmd *cmd, char **envp, t_pipex *pipex);
 pid_t	first_execution_bonus(int i, char **argv, char **envp, t_pipex *pipex);
 pid_t	last_execution_bonus(int i, char **argv, char **envp, t_pipex *pipex);
 pid_t	middle_execution_bonus(int i, char **argv, char **envp, t_pipex *pipex);
@@ -76,5 +76,6 @@ char	*get_last_file_of_type(t_list *redirs, int type1, int type2);
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex);
 int	execute_pipex_adapter(t_cmd *cmds, char **envp);
 int	main_bonus(int argc, char **argv, char **envp);
+bool check_redirections_failure(t_cmd *cmd);
 
 #endif
