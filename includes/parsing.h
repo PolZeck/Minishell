@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 16:51:15 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 12:42:40 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_quote
 
 typedef struct s_token_list
 {
-	t_token	**tokens;
+	t_token	**tokens; 
 	t_token	**last;
 }	t_token_list;
 
@@ -84,6 +84,18 @@ typedef struct s_data
 {
 	char	**env;
 }	t_data;
+
+typedef struct s_parseinfo
+{
+	t_data	*data;
+	char	*input;
+	int		*i;
+	char	quote;
+	t_quote_type	*quote_type;
+}	t_parseinfo;
+
+
+char	*ft_getenv(t_data *data, const char *name);
 
 t_redir	*create_redir(int type, char *file);
 void	add_redir(t_cmd *cmd, int type, char *file);
@@ -95,38 +107,36 @@ int				is_builtin(char *cmd);
 int				is_operator(char c);
 int				check_unclosed_quotes(char *input);
 
-char	*expand_env_var(char *token, t_quote_type quote_type);
+char			*expand_env_var(char *token, t_quote_type quote_type, t_data *data);
 char			**dup_env(char **envp);
 
-
 t_cmd			*parse_tokens(t_token *tokens);
-t_cmd	*create_cmd(t_token *tokens);
+t_cmd			*create_cmd(t_token *tokens);
 
-void			add_token(t_token **tokens, t_token **last, t_token_info info);
+void			add_token(t_token **tokens, t_token **last, t_token_info info, t_data *data);
 void			handle_argument(t_cmd *cmd,
 					int *arg_count, char *value);
 void			handle_pipe(t_cmd **cmd, int *arg_count, size_t *args_size, t_token **tokens);
 void			handle_redir_in(t_cmd *cmd, t_token **tokens);
 void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append);
 void			handle_heredoc(t_cmd *cmd, t_token **tokens);
-void			handle_token(t_token **tokens,
-			t_token **last, char *input, int *i);
+void			handle_token(t_token **tokens, t_token **last, t_parseinfo *info);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
 void			process_word_or_quote(t_quote *q, t_token_info *info);
-void	flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type);
-void			handle_operator_token(t_token **tokens, t_token **last, char *input, int *i);
-void	handle_quotes_in_token(char **buffer, char *input, int *i, t_quote_type *quote_type);
-void			handle_variable_expansion(char **buffer, char *input, int *i);
+void			flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type);
+void			handle_operator_token(t_token **tokens,
+			t_token **last, t_parseinfo *info);
+void			handle_quotes_in_token(char **buffer, t_parseinfo *info);
+void			handle_variable_expansion(char **buffer, char *input, int *i, t_data *data);
 void			append_word(char **buffer, char *input, int *i);
 void			free_tokens(t_token *tokens);
 void			free_cmds(t_cmd *cmds);
-void	free_env(char **env);
+void			free_env(char **env);
 void			*ft_realloc(void *ptr, size_t old_size, size_t new_size);
-void	free_split(char **split);
+void			free_split(char **split);
 
-t_token			*tokenize(char *input);
-t_token	*create_token(char *value, t_token_type type, t_quote_type quote_type);
-
+t_token			*tokenize(char *input, t_data *data);
+t_token			*create_token(char *value, t_token_type type, t_quote_type quote_type, t_data *data);
 
 t_token_type	handle_operator(char *buffer, char *input, int *i, int *j);
 t_token_type	handle_quotes(t_quote *q);

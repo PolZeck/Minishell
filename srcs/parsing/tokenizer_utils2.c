@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 13:48:06 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 12:35:14 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,8 @@ void	flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_qu
 	*buffer = ft_strdup("");
 }
 
-
-
 void	handle_operator_token(t_token **tokens,
-	t_token **last, char *input, int *i)
+	t_token **last, t_parseinfo *info)
 {
 	char			op[3];
 	int				j;
@@ -48,12 +46,12 @@ void	handle_operator_token(t_token **tokens,
 	t_token			*new;
 
 	j = 0;
-	op[j++] = input[(*i)++];
-	if ((op[0] == '<' || op[0] == '>') && input[*i] == op[0])
-		op[j++] = input[(*i)++];
+	op[j++] = info->input[(*info->i)++];
+	if ((op[0] == '<' || op[0] == '>') && info->input[(*info->i)] == op[0])
+		op[j++] = info->input[(*info->i)++];
 	op[j] = '\0';
 	type = get_token_type_from_op(op);
-	new = create_token(op, type, NO_QUOTE);
+	new = create_token(op, type, NO_QUOTE, info->data);
 	if (!*tokens)
 		*tokens = new;
 	else
@@ -61,49 +59,46 @@ void	handle_operator_token(t_token **tokens,
 	*last = new;
 }
 
-void	handle_quotes_in_token(char **buffer, char *input, int *i, t_quote_type *quote_type)
+void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
 {
 	char	quote;
 	int		start;
 	char	*sub;
 	char	*tmp;
 
-	quote = input[*i];
-	if (quote == '\'' && *quote_type == NO_QUOTE)
-		*quote_type = SINGLE_QUOTE;
-	else if (quote == '\"' && *quote_type == NO_QUOTE)
-		*quote_type = DOUBLE_QUOTE;
-
-	(*i)++;
-
+	quote = info->input[*(info->i)];
+	if (quote == '\'' && *(info->quote_type) == NO_QUOTE)
+		*(info->quote_type) = SINGLE_QUOTE;
+	else if (quote == '\"' && *(info->quote_type) == NO_QUOTE)
+		*(info->quote_type) = DOUBLE_QUOTE;
+	(*(info->i))++;
 	if (quote == '\'')
 	{
-		start = *i;
-		while (input[*i] && input[*i] != quote)
-			(*i)++;
-		sub = ft_substr(input, start, *i - start);
+		start = *(info->i);
+		while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
+			(*(info->i))++;
+		sub = ft_substr(info->input, start, *(info->i) - start);
 	}
 	else
 	{
 		sub = ft_strdup("");
-		while (input[*i] && input[*i] != quote)
+		while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
 		{
-			if (input[*i] == '$')
-				handle_variable_expansion(&sub, input, i);
+			if (info->input[*(info->i)] == '$')
+				handle_variable_expansion(&sub, info->input, info->i, info->data);
 			else
 			{
-				start = *i;
-				while (input[*i] && input[*i] != '$' && input[*i] != quote)
-					(*i)++;
-				tmp = ft_substr(input, start, *i - start);
+				start = *(info->i);
+				while (info->input[*(info->i)] && info->input[*(info->i)] != '$'
+					&& info->input[*(info->i)] != quote)
+					(*(info->i))++;
+				tmp = ft_substr(info->input, start, *(info->i) - start);
 				sub = ft_strjoin(sub, tmp);
 			}
 		}
 	}
-
-	if (input[*i] == quote)
-		(*i)++;
-
+	if (info->input[*(info->i)] == quote)
+		(*(info->i))++;
 	tmp = ft_strjoin(*buffer, sub);
 	free(*buffer);
 	free(sub);
@@ -111,10 +106,7 @@ void	handle_quotes_in_token(char **buffer, char *input, int *i, t_quote_type *qu
 }
 
 
-
-
-
-void	handle_variable_expansion(char **buffer, char *input, int *i)
+void	handle_variable_expansion(char **buffer, char *input, int *i, t_data *data)
 {
 	int		start;
 	char	*var;
@@ -136,7 +128,7 @@ void	handle_variable_expansion(char **buffer, char *input, int *i)
 		var = ft_strjoin("$", ft_substr(input, start, *i - start));
 	}
 
-	value = expand_env_var(var, 0); // appelle ta fonction avec $ inclus
+	value = expand_env_var(var, 0, data); // appelle ta fonction avec $ inclus
 	to_append = ft_strdup(value);
 	tmp = ft_strjoin(*buffer, to_append);
 

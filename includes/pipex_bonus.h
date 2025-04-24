@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
 /*   Updated: 2025/04/24 15:27:04 by lcosson          ###   ########.fr       */
@@ -26,6 +26,10 @@
 # include <fcntl.h>
 # include <stdbool.h>
 # include <errno.h>
+
+typedef struct s_cmd t_cmd;
+typedef struct s_data t_data;
+
 
 typedef struct s_pipex
 {

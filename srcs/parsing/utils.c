@@ -6,13 +6,13 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 12:19:50 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 10:55:10 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*expand_env_var(char *token, t_quote_type quote_type)
+char	*expand_env_var(char *token, t_quote_type quote_type, t_data *data)
 {
 	char	*env_value;
 
@@ -33,7 +33,7 @@ char	*expand_env_var(char *token, t_quote_type quote_type)
 		return (ft_strdup("$"));
 
 	// Expansion normale
-	env_value = getenv(token + 1);
+	env_value = ft_getenv(data, token + 1);
 	if (env_value)
 		return (ft_strdup(env_value));
 	return (ft_strdup(""));

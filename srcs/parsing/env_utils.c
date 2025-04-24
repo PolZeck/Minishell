@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.h                                             :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 11:10:15 by pledieu          ###   ########lyon.fr   */
+/*   Created: 2025/04/24 10:44:47 by pledieu           #+#    #+#             */
+/*   Updated: 2025/04/24 10:51:45 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_H
-# define EXEC_H
+#include "parsing.h"
+#include <string.h>
 
-# include "minishell.h"
-# include "pipex_bonus.h"
+char	*ft_getenv(t_data *data, const char *name)
+{
+	int		i;
+	size_t	len;
 
-typedef struct s_cmd t_cmd;
-typedef struct s_data t_data;
-
-
-void	execute_builtin(t_cmd *cmd,  t_data *data);
-void	execute_pipeline(t_cmd *cmd_list, t_data *data);
-char	*find_command_path(char *cmd);
-void	execute_command(t_cmd *cmd, t_data *data);
-
-#endif
+	if (!data || !data->env || !name)
+		return (NULL);
+	len = strlen(name);
+	i = 0;
+	while (data->env[i])
+	{
+		if (!strncmp(data->env[i], name, len) && data->env[i][len] == '=')
+			return (data->env[i] + len + 1);
+		i++;
+	}
+	return (NULL);
+}

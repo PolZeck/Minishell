@@ -6,12 +6,16 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/09 15:59:27 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/24 11:09:57 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+typedef struct s_cmd t_cmd;
+typedef struct s_data t_data;
+
 
 # include "../libft/libft.h"
 # include "signals.h"
