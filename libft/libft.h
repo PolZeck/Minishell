@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 11:08:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/21 13:45:15 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:59:53 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void			ft_lstclear(t_list **lst, void (*del)(void*));
 void			ft_lstiter(t_list *lst, void (*f)(void *));
 int				ft_lstsize(t_list *lst);
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t			ft_strlcpy(char *dst, const char *src, size_t dstsize);
 unsigned int	ft_strlcat(char *dest, char *src, unsigned int size);
 
 int				ft_isdigit(int c);
@@ -75,7 +75,6 @@ char			*ft_strchr(const char *s, int c);
 char			*ft_strrchr(const char *s, int c);
 char			*ft_strnstr(const char *big, const char *little, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2);
-// char			*ft_strjoin_gnl(char *s1, char *s2);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strtrim(char const *s1, char const *set);
 char			*ft_strmapi(char const *s, char (*f)(unsigned int, char));
@@ -99,7 +98,7 @@ size_t			ft_strspn(const char *s, const char *accept);
 size_t			ft_strcspn(const char *s, const char *reject);
 char			*ft_strtok(char *str, const char *delim);
 char			*ft_strtok_r(char *str, const char *delim, char **saveptr);
-char	*ft_strjoin_char(const char *s1, const char *s2, char c);
+char			*ft_strjoin_char(const char *s1, const char *s2, char c);
 
 char			*get_next_line(int fd);
 char			*ft_strdup_gnl(const char *s1);
