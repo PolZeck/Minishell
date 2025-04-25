@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipex_adapter.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:50:45 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 15:27:41 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/25 16:55:40 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static int	count_cmds(t_cmd *cmd)
 static char	*join_args(char **args)
 {
 	char	*result;
+	char	*tmp;
 	int		i;
 
 	if (!args || !args[0])
@@ -40,12 +41,17 @@ static char	*join_args(char **args)
 	i = 1;
 	while (args[i])
 	{
-		result = ft_strjoin(result, " "); // join + free prev
+		tmp = result;
+		result = ft_strjoin(result, " ");
+		free(tmp);
+		tmp = result;
 		result = ft_strjoin(result, args[i]);
+		free(tmp);
 		i++;
 	}
-	return result;
+	return (result);
 }
+
 
 char	*get_last_file_of_type(t_list *redirs, int type1, int type2)
 {
