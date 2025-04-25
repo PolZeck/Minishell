@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 15:09:22 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:40:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,15 @@ static void	print_numeric_error(char *arg)
 	ft_putstr_fd(": numeric argument required\n", 2);
 }
 
+static void	exit_cleanup(t_cmd *cmd, t_data *data, int exit_code)
+{
+	free_cmds(cmd);
+	free_tokens(data->tokens);
+	free_env(data->env);
+	rl_clear_history();
+	exit(exit_code);
+}
+
 int	builtin_exit(t_cmd *cmd, t_data *data)
 {
 	int	exit_code;
@@ -46,11 +55,7 @@ int	builtin_exit(t_cmd *cmd, t_data *data)
 	{
 		print_numeric_error(cmd->args[1]);
 		*get_exit_status() = 2;
-		free_cmds(cmd);
-		free_tokens(data->tokens);    // ✅ AJOUTÉ
-		free_env(data->env);
-		rl_clear_history();
-		exit(2);
+		exit_cleanup(cmd, data, 2);
 	}
 	if (cmd->args[1] && cmd->args[2])
 	{
@@ -58,11 +63,11 @@ int	builtin_exit(t_cmd *cmd, t_data *data)
 		*get_exit_status() = 1;
 		return (1);
 	}
-	exit_code = cmd->args[1] ? ft_atoi(cmd->args[1]) : 0;
+	if (cmd->args[1])
+		exit_code = ft_atoi(cmd->args[1]);
+	else
+		exit_code = 0;
 	*get_exit_status() = exit_code;
-	free_cmds(cmd);
-	free_tokens(data->tokens);        // ✅ AJOUTÉ
-	free_env(data->env);
-	rl_clear_history();
-	exit(exit_code);
+	exit_cleanup(cmd, data, exit_code);
+	return (0);
 }
