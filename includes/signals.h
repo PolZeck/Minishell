@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:39:00 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 11:55:05 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 11:22:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,9 @@ void	disable_ctrl_backslash(void);
 void	setup_signals(void);
 
 int		*get_exit_status(void);
+
+void disable_ctrl_backslash(void);
+void enable_ctrl_backslash(void);
+
 
 #endif
