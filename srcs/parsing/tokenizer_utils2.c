@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 12:35:14 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:21:04 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ void	flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_qu
 	t_token	*new;
 
 	if (!*buffer || !**buffer)
-		return ;
+		return;
 
 	new = malloc(sizeof(t_token));
 	if (!new)
-		return ;
-	new->value = ft_strdup(*buffer); // contenu brut du buffer
+		return;
+	new->value = ft_strdup(*buffer);
 	new->type = WORD;
 	new->quote_type = quote_type;
 	new->next = NULL;
@@ -36,6 +36,7 @@ void	flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_qu
 	free(*buffer);
 	*buffer = ft_strdup("");
 }
+
 
 void	handle_operator_token(t_token **tokens,
 	t_token **last, t_parseinfo *info)

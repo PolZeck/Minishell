@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 11:03:02 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:15:41 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@
 int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
-	t_token	*tokens;
+	// t_token	*tokens;
 	t_cmd	*cmd;
 	t_data	data;
 
@@ -110,13 +110,26 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 
 	setup_signals();
+
+	// ✅ Réactivation explicite des signaux clavier (comme Ctrl-\)
+	#include <termios.h>
+
+	struct termios term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag |= ISIG;        // permet à Ctrl-C et Ctrl-\ d’envoyer des signaux
+	term.c_cc[VQUIT] = 28;       // remet Ctrl-\ (char code 28) comme touche de SIGQUIT
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+
+
 	while (1)
 	{
+		disable_ctrl_backslash();
 		input = readline("minishell> ");
 		if (!input)
 		{
 			write(1, "exit\n", 5);
-			free_env(data.env); // ✅ ici seulement
+			free_env(data.env);
 			rl_clear_history();
 			break ;
 		}
@@ -127,17 +140,16 @@ int	main(int argc, char **argv, char **envp)
 			free(input);
 			continue ;
 		}
-		tokens = tokenize(input, &data);
-		cmd = parse_tokens(tokens);
+		data.tokens = tokenize(input, &data);
+		cmd = parse_tokens(data.tokens);
 		if (cmd)
 			execute_pipeline(cmd, &data);
 		
-		free_tokens(tokens);
+
+		free_tokens(data.tokens);
 		free_cmds(cmd);
 		free(input);
 	}
 	rl_clear_history();
 	return (0);
 }
-
-

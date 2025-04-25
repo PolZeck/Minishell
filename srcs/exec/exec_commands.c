@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 13:05:42 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/25 11:24:17 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,10 +143,16 @@ void	execute_command(t_cmd *cmd, t_data *data)
 			return;
 		}
 	}
-	
+	enable_ctrl_backslash();
 	pid = fork();
 	if (pid == 0)
 	{
+		// ENFANT : réactive les signaux par défaut
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		// raise(SIGQUIT);
+
+
 		t_list *node = cmd->redirs;
 		while (node)
 		{
@@ -168,10 +174,7 @@ void	execute_command(t_cmd *cmd, t_data *data)
 			else if (redir->type == REDIR_OUT || redir->type == APPEND)
 			{
 				int flags = O_WRONLY | O_CREAT;
-				if (redir->type == APPEND)
-					flags |= O_APPEND;
-				else
-					flags |= O_TRUNC;
+				flags |= (redir->type == APPEND) ? O_APPEND : O_TRUNC;
 				fd = open(redir->file, flags, 0644);
 				if (fd == -1)
 				{
@@ -195,17 +198,30 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	else if (pid > 0)
 	{
 		int status;
+		signal(SIGINT, SIG_IGN);      // Ignore Ctrl-C
+		signal(SIGQUIT, SIG_IGN);     // ✅ Ignore Ctrl-\ (très important)
 		waitpid(pid, &status, 0);
+		disable_ctrl_backslash();
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, sigquit_handler);  // ✅ Restaurer proprement
+	
+
 		if (WIFEXITED(status))
 			*get_exit_status() = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			*get_exit_status() = 128 + WTERMSIG(status);
+		{
+			int sig = WTERMSIG(status);
+			*get_exit_status() = 128 + sig;
+			if (sig == SIGINT)
+				write(1, "\n", 1);
+			else if (sig == SIGQUIT)
+				write(1, "Quit (core dumped)\n", 20);
+		}
 	}
 	else
 	{
 		perror("fork");
 		*get_exit_status() = 1;
 	}
-
 	free(cmd_path);
 }

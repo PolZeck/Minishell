@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 12:43:32 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:19:01 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ t_token	*tokenize(char *input, t_data *data)
 
 	if (*buffer)
 		flush_buffer_to_token(&tokens, &last, &buffer, NO_QUOTE);
+
+	
 	free(buffer);
+	// free_tokens(tokens);
 	return (tokens);
 }
 

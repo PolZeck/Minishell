@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:25:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/09 15:42:59 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 11:25:16 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ void	sigquit_handler(int sig)
 	Désactive `Ctrl-\`
 	Applique les nouveaux attributs
 */
-void	disable_ctrl_backslash(void)
-{
-	struct termios term;
+// void	disable_ctrl_backslash(void)
+// {
+// 	struct termios term;
 
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_cc[VQUIT] = _POSIX_VDISABLE;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
+// 	tcgetattr(STDIN_FILENO, &term);
+// 	term.c_cc[VQUIT] = _POSIX_VDISABLE;
+// 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+// }
 /*
 	Ctrl+C -> affiche un nouveau prompt
 	Empeche Ctrl-\ et le desactive
@@ -47,5 +47,5 @@ void	setup_signals(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, sigquit_handler);
-	disable_ctrl_backslash();
+	// disable_ctrl_backslash();
 }
