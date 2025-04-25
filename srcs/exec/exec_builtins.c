@@ -6,24 +6,23 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 15:21:44 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 16:14:27 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "pipex_bonus.h"
 
-#include "minishell.h"
-#include "pipex_bonus.h"
-
 void	execute_builtin(t_cmd *cmd, t_data *data)
 {
-	int		save_stdin = -1;
-	int		save_stdout = -1;
+	int		save_stdin;
+	int		save_stdout;
 	int		fd;
 	t_list	*node;
 	t_redir	*redir;
 
+	save_stdout = -1;
+	save_stdin = -1;
 	node = cmd->redirs;
 	while (node)
 	{
@@ -65,8 +64,6 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		}
 		node = node->next;
 	}
-
-	// 🔧 Exécution du builtin
 	if (!cmd->args[0])
 		return;
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
@@ -83,9 +80,6 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		*get_exit_status() = builtin_unset(cmd, data);
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		*get_exit_status() = builtin_env(cmd, data);
-	// data->tokens = NULL;
-
-	// 🔁 Rétablir les descripteurs originaux
 	if (save_stdin != -1)
 	{
 		dup2(save_stdin, STDIN_FILENO);
@@ -107,13 +101,9 @@ void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex)
 	cmd.redirs = NULL;
 	cmd.invalid = 0;
 	cmd.next = NULL;
-
 	data.env = envp;
-
 	execute_builtin(&cmd, &data);
-
 	clean(pipex);
 	close_fds(pipex);
 	exit(*get_exit_status());
 }
-

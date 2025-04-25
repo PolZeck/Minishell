@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 11:24:17 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 16:12:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,18 @@ char	*find_command_path(char *cmd)
 	i = 0;
 	while (paths[i])
 	{
-		prefix = ft_strjoin(paths[i], "/");             // chemin/
-		full_path = ft_strjoin(prefix, cmd);            // chemin/cmd
-		free(prefix);                                   // ✅ libération du intermédiaire
+		prefix = ft_strjoin(paths[i], "/");
+		full_path = ft_strjoin(prefix, cmd);
+		free(prefix);
 		if (access(full_path, X_OK) == 0)
 		{
-			free_split(paths);                          //  libération du split complet
-			return (full_path);                         // on garde le bon path
+			free_split(paths);
+			return (full_path);
 		}
-		free(full_path);                                //  sinon on le libère
+		free(full_path);
 		i++;
 	}
-	free_split(paths); // libère tout
+	free_split(paths);
 	return (NULL);
 }
 
@@ -82,32 +82,28 @@ int	validate_redirections(t_cmd *cmd)
 
 void	execute_command(t_cmd *cmd, t_data *data)
 {
-	pid_t	pid;
-	char	*cmd_path;
+	pid_t		pid;
+	char		*cmd_path;
 	struct stat	st;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
-		return;
-
+		return ;
 	if (validate_redirections(cmd))
 	{
 		*get_exit_status() = 1;
-		return;
+		return ;
 	}
-
 	if (cmd->args[0][0] == '\0')
 	{
 		print_error("bash: ", "", ": command not found\n");
 		*get_exit_status() = 127;
-		return;
+		return ;
 	}
-
 	if (is_builtin(cmd->args[0]))
 	{
 		execute_builtin(cmd, data);
-		return;
+		return ;
 	}
-
 	if (ft_strchr(cmd->args[0], '/'))
 	{
 		if (stat(cmd->args[0], &st) == 0)
@@ -116,13 +112,13 @@ void	execute_command(t_cmd *cmd, t_data *data)
 			{
 				print_error("bash: ", cmd->args[0], ": Is a directory\n");
 				*get_exit_status() = 126;
-				return;
+				return ;
 			}
 			if (access(cmd->args[0], X_OK) != 0)
 			{
 				print_error("bash: ", cmd->args[0], ": Permission denied\n");
 				*get_exit_status() = 126;
-				return;
+				return ;
 			}
 			cmd_path = ft_strdup(cmd->args[0]);
 		}
@@ -130,7 +126,7 @@ void	execute_command(t_cmd *cmd, t_data *data)
 		{
 			print_error("bash: ", cmd->args[0], ": No such file or directory\n");
 			*get_exit_status() = 127;
-			return;
+			return ;
 		}
 	}
 	else
@@ -140,19 +136,15 @@ void	execute_command(t_cmd *cmd, t_data *data)
 		{
 			print_error("bash: ", cmd->args[0], ": command not found\n");
 			*get_exit_status() = 127;
-			return;
+			return ;
 		}
 	}
 	enable_ctrl_backslash();
 	pid = fork();
 	if (pid == 0)
 	{
-		// ENFANT : réactive les signaux par défaut
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		// raise(SIGQUIT);
-
-
 		t_list *node = cmd->redirs;
 		while (node)
 		{
@@ -198,14 +190,12 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	else if (pid > 0)
 	{
 		int status;
-		signal(SIGINT, SIG_IGN);      // Ignore Ctrl-C
-		signal(SIGQUIT, SIG_IGN);     // ✅ Ignore Ctrl-\ (très important)
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
 		disable_ctrl_backslash();
 		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, sigquit_handler);  // ✅ Restaurer proprement
-	
-
+		signal(SIGQUIT, sigquit_handler);
 		if (WIFEXITED(status))
 			*get_exit_status() = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
