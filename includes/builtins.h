@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:47:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 11:10:19 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 14:27:36 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	builtin_cd(t_cmd *cmd);
 int	builtin_echo(t_cmd *cmd);
 
 // Builtins : EXIT
-int	builtin_exit(t_cmd *cmd);
+int	builtin_exit(t_cmd *cmd, t_data *data);
 int	builtin_pwd(t_cmd *cmd);
 int	builtin_env(t_cmd *cmd, t_data *data);
 int	builtin_unset(t_cmd *cmd, t_data *data);

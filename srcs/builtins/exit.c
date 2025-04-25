@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 13:09:23 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 14:30:28 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	print_numeric_error(char *arg)
 	ft_putstr_fd(": numeric argument required\n", 2);
 }
 
-int	builtin_exit(t_cmd *cmd)
+int	builtin_exit(t_cmd *cmd, t_data *data)
 {
 	int	exit_code;
 
@@ -47,6 +47,8 @@ int	builtin_exit(t_cmd *cmd)
 		print_numeric_error(cmd->args[1]);
 		*get_exit_status() = 2;
 		free_cmds(cmd);
+		free_env(data->env);         // ✅
+		rl_clear_history();          // ✅
 		exit(2);
 	}
 	if (cmd->args[1] && cmd->args[2])
@@ -60,5 +62,7 @@ int	builtin_exit(t_cmd *cmd)
 		exit_code = ft_atoi(cmd->args[1]);
 	*get_exit_status() = exit_code;
 	free_cmds(cmd);
+	free_env(data->env);             // ✅
+	rl_clear_history();              // ✅
 	exit(exit_code);
 }
