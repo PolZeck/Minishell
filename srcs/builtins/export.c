@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 13:26:19 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 17:21:37 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,72 @@ static void	add_or_replace_var(t_data *data, char *arg)
 		data->env = append_env(data->env, arg);
 }
 
+static void	sort_env(char **env)
+{
+	int		i;
+	int		swapped;
+	char	*tmp;
+
+	if (!env)
+		return ;
+	swapped = 1;
+	while (swapped)
+	{
+		swapped = 0;
+		i = 0;
+		while (env[i] && env[i + 1])
+		{
+			if (ft_strcmp(env[i], env[i + 1]) > 0)
+			{
+				tmp = env[i];
+				env[i] = env[i + 1];
+				env[i + 1] = tmp;
+				swapped = 1;
+			}
+			i++;
+		}
+	}
+}
+
+static void	print_export(char **env)
+{
+	int		i;
+	char	*eq;
+	char	*name;
+	char	*value;	
+
+	if (!env)
+		return ;
+	i = 0;
+	while (env[i])
+	{
+		eq = ft_strchr(env[i], '=');
+		if (eq)
+		{
+			name = ft_substr(env[i], 0, eq - env[i]);
+			value = eq + 1;
+			printf("export %s=\"%s\"\n", name, value);
+			free(name);
+		}
+		else
+			printf("export %s\n", env[i]);
+		i++;
+	}
+}
+
 int	builtin_export(t_cmd *cmd, t_data *data)
 {
-	int	i;
+	int		i;
+	char	**sorted;
 
 	if (!cmd->args[1])
 	{
-		*get_exit_status() = 0;
+		sorted = dup_env(data->env);
+		if (!sorted)
+			return (1);
+		sort_env(sorted);
+		print_export(sorted);
+		free_split(sorted);
 		return (0);
 	}
 	i = 1;
