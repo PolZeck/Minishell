@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 11:54:25 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/15 11:54:49 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:41:24 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,6 @@
 int	*get_exit_status(void)
 {
 	static int	status = 0;
+
 	return (&status);
 }
