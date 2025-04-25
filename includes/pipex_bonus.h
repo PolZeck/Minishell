@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/24 15:27:04 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/25 15:56:57 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,8 @@
 # include <stdbool.h>
 # include <errno.h>
 
-typedef struct s_cmd t_cmd;
-typedef struct s_data t_data;
-
+typedef struct s_cmd	t_cmd;
+typedef struct s_data	t_data;
 
 typedef struct s_pipex
 {
@@ -40,7 +39,7 @@ typedef struct s_pipex
 	int		num_cmds;
 	pid_t	*pid;
 	int		here_doc_flag;
-	t_cmd 	*current_cmd; 
+	t_cmd	*current_cmd;
 }			t_pipex;
 
 # define TRUE 1
@@ -78,8 +77,7 @@ int		my_pipex(char **argv, char **envp, t_pipex *pipex, t_cmd *cmd_list);
 char	*get_last_file_of_type(t_list *redirs, int type1, int type2);
 
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex);
-int	execute_pipex_adapter(t_cmd *cmds, char **envp);
-int	main_bonus(int argc, char **argv, char **envp);
-bool check_redirections_failure(t_cmd *cmd);
+int		execute_pipex_adapter(t_cmd *cmds, char **envp);
+bool	check_redirections_failure(t_cmd *cmd);
 
 #endif
