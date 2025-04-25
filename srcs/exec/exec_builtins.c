@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 14:27:45 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:21:44 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		*get_exit_status() = builtin_unset(cmd, data);
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		*get_exit_status() = builtin_env(cmd, data);
+	// data->tokens = NULL;
 
 	// 🔁 Rétablir les descripteurs originaux
 	if (save_stdin != -1)

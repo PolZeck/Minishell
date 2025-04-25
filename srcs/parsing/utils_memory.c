@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/22 15:33:11 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:12:33 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	free_tokens(t_token *tokens)
 		tmp = tokens->next;
 		if (tokens->value)
 			free(tokens->value);
+
 		free(tokens);
 		tokens = tmp;
 	}

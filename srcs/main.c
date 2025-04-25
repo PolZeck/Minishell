@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 11:22:28 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:15:41 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@
 int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
-	t_token	*tokens;
+	// t_token	*tokens;
 	t_cmd	*cmd;
 	t_data	data;
 
@@ -140,12 +140,13 @@ int	main(int argc, char **argv, char **envp)
 			free(input);
 			continue ;
 		}
-		tokens = tokenize(input, &data);
-		cmd = parse_tokens(tokens);
+		data.tokens = tokenize(input, &data);
+		cmd = parse_tokens(data.tokens);
 		if (cmd)
 			execute_pipeline(cmd, &data);
 		
-		free_tokens(tokens);
+
+		free_tokens(data.tokens);
 		free_cmds(cmd);
 		free(input);
 	}

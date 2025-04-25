@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 10:14:53 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:04:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_token_list
 typedef struct s_data
 {
 	char	**env;
+	t_token	*tokens;
 }	t_data;
 
 typedef struct s_parseinfo
