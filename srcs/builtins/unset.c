@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:08:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 13:25:54 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/27 12:09:42 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,45 @@ static int	is_valid_identifier_unset(char *var)
 	return (1);
 }
 
+static int	match_var(char *env_var, char *key)
+{
+	int	i;
+
+	i = 0;
+	while (env_var[i] && key[i] && env_var[i] != '=')
+	{
+		if (env_var[i] != key[i])
+			return (0);
+		i++;
+	}
+	return (env_var[i] == '=' && key[i] == '\0');
+}
+
 static char	**remove_var(char **env, char *key)
 {
 	int		i;
 	int		j;
-	int		count;
+	int		new_count;
 	char	**new_env;
 
+	new_count = 0;
 	i = 0;
-	j = 0;
-	count = 0;
-	while (env[count])
-		count++;
-	new_env = malloc(sizeof(char *) * count);
-	if (!new_env)
-		return (NULL);
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], key, ft_strlen(key)) == 0
-			&& env[i][ft_strlen(key)] == '=')
-			i++;
-		else
-			new_env[j++] = ft_strdup(env[i++]);
+		if (!match_var(env[i], key))
+			new_count++;
+		i++;
+	}
+	new_env = malloc(sizeof(char *) * (new_count + 1));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (env[i])
+	{
+		if (!match_var(env[i], key))
+			new_env[j++] = ft_strdup(env[i]);
+		i++;
 	}
 	new_env[j] = NULL;
 	free_split(env);
