@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 16:51:01 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/27 11:55:59 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ t_cmd	*parse_tokens(t_token *tokens)
 	t_cmd	*cmd;
 	t_cmd	*head;
 	int		arg_count;
-	size_t	args_size;
 
 	if (!tokens || tokens->type == PIPE)
 	{
@@ -32,10 +31,9 @@ t_cmd	*parse_tokens(t_token *tokens)
 		return (NULL);
 	head = cmd;
 	arg_count = 0;
-	args_size = 2;
 
 	while (tokens)
-	{
+	{																																																		
 		if (tokens->type == PIPE)
 		{
 			if (!tokens->next || tokens->next->type == PIPE)
