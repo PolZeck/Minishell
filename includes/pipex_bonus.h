@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/25 15:56:57 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/28 13:59:16 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,12 @@ int		my_pipex(char **argv, char **envp, t_pipex *pipex, t_cmd *cmd_list);
 char	*get_last_file_of_type(t_list *redirs, int type1, int type2);
 
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex);
-int		execute_pipex_adapter(t_cmd *cmds, char **envp);
+int		execute_pipex_direct(t_cmd *cmds, t_data *data);
 bool	check_redirections_failure(t_cmd *cmd);
+
+bool	has_input_redir(t_cmd *cmd);
+bool	has_output_redir(t_cmd *cmd);
+void 	apply_redirections(t_list *redirs);
+int		wait_for_processes(t_pipex *pipex);
 
 #endif

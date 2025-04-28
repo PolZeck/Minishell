@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 16:12:46 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/28 13:51:11 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 	if (count == 1)
 		execute_command(cmd_list, data);
 	else
-		*get_exit_status() = execute_pipex_adapter(cmd_list, data->env);
+		*get_exit_status() = execute_pipex_direct(cmd_list, data);
 }

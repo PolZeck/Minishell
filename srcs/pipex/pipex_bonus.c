@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 13:40:34 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/24 15:28:37 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/28 14:01:42 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,37 +75,4 @@ int	wait_for_processes(t_pipex *pipex)
 	}
 	clean(pipex);
 	return (final_status);
-}
-
-int	my_pipex(char **argv, char **envp, t_pipex *pipex, t_cmd *cmd_list)
-{
-	int	i;
-	int	status;
-
-	pipex->pid = ft_calloc(pipex->num_cmds, sizeof(pid_t));
-	if (!pipex->pid)
-	{
-		close_fds(pipex);
-		clean(pipex);
-		my_perr(ERR_MALLOC, true);
-	}
-	
-	t_cmd *cmd = cmd_list;
-
-	i = -1;
-	while (++i < pipex->num_cmds)
-	{
-		pipex->current_cmd = cmd;
-		if (i == 0)
-			pipex->pid[i] = first_execution_bonus(i, argv, envp, pipex);
-		else if (i == pipex->num_cmds - 1)
-			pipex->pid[i] = last_execution_bonus(i, argv, envp, pipex);
-		else
-			pipex->pid[i] = middle_execution_bonus(i, argv, envp, pipex);
-		cmd = cmd->next;
-	}
-	close_fds(pipex);
-	status = wait_for_processes(pipex);
-	clean(pipex);
-	return (status);
 }
