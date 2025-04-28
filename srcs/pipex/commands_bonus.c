@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:42:11 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/28 14:03:22 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/28 14:29:26 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ bool	has_input_redir(t_cmd *cmd)
 	t_redir	*redir;
 
 	if (!cmd)
-		return false;
+		return (false);
 	node = cmd->redirs;
 	while (node)
 	{
 		redir = (t_redir *)node->content;
 		if (redir->type == REDIR_IN || redir->type == HEREDOC)
-			return true;
+			return (true);
 		node = node->next;
 	}
 	return (false);
@@ -37,7 +37,6 @@ bool	has_output_redir(t_cmd *cmd)
 
 	if (!cmd)
 		return (false);
-
 	node = cmd->redirs;
 	while (node)
 	{
@@ -49,14 +48,14 @@ bool	has_output_redir(t_cmd *cmd)
 	return (false);
 }
 
-void apply_redirections(t_list *redirs)
+void	apply_redirections(t_list *redirs)
 {
-	t_list *node = redirs;
-	t_redir *redir;
-	t_redir *last_out = NULL;
-	int fd;
+	t_list	*node;
+	t_redir	*redir;
+	t_redir	*last_out;
+	int		fd;
+	int		flags;
 
-	// 1. Appliquer redirections d'entrée (IN / HEREDOC)
 	node = redirs;
 	while (node)
 	{
@@ -74,31 +73,36 @@ void apply_redirections(t_list *redirs)
 		}
 		node = node->next;
 	}
-
-	// 2. Ouvrir tous les fichiers OUT pour les effets de bord, sans dup2
 	node = redirs;
+	last_out = NULL;
 	while (node)
 	{
 		redir = (t_redir *)node->content;
 		if (redir->type == REDIR_OUT || redir->type == APPEND)
 		{
-			int flags = O_WRONLY | O_CREAT | (redir->type == APPEND ? O_APPEND : O_TRUNC);
+			flags = O_WRONLY | O_CREAT;
+			if (redir->type == APPEND)
+				flags |= O_APPEND;
+			else
+				flags |= O_TRUNC;
 			fd = open(redir->file, flags, 0644);
 			if (fd == -1)
 			{
 				perror(redir->file);
-				exit(1); // quitte immédiatement : ne passe pas à la suite
+				exit(1);
 			}
 			close(fd);
 			last_out = redir;
 		}
 		node = node->next;
 	}
-
-	// 3. Appliquer dup2 uniquement pour la dernière redirection OUT
 	if (last_out)
 	{
-		int flags = O_WRONLY | O_CREAT | (last_out->type == APPEND ? O_APPEND : O_TRUNC);
+		flags = O_WRONLY | O_CREAT;
+		if (last_out->type == APPEND)
+			flags |= O_APPEND;
+		else
+			flags |= O_TRUNC;
 		fd = open(last_out->file, flags, 0644);
 		if (fd == -1)
 		{
@@ -110,14 +114,12 @@ void apply_redirections(t_list *redirs)
 	}
 }
 
-
 void	execute_cmd(t_cmd *cmd, char **envp, t_pipex *pipex)
 {
 	char	*path_cmd;
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		exit(1);
-
 	if (is_builtin(cmd->args[0]))
 	{
 		apply_redirections(cmd->redirs);
@@ -126,7 +128,6 @@ void	execute_cmd(t_cmd *cmd, char **envp, t_pipex *pipex)
 		close_fds(pipex);
 		exit(EXIT_SUCCESS);
 	}
-
 	path_cmd = check_addpath_cmd_bonus(cmd->args[0], envp, pipex);
 	if (!path_cmd)
 	{
@@ -134,9 +135,7 @@ void	execute_cmd(t_cmd *cmd, char **envp, t_pipex *pipex)
 		close_fds(pipex);
 		exit(127);
 	}
-
 	apply_redirections(cmd->redirs);
-
 	if (execve(path_cmd, cmd->args, envp) == -1)
 		handle_exec_error(path_cmd, cmd->args);
 }

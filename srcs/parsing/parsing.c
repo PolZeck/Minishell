@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/27 11:55:59 by pol              ###   ########.fr       */
+/*   Updated: 2025/04/28 14:44:36 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,14 @@ t_cmd	*parse_tokens(t_token *tokens)
 	int		arg_count;
 
 	if (!tokens || tokens->type == PIPE)
-	{
-		//ft_printf("bash: syntax error near unexpected token `|'\n");
 		return (NULL);
-	}
-
 	cmd = create_cmd(tokens);
 	if (!cmd)
 		return (NULL);
 	head = cmd;
 	arg_count = 0;
-
 	while (tokens)
-	{																																																		
+	{
 		if (tokens->type == PIPE)
 		{
 			if (!tokens->next || tokens->next->type == PIPE)
@@ -59,11 +54,8 @@ t_cmd	*parse_tokens(t_token *tokens)
 		}
 		tokens = tokens->next;
 	}
-
 	if (cmd && cmd->args)
 		cmd->args[arg_count] = NULL;
-
-
 	return (head);
 }
 

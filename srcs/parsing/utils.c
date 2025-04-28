@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 10:55:10 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/28 14:40:18 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,14 @@ char	*expand_env_var(char *token, t_quote_type quote_type, t_data *data)
 {
 	char	*env_value;
 
-	// Pas d’expansion dans les quotes simples
 	if (quote_type == SINGLE_QUOTE)
 		return (ft_strdup(token));
-
-	// Si ce n’est pas une variable
 	if (!token || token[0] != '$')
 		return (ft_strdup(token));
-
-	// Variable spéciale `$?`
 	if (ft_strcmp(token, "$?") == 0)
 		return (ft_itoa(*get_exit_status()));
-
-	// Cas "$" seul sans nom de variable
 	if (token[1] == '\0')
 		return (ft_strdup("$"));
-
-	// Expansion normale
 	env_value = ft_getenv(data, token + 1);
 	if (env_value)
 		return (ft_strdup(env_value));
@@ -41,8 +32,9 @@ char	*expand_env_var(char *token, t_quote_type quote_type, t_data *data)
 
 int	count_args(t_token *tokens)
 {
-	int	count = 0;
+	int	count;
 
+	count = 0;
 	while (tokens && tokens->type != PIPE)
 	{
 		if (tokens->type == WORD || tokens->type == QUOTE)
@@ -51,39 +43,40 @@ int	count_args(t_token *tokens)
 			|| tokens->type == HEREDOC || tokens->type == APPEND)
 		{
 			if (tokens->next)
-				tokens = tokens->next; // skip redir target
+				tokens = tokens->next;
 		}
 		tokens = tokens->next;
 	}
 	return (count);
 }
 
-
 t_cmd	*create_cmd(t_token *tokens)
 {
-	t_cmd *cmd = malloc(sizeof(t_cmd));
+	t_cmd	*cmd;
+	int		i;
+	int		arg_count;
+
+	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-
-	int arg_count = count_args(tokens);
+	arg_count = count_args(tokens);
 	cmd->args = malloc(sizeof(char *) * (arg_count + 1));
 	if (!cmd->args)
 	{
 		free(cmd);
 		return (NULL);
 	}
-
-	for (int i = 0; i <= arg_count; i++) // ✅ ici, on corrige le nom
+	i = 0;
+	while (i <= arg_count)
+	{
 		cmd->args[i] = NULL;
-
+		i++;
+	}
 	cmd->redirs = NULL;
 	cmd->invalid = 0;
 	cmd->next = NULL;
-
 	return (cmd);
 }
-
-
 
 int	is_operator(char c)
 {

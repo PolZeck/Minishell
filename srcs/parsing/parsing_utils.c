@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 16:50:55 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/28 14:50:57 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,17 @@ void	handle_redir_in(t_cmd *cmd, t_token **tokens)
 	add_redir(cmd, REDIR_IN, ft_strdup((*tokens)->value));
 }
 
-
 void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 {
-	t_token *token = *tokens;
+	t_token	*token;
 
+	token = *tokens;
 	if (token->next && token->next->type == WORD)
 	{
-		add_redir(cmd, append ? APPEND : REDIR_OUT, ft_strdup(token->next->value));
+		if (append)
+			add_redir(cmd, APPEND, ft_strdup(token->next->value));
+		else
+			add_redir(cmd, REDIR_OUT, ft_strdup(token->next->value));
 		*tokens = token->next;
 	}
 	else
@@ -74,7 +77,6 @@ void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 		cmd->invalid = 1;
 	}
 }
-
 
 void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 {
@@ -92,25 +94,28 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 		return ;
 	}
 	add_redir(cmd, HEREDOC, ft_strdup((*tokens)->value));
-	ft_printf("Lecture depuis un HEREDOC avec délimiteur : %s\n", (*tokens)->value);
+	ft_printf("Lecture depuis un HEREDOC avec délimiteur : %s\n",
+		(*tokens)->value);
 }
-
-
 
 t_redir	*create_redir(int type, char *file)
 {
-	t_redir *redir = malloc(sizeof(t_redir));
+	t_redir	*redir;
+
+	redir = malloc(sizeof(t_redir));
 	if (!redir)
 		return (NULL);
 	redir->type = type;
-	redir->file = file; // 🔥 tu peux faire un strdup ici si besoin
+	redir->file = file;
 	return (redir);
 }
 
 void	add_redir(t_cmd *cmd, int type, char *file)
 {
-	t_redir *redir = create_redir(type, file);
+	t_redir	*redir;
+
+	redir = create_redir(type, file);
 	if (!redir)
-		return ; // ou gérer erreur mémoire
+		return ;
 	ft_lstadd_back(&cmd->redirs, ft_lstnew(redir));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 16:14:27 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/28 14:12:08 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 	int		save_stdin;
 	int		save_stdout;
 	int		fd;
+	int		flags;
 	t_list	*node;
 	t_redir	*redir;
 
@@ -44,7 +45,7 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		}
 		else if (redir->type == REDIR_OUT || redir->type == APPEND)
 		{
-			int flags = O_WRONLY | O_CREAT;
+			flags = O_WRONLY | O_CREAT;
 			if (redir->type == APPEND)
 				flags |= O_APPEND;
 			else
@@ -65,7 +66,7 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		node = node->next;
 	}
 	if (!cmd->args[0])
-		return;
+		return ;
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
 		*get_exit_status() = builtin_cd(cmd);
 	else if (ft_strcmp(cmd->args[0], "echo") == 0)

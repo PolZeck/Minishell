@@ -3,35 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:03:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/24 10:58:00 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/28 14:53:50 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*create_token(char *value, t_token_type type, t_quote_type quote_type, t_data *data)
+t_token	*create_token(char *value, t_token_type type,
+						t_quote_type quote_type, t_data *data)
 {
 	t_token	*token;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-
 	if (quote_type == SINGLE_QUOTE)
-		token->value = ft_strdup(value); // jamais expand dans single quotes
+		token->value = ft_strdup(value);
 	else
-		token->value = expand_env_var(value, quote_type, data); // expand toujours sauf single
-
+		token->value = expand_env_var(value, quote_type, data);
 	token->type = type;
 	token->quote_type = quote_type;
 	token->next = NULL;
 	return (token);
 }
-
-
 
 int	check_unclosed_quotes(char *input)
 {
@@ -54,7 +51,8 @@ int	check_unclosed_quotes(char *input)
 	return (quote != 0);
 }
 
-void	add_token(t_token **tokens, t_token **last, t_token_info info, t_data *data)
+void	add_token(t_token **tokens, t_token **last,
+					t_token_info info, t_data *data)
 {
 	t_token	*new_token;
 

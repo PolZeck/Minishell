@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_memory.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 15:12:33 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/28 14:36:27 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	free_tokens(t_token *tokens)
 		tmp = tokens->next;
 		if (tokens->value)
 			free(tokens->value);
-
 		free(tokens);
 		tokens = tmp;
 	}
@@ -64,8 +63,6 @@ void	free_cmds(t_cmd *cmd)
 	while (cmd)
 	{
 		tmp = cmd->next;
-
-		// Free args
 		if (cmd->args)
 		{
 			i = 0;
@@ -73,8 +70,6 @@ void	free_cmds(t_cmd *cmd)
 				free(cmd->args[i++]);
 			free(cmd->args);
 		}
-
-		// Free redirections
 		node = cmd->redirs;
 		while (node)
 		{
@@ -89,13 +84,10 @@ void	free_cmds(t_cmd *cmd)
 			free(node);
 			node = next;
 		}
-
-		// Free the command itself
 		free(cmd);
 		cmd = tmp;
 	}
 }
-
 
 void	free_split(char **split)
 {
@@ -111,9 +103,11 @@ void	free_split(char **split)
 
 void	free_env(char **env)
 {
-	int i = 0;
+	int	i;
+
 	if (!env)
-		return;
+		return ;
+	i = 0;
 	while (env[i])
 		free(env[i++]);
 	free(env);

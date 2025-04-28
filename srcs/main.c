@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 15:15:41 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/28 14:34:55 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,7 @@ int	main(int argc, char **argv, char **envp)
 	data.env = dup_env(envp);
 	if (!data.env)
 		return (1);
-
 	setup_signals();
-
 	// ✅ Réactivation explicite des signaux clavier (comme Ctrl-\)
 	#include <termios.h>
 
@@ -120,8 +118,6 @@ int	main(int argc, char **argv, char **envp)
 	term.c_lflag |= ISIG;        // permet à Ctrl-C et Ctrl-\ d’envoyer des signaux
 	term.c_cc[VQUIT] = 28;       // remet Ctrl-\ (char code 28) comme touche de SIGQUIT
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-
-
 	while (1)
 	{
 		disable_ctrl_backslash();
@@ -144,8 +140,6 @@ int	main(int argc, char **argv, char **envp)
 		cmd = parse_tokens(data.tokens);
 		if (cmd)
 			execute_pipeline(cmd, &data);
-		
-
 		free_tokens(data.tokens);
 		free_cmds(cmd);
 		free(input);
