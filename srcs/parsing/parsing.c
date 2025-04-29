@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 10:53:42 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 16:37:04 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ t_cmd	*parse_tokens(t_token *tokens)
 	t_cmd	*cmd;
 	t_cmd	*head;
 	int		arg_count;
-
-	if (!tokens || tokens->type == PIPE)
+	if (!tokens)
+		return (NULL);
+	if (tokens->type == PIPE)
 	{
 		ft_printf("bash: syntax error near unexpected token `|'\n");
 		*get_exit_status() = 2;
@@ -57,6 +58,11 @@ t_cmd	*parse_tokens(t_token *tokens)
 			free_cmds(head);
 			return (NULL);
 		}
+		if (cmd->invalid)
+		{
+			free_cmds(head);
+			return (NULL);
+		}
 		tokens = tokens->next;
 	}
 	if (cmd && cmd->args)
@@ -68,7 +74,7 @@ static int	handle_redirections(t_cmd *cmd, t_token **tokens)
 {
 	if (!(*tokens)->next || (*tokens)->next->type != WORD)
 	{
-		ft_printf("Erreur : redirection sans fichier valide\n");
+		ft_printf("bash: syntax error near unexpected token `>'\n"); // Il faut le cas pour le < aussi
 		return (0);
 	}
 	if ((*tokens)->type == REDIR_IN)

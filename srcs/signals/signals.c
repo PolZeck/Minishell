@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:25:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 15:41:51 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/29 13:32:27 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signals.h"
+
+volatile sig_atomic_t heredoc_interrupted = 0;
 
 void	sigint_handler(int sig)
 {
@@ -30,4 +32,12 @@ void	setup_signals(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, sigquit_handler);
+}
+
+void	heredoc_sigint_handler(int sig)
+{
+	(void)sig;
+	heredoc_interrupted = 1;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_done = 1;
 }

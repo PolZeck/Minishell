@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:36:27 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 12:07:37 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void	free_cmds(t_cmd *cmd)
 			{
 				if (redir->file)
 					free(redir->file);
+				if (redir->type == HEREDOC && redir->fd != -1)
+					close(redir->fd);
 				free(redir);
 			}
 			free(node);

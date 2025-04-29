@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 10:50:48 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 16:32:13 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,111 @@ void print_error(char *prefix, char *cmd, char *message)
 
 int	validate_redirections(t_cmd *cmd)
 {
-	t_list	*node = cmd->redirs;
+	t_list	*node;
 	t_redir	*redir;
 	int		fd;
 
+	node = cmd->redirs;
 	while (node)
 	{
-		redir = (t_redir *)node->content;
-		if (redir->type == REDIR_IN || redir->type == HEREDOC)
-			fd = open(redir->file, O_RDONLY);
-		else
-			fd = open(redir->file,
-				O_WRONLY | O_CREAT | (redir->type == APPEND ? O_APPEND : O_TRUNC),
-				0644);
-		if (fd == -1)
+		redir = node->content;
+		if (redir->type == REDIR_IN)
 		{
-			perror(redir->file);
-			return (1);
+			if (!redir->file)
+			{
+				ft_putstr_fd("minishell: redirection file missing\n", 2);
+				return (1);
+			}
+			fd = open(redir->file, O_RDONLY);
+			if (fd == -1)
+			{
+				ft_putstr_fd("bash: ", STDERR_FILENO);
+				perror(redir->file);
+				return (1);
+			}
+			close(fd);
 		}
-		close(fd);
+		else if (redir->type == REDIR_OUT || redir->type == APPEND)
+		{
+			if (!redir->file)
+			{
+				ft_putstr_fd("minishell: redirection file missing\n", 2);
+				return (1);
+			}
+			fd = open(redir->file, O_WRONLY | O_CREAT
+					| (redir->type == APPEND ? O_APPEND : O_TRUNC), 0644);
+			if (fd == -1)
+			{
+				perror(redir->file);
+				return (1);
+			}
+			close(fd);
+		}
 		node = node->next;
 	}
 	return (0);
+}
+
+void apply_redirections_in_child(t_cmd *cmd)
+{
+	t_list *node = cmd->redirs;
+	int input_fd = -1;
+	int output_fd = -1;
+
+	while (node)
+	{
+		t_redir *redir = node->content;
+		int fd = -1;
+
+		if (redir->type == HEREDOC && redir->fd != -1)
+		{
+			if (input_fd != -1)
+				close(input_fd);
+			input_fd = redir->fd;
+		}
+		else if (redir->type == REDIR_IN)
+		{
+			if (!redir->file)
+				exit(1);
+			fd = open(redir->file, O_RDONLY);
+			if (fd == -1)
+			{
+				perror(redir->file);
+				exit(1);
+			}
+			if (input_fd != -1)
+				close(input_fd);
+			input_fd = fd;
+		}
+		else if (redir->type == REDIR_OUT || redir->type == APPEND)
+		{
+			if (!redir->file)
+				exit(1);
+			int flags = O_WRONLY | O_CREAT;
+			flags |= (redir->type == APPEND) ? O_APPEND : O_TRUNC;
+			fd = open(redir->file, flags, 0644);
+			if (fd == -1)
+			{
+				perror(redir->file);
+				exit(1);
+			}
+			if (output_fd != -1)
+				close(output_fd);
+			output_fd = fd;
+		}
+		node = node->next;
+	}
+
+	if (input_fd != -1)
+	{
+		dup2(input_fd, STDIN_FILENO);
+		close(input_fd);
+	}
+	if (output_fd != -1)
+	{
+		dup2(output_fd, STDOUT_FILENO);
+		close(output_fd);
+	}
 }
 
 void	execute_command(t_cmd *cmd, t_data *data)
@@ -85,6 +168,7 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	pid_t		pid;
 	char		*cmd_path;
 	struct stat	st;
+	int			saved_stdout;
 
 	if (!cmd)
 		return ;
@@ -97,7 +181,7 @@ void	execute_command(t_cmd *cmd, t_data *data)
 		return ;
 	if (cmd->args[0][0] == '\0')
 	{
-		print_error("bash: ", "", ": command not found\n");
+		ft_putstr_fd("bash: : command not found\n", STDERR_FILENO);
 		*get_exit_status() = 127;
 		return ;
 	}
@@ -112,13 +196,17 @@ void	execute_command(t_cmd *cmd, t_data *data)
 		{
 			if (S_ISDIR(st.st_mode))
 			{
-				print_error("bash: ", cmd->args[0], ": Is a directory\n");
+				ft_putstr_fd("bash: ", STDERR_FILENO);
+				ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+				ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 				*get_exit_status() = 126;
 				return ;
 			}
 			if (access(cmd->args[0], X_OK) != 0)
 			{
-				print_error("bash: ", cmd->args[0], ": Permission denied\n");
+				ft_putstr_fd("bash: ", STDERR_FILENO);
+				ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+				ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
 				*get_exit_status() = 126;
 				return ;
 			}
@@ -126,7 +214,9 @@ void	execute_command(t_cmd *cmd, t_data *data)
 		}
 		else
 		{
-			print_error("bash: ", cmd->args[0], ": No such file or directory\n");
+			ft_putstr_fd("bash: ", STDERR_FILENO);
+			ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 			*get_exit_status() = 127;
 			return ;
 		}
@@ -136,68 +226,48 @@ void	execute_command(t_cmd *cmd, t_data *data)
 		cmd_path = find_command_path(cmd->args[0]);
 		if (!cmd_path)
 		{
-			print_error("bash: ", cmd->args[0], ": command not found\n");
+			ft_putstr_fd("bash: ", STDERR_FILENO);
+			ft_putstr_fd(cmd->args[0], STDERR_FILENO);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
 			*get_exit_status() = 127;
 			return ;
 		}
 	}
+
 	enable_ctrl_backslash();
+
+	// ➔ Sauvegarder stdout
+	saved_stdout = dup(STDOUT_FILENO);
+
 	pid = fork();
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		t_list *node = cmd->redirs;
-		while (node)
-		{
-			t_redir *redir = (t_redir *)node->content;
-			int fd;
 
-			if (redir->type == REDIR_IN || redir->type == HEREDOC)
-			{
-				fd = open(redir->file, O_RDONLY);
-				if (fd == -1)
-				{
-					print_error("bash: ", redir->file, ": ");
-					perror("");
-					exit(1);
-				}
-				dup2(fd, STDIN_FILENO);
-				close(fd);
-			}
-			else if (redir->type == REDIR_OUT || redir->type == APPEND)
-			{
-				int flags = O_WRONLY | O_CREAT;
-				flags |= (redir->type == APPEND) ? O_APPEND : O_TRUNC;
-				fd = open(redir->file, flags, 0644);
-				if (fd == -1)
-				{
-					print_error("bash: ", redir->file, ": ");
-					perror("");
-					exit(1);
-				}
-				dup2(fd, STDOUT_FILENO);
-				close(fd);
-			}
-			node = node->next;
-		}
+		// ➔ Appliquer les redirections dans le processus enfant
+		apply_redirections_in_child(cmd);
 
-		if (execve(cmd_path, cmd->args, data->env) == -1)
-		{
-			print_error("bash: ", cmd_path, ": ");
-			perror("");
-			exit(126);
-		}
+		execve(cmd_path, cmd->args, data->env);
+		perror(cmd_path);
+		exit(126);
 	}
 	else if (pid > 0)
 	{
 		int status;
+
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
+
+		// ➔ Restaurer stdout
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+
 		disable_ctrl_backslash();
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, sigquit_handler);
+
 		if (WIFEXITED(status))
 			*get_exit_status() = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
@@ -217,3 +287,4 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	}
 	free(cmd_path);
 }
+
