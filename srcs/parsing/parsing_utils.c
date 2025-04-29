@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:50:57 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 14:00:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,25 @@ void	handle_redir_in(t_cmd *cmd, t_token **tokens)
 	*tokens = (*tokens)->next;
 	if (!(*tokens))
 	{
-		ft_printf("Erreur : redirection sans fichier\n");
+		syntax_error("newline");
 		cmd->invalid = 1;
 		return ;
 	}
 	if ((*tokens)->type != WORD)
 	{
-		ft_printf("Erreur : fichier invalide pour la redirection\n");
+		if ((*tokens)->type == REDIR_IN || (*tokens)->type == REDIR_OUT
+			|| (*tokens)->type == APPEND || (*tokens)->type == HEREDOC
+			|| (*tokens)->type == PIPE)
+			syntax_error("newline");
+		else
+			syntax_error((*tokens)->value);
 		cmd->invalid = 1;
 		return ;
 	}
 	add_redir(cmd, REDIR_IN, ft_strdup((*tokens)->value));
 }
+
+
 
 void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 {
@@ -73,10 +80,15 @@ void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 	}
 	else
 	{
-		ft_printf("Erreur : redirection de sortie sans fichier\n");
+		if (!token->next)
+			syntax_error("newline");
+		else
+			syntax_error(token->next->value);
 		cmd->invalid = 1;
 	}
 }
+
+
 
 void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 {
@@ -118,4 +130,12 @@ void	add_redir(t_cmd *cmd, int type, char *file)
 	if (!redir)
 		return ;
 	ft_lstadd_back(&cmd->redirs, ft_lstnew(redir));
+}
+
+void	syntax_error(char *token)
+{
+	ft_putstr_fd("bash: syntax error near unexpected token `", 2);
+	ft_putstr_fd(token, 2);
+	ft_putstr_fd("'\n", 2);
+	*get_exit_status() = 2;
 }

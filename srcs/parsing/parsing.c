@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 11:57:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/29 13:55:50 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,6 @@ t_cmd	*parse_tokens(t_token *tokens)
 
 static int	handle_redirections(t_cmd *cmd, t_token **tokens)
 {
-	if (!(*tokens)->next || (*tokens)->next->type != WORD)
-	{
-		ft_printf("Erreur : redirection sans fichier valide\n");
-		return (0);
-	}
 	if ((*tokens)->type == REDIR_IN)
 		handle_redir_in(cmd, tokens);
 	else if ((*tokens)->type == REDIR_OUT)
@@ -81,5 +76,8 @@ static int	handle_redirections(t_cmd *cmd, t_token **tokens)
 		handle_redir_out(cmd, tokens, 1);
 	else if ((*tokens)->type == HEREDOC)
 		handle_heredoc(cmd, tokens);
+	if (cmd->invalid)
+		return (0);
 	return (1);
 }
+

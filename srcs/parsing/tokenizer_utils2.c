@@ -6,34 +6,36 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 12:08:01 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/29 15:08:57 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	flush_buffer_to_token(t_token **tokens, t_token **last,
-	char **buffer, t_quote_type quote_type)
+void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type)
 {
-	t_token	*new;
+    t_token *new;
 
-	if (!*buffer || !**buffer)
+    if (!*buffer)
 		return ;
-	new = malloc(sizeof(t_token));
-	if (!new)
+	if (!**buffer && quote_type == NO_QUOTE)
 		return ;
-	new->value = ft_strdup(*buffer);
-	new->type = WORD;
-	new->quote_type = quote_type;
-	new->next = NULL;
-	if (!*tokens)
-		*tokens = new;
-	else
-		(*last)->next = new;
-	*last = new;
-	free(*buffer);
-	*buffer = ft_strdup("");
+    new = malloc(sizeof(t_token));
+    if (!new)
+        return ;
+    new->value = ft_strdup(*buffer); // même si buffer est "", on duplique ""
+    new->type = WORD;
+    new->quote_type = quote_type;
+    new->next = NULL;
+    if (!*tokens)
+        *tokens = new;
+    else
+        (*last)->next = new;
+    *last = new;
+    free(*buffer);
+    *buffer = ft_strdup("");
 }
+
 
 void	handle_operator_token(t_token **tokens,
 	t_token **last, t_parseinfo *info)
@@ -117,6 +119,8 @@ void	handle_variable_expansion(char **buffer,
 	char	*to_append;
 	char	*tmp;
 
+	if (input[*i] == '"' || input[*i] == '\'')
+		return ; // on ne fait pas d'expansion, on laisse la quote être gérée ailleurs
 	(*i)++;
 	if (input[*i] == '?')
 	{

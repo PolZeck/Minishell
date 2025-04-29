@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:46:57 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 15:10:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	handle_input_token(t_token_list *tlist,
 {
 	static t_quote_type	current_quote_type;
 
-	current_quote_type = NO_QUOTE;
 	if (info->input[*(info->i)] == ' ')
 	{
 		flush_buffer_to_token(tlist->tokens,
@@ -43,11 +42,20 @@ static void	handle_input_token(t_token_list *tlist,
 	}
 	if (info->input[*(info->i)] == '$')
 	{
+		// 🔒 Cas particulier : $ suivi de quote, on ne fait pas d'expansion
+		char next = info->input[*(info->i) + 1];
+		if (next == '\'' || next == '\"')
+		{
+			(*(info->i))++; // on saute le $
+			return ;
+		}
 		handle_variable_expansion(buffer, info->input, info->i, info->data);
 		return ;
 	}
 	append_word(buffer, info->input, info->i);
 }
+
+
 
 t_token	*tokenize(char *input, t_data *data)
 {

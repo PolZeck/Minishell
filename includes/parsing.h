@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 15:55:41 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/29 13:51:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ char			**dup_env(char **envp);
 t_cmd			*parse_tokens(t_token *tokens);
 t_cmd			*create_cmd(t_token *tokens);
 
+void			syntax_error(char *token);
 void			add_token(t_token **tokens, t_token **last,
 					t_token_info info, t_data *data);
 void			handle_argument(t_cmd *cmd, int *arg_count, char *value);
