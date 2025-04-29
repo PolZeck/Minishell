@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 16:45:24 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/29 16:04:24 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 {
 	int		save_stdin;
 	int		save_stdout;
-	int		fd;
-	int		flags;
 	t_list	*node;
 	t_redir	*redir;
+	int		fd;
 
-	save_stdout = -1;
-	save_stdin = -1;
+	save_stdin = dup(STDIN_FILENO);
+	save_stdout = dup(STDOUT_FILENO);
+
 	node = cmd->redirs;
 	while (node)
 	{
@@ -35,21 +35,15 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 			{
 				perror(redir->file);
 				*get_exit_status() = 1;
-				exit(EXIT_FAILURE);
+				return ;
 			}
-			if (save_stdin != -1)
-				close(save_stdin);
-			save_stdin = dup(STDIN_FILENO);
 			dup2(fd, STDIN_FILENO);
 			close(fd);
 		}
 		else if (redir->type == REDIR_OUT || redir->type == APPEND)
 		{
-			flags = O_WRONLY | O_CREAT;
-			if (redir->type == APPEND)
-				flags |= O_APPEND;
-			else
-				flags |= O_TRUNC;
+			int flags = O_WRONLY | O_CREAT;
+			flags |= (redir->type == APPEND) ? O_APPEND : O_TRUNC;
 			fd = open(redir->file, flags, 0644);
 			if (fd == -1)
 			{
@@ -57,14 +51,13 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 				*get_exit_status() = 1;
 				return ;
 			}
-			if (save_stdout != -1)
-				close(save_stdout);
-			save_stdout = dup(STDOUT_FILENO);
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
 		node = node->next;
 	}
+
+	// ➔ Maintenant exécuter le builtin
 	if (!cmd->args[0])
 		return ;
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
@@ -81,17 +74,14 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		*get_exit_status() = builtin_unset(cmd, data);
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		*get_exit_status() = builtin_env(cmd, data);
-	if (save_stdin != -1)
-	{
-		dup2(save_stdin, STDIN_FILENO);
-		close(save_stdin);
-	}
-	if (save_stdout != -1)
-	{
-		dup2(save_stdout, STDOUT_FILENO);
-		close(save_stdout);
-	}
+
+	// ➔ Puis restaurer l'input et l'output d'origine
+	dup2(save_stdin, STDIN_FILENO);
+	dup2(save_stdout, STDOUT_FILENO);
+	close(save_stdin);
+	close(save_stdout);
 }
+
 
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex)
 {

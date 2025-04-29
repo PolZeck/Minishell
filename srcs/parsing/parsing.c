@@ -19,7 +19,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 	t_cmd	*cmd;
 	t_cmd	*head;
 	int		arg_count;
-
+  
 	if (!tokens)
 		return (NULL);
 	if (tokens->type == PIPE)
@@ -59,6 +59,11 @@ t_cmd	*parse_tokens(t_token *tokens)
 			free_cmds(head);
 			return (NULL);
 		}
+		if (cmd->invalid)
+		{
+			free_cmds(head);
+			return (NULL);
+		}
 		tokens = tokens->next;
 	}
 	if (cmd && cmd->args)
@@ -68,6 +73,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 
 static int	handle_redirections(t_cmd *cmd, t_token **tokens)
 {
+
 	if ((*tokens)->type == REDIR_IN)
 		handle_redir_in(cmd, tokens);
 	else if ((*tokens)->type == REDIR_OUT)
