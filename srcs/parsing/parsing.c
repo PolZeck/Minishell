@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:44:36 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 10:24:13 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,14 @@ t_cmd	*parse_tokens(t_token *tokens)
 	t_cmd	*head;
 	int		arg_count;
 
-	if (!tokens || tokens->type == PIPE)
+	if (!tokens)
 		return (NULL);
+	if (tokens->type == PIPE)
+	{
+		ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);
+		*get_exit_status() = 2;
+		return (NULL);
+	}
 	cmd = create_cmd(tokens);
 	if (!cmd)
 		return (NULL);
@@ -33,7 +39,8 @@ t_cmd	*parse_tokens(t_token *tokens)
 		{
 			if (!tokens->next || tokens->next->type == PIPE)
 			{
-				ft_printf("bash: syntax error near unexpected token `|'\n");
+				ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);
+				*get_exit_status() = 2;
 				free_cmds(head);
 				return (NULL);
 			}
@@ -46,7 +53,10 @@ t_cmd	*parse_tokens(t_token *tokens)
 			continue ;
 		}
 		else if (tokens->type == WORD || tokens->type == QUOTE)
+		{
+			// printf("DEBUG: [%s] (len=%zu)\n", tokens->value, ft_strlen(tokens->value));
 			handle_argument(cmd, &arg_count, tokens->value);
+		}
 		else if (!handle_redirections(cmd, &tokens))
 		{
 			free_cmds(head);
@@ -58,6 +68,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 		cmd->args[arg_count] = NULL;
 	return (head);
 }
+
 
 static int	handle_redirections(t_cmd *cmd, t_token **tokens)
 {

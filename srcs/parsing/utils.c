@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:40:18 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 10:01:53 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,11 @@ t_cmd	*create_cmd(t_token *tokens)
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
+
 	arg_count = count_args(tokens);
+	if (arg_count == 0)
+		arg_count = 1; // pour gérer les cas comme ''
+
 	cmd->args = malloc(sizeof(char *) * (arg_count + 1));
 	if (!cmd->args)
 	{
@@ -67,16 +71,23 @@ t_cmd	*create_cmd(t_token *tokens)
 		return (NULL);
 	}
 	i = 0;
-	while (i <= arg_count)
+	while (i < arg_count)
 	{
 		cmd->args[i] = NULL;
 		i++;
 	}
+	cmd->args[i] = NULL;
 	cmd->redirs = NULL;
 	cmd->invalid = 0;
 	cmd->next = NULL;
+
+	// Cas spécial : si aucun argument détecté, mais on veut traiter `''` ou `""`
+	if (count_args(tokens) == 0)
+		cmd->args[0] = ft_strdup("");
+
 	return (cmd);
 }
+
 
 int	is_operator(char c)
 {
@@ -118,3 +129,33 @@ char	**dup_env(char **envp)
 	copy[i] = NULL;
 	return (copy);
 }
+
+
+// int	check_syntax(t_token *token)
+// {
+// 	if (!token)
+// 		return (0); // ligne vide autorisée
+
+// 	// premier token = PIPE
+// 	if (token->type == PIPE)
+// 	{
+// 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+// 		get_exit_status() = 2;
+// 		return (1);
+// 	}
+
+// 	while (token)
+// 	{
+// 		if (token->type == PIPE)
+// 		{
+// 			if (!token->next || token->next->type == PIPE)
+// 			{
+// 				ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+// 				get_exit_status() = 2;
+// 				return (1);
+// 			}
+// 		}
+// 		token = token->next;
+// 	}
+// 	return (0);
+// }
