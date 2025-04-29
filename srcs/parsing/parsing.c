@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:44:36 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 10:53:42 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@ t_cmd	*parse_tokens(t_token *tokens)
 	int		arg_count;
 
 	if (!tokens || tokens->type == PIPE)
+	{
+		ft_printf("bash: syntax error near unexpected token `|'\n");
+		*get_exit_status() = 2;
 		return (NULL);
+	}
 	cmd = create_cmd(tokens);
 	if (!cmd)
 		return (NULL);
@@ -34,6 +38,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 			if (!tokens->next || tokens->next->type == PIPE)
 			{
 				ft_printf("bash: syntax error near unexpected token `|'\n");
+				*get_exit_status() = 2;
 				free_cmds(head);
 				return (NULL);
 			}

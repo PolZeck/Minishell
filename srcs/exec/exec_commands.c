@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 16:12:31 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/29 10:50:48 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,15 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	char		*cmd_path;
 	struct stat	st;
 
-	if (!cmd || !cmd->args || !cmd->args[0])
+	if (!cmd)
 		return ;
 	if (validate_redirections(cmd))
 	{
 		*get_exit_status() = 1;
 		return ;
 	}
+	if (!cmd->args || !cmd->args[0])
+		return ;
 	if (cmd->args[0][0] == '\0')
 	{
 		print_error("bash: ", "", ": command not found\n");
