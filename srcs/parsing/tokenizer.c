@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 15:10:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/29 15:18:40 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static void	handle_input_token(t_token_list *tlist,
 	}
 	if (info->input[*(info->i)] == '$')
 	{
-		// 🔒 Cas particulier : $ suivi de quote, on ne fait pas d'expansion
 		char next = info->input[*(info->i) + 1];
 		if (next == '\'' || next == '\"')
 		{

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 17:21:37 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/29 16:07:01 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,14 @@ static void	add_or_replace_var(t_data *data, char *arg)
 
 	eq = ft_strchr(arg, '=');
 	if (!eq)
+	{
+		// Cas sans '='
+		if (var_exists(data->env, arg) == -1)
+		{
+			data->env = append_env(data->env, arg);
+		}
 		return ;
+	}
 	len = eq - arg;
 	name = ft_substr(arg, 0, len);
 	idx = var_exists(data->env, name);
@@ -40,6 +47,8 @@ static void	add_or_replace_var(t_data *data, char *arg)
 	else
 		data->env = append_env(data->env, arg);
 }
+
+
 
 static void	sort_env(char **env)
 {
@@ -112,6 +121,17 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 	i = 1;
 	while (cmd->args[i])
 	{
+		// ⚠️ Si l'argument commence par '-' : option invalide
+		if (cmd->args[i][0] == '-')
+		{
+			ft_putstr_fd("minishell: export: ", 2);
+			write(2, cmd->args[i], 2); // écrit juste les 2 premiers caractères : "-X"
+			ft_putstr_fd(": invalid option\n", 2);
+			*get_exit_status() = 2;
+			return (2);
+		}
+
+
 		if (!is_valid_identifier_export(cmd->args[i]))
 		{
 			handle_invalid_identifier(cmd->args[i]);
@@ -121,5 +141,6 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 		add_or_replace_var(data, cmd->args[i]);
 		i++;
 	}
+
 	return (*get_exit_status());
 }

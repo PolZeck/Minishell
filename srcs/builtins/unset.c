@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:08:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/27 12:09:42 by pol              ###   ########.fr       */
+/*   Updated: 2025/04/29 16:27:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	builtin_unset(t_cmd *cmd, t_data *data)
 	{
 		if (!is_valid_identifier_unset(cmd->args[i]))
 		{
-			ft_putstr_fd("minishell: unset: `", 2);
+			ft_putstr_fd("bash: unset: `", 2);
 			ft_putstr_fd(cmd->args[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			*get_exit_status() = 1;
