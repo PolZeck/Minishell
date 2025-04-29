@@ -112,6 +112,7 @@ char			**dup_env(char **envp);
 t_cmd			*parse_tokens(t_token *tokens);
 t_cmd			*create_cmd(t_token *tokens);
 
+void			syntax_error(char *token);
 void			add_token(t_token **tokens, t_token **last,
 					t_token_info info, t_data *data);
 void			handle_argument(t_cmd *cmd, int *arg_count, char *value);

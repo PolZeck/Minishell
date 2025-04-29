@@ -3,37 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:52:59 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 15:08:57 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	flush_buffer_to_token(t_token **tokens, t_token **last,
-	char **buffer, t_quote_type quote_type)
+void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type)
 {
-	t_token	*new;
+    t_token *new;
 
-	if (!*buffer || !**buffer)
+    if (!*buffer)
 		return ;
-	new = malloc(sizeof(t_token));
-	if (!new)
+	if (!**buffer && quote_type == NO_QUOTE)
 		return ;
-	new->value = ft_strdup(*buffer);
-	new->type = WORD;
-	new->quote_type = quote_type;
-	new->next = NULL;
-	if (!*tokens)
-		*tokens = new;
-	else
-		(*last)->next = new;
-	*last = new;
-	free(*buffer);
-	*buffer = ft_strdup("");
+    new = malloc(sizeof(t_token));
+    if (!new)
+        return ;
+    new->value = ft_strdup(*buffer); // même si buffer est "", on duplique ""
+    new->type = WORD;
+    new->quote_type = quote_type;
+    new->next = NULL;
+    if (!*tokens)
+        *tokens = new;
+    else
+        (*last)->next = new;
+    *last = new;
+    free(*buffer);
+    *buffer = ft_strdup("");
 }
+
 
 void	handle_operator_token(t_token **tokens,
 	t_token **last, t_parseinfo *info)
@@ -83,8 +85,7 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
 		while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
 		{
 			if (info->input[*(info->i)] == '$')
-				handle_variable_expansion(&sub,
-					info->input, info->i, info->data);
+				handle_variable_expansion(&sub, info->input, info->i, info->data);
 			else
 			{
 				start = *(info->i);
@@ -92,7 +93,10 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
 					&& info->input[*(info->i)] != quote)
 					(*(info->i))++;
 				tmp = ft_substr(info->input, start, *(info->i) - start);
-				sub = ft_strjoin(sub, tmp);
+				char *joined = ft_strjoin(sub, tmp);
+				free(sub);
+				free(tmp); // ✅ ici tu libères la mémoire
+				sub = joined;
 			}
 		}
 	}
@@ -104,15 +108,19 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
 	*buffer = tmp;
 }
 
+
 void	handle_variable_expansion(char **buffer,
 	char *input, int *i, t_data *data)
 {
 	int		start;
 	char	*var;
+	char	*var_name;
 	char	*value;
 	char	*to_append;
 	char	*tmp;
 
+	if (input[*i] == '"' || input[*i] == '\'')
+		return ; // on ne fait pas d'expansion, on laisse la quote être gérée ailleurs
 	(*i)++;
 	if (input[*i] == '?')
 	{
@@ -124,17 +132,20 @@ void	handle_variable_expansion(char **buffer,
 		start = *i;
 		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
 			(*i)++;
-		var = ft_strjoin("$", ft_substr(input, start, *i - start));
+		var_name = ft_substr(input, start, *i - start);     // ✅ ALLOC
+		var = ft_strjoin("$", var_name);                    // ✅ ALLOC
+		free(var_name);                                     // ✅ LIBÉRÉ
 	}
-	value = expand_env_var(var, 0, data);
-	to_append = ft_strdup(value);
-	tmp = ft_strjoin(*buffer, to_append);
+	value = expand_env_var(var, 0, data);                   // ✅ PEUT FAIRE strdup
+	to_append = ft_strdup(value);                           // ✅ ALLOC
+	tmp = ft_strjoin(*buffer, to_append);                   // ✅ ALLOC
 	free(*buffer);
 	free(var);
 	free(to_append);
 	free(value);
 	*buffer = tmp;
 }
+
 
 void	append_word(char **buffer, char *input, int *i)
 {
