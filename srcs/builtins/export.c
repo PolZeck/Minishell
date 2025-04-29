@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 09:11:36 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 17:21:37 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ static void	print_export(char **env)
 		{
 			name = ft_substr(env[i], 0, eq - env[i]);
 			value = eq + 1;
-			ft_printf("export %s=\"%s\"\n", name, value);
+			printf("export %s=\"%s\"\n", name, value);
 			free(name);
 		}
 		else
-			ft_printf("export %s\n", env[i]);
+			printf("export %s\n", env[i]);
 		i++;
 	}
 }

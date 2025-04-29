@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:03:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 10:09:36 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/28 14:53:50 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,7 @@ t_token_type	handle_quotes(t_quote *q)
 			q->buffer[(*q->j)++] = q->input[(*q->i)++];
 	}
 	if (q->input[*q->i] == quote)
-	(*q->i)++;
-	if (*q->j == 0)
-		q->buffer[0] = '\0';
+		(*q->i)++;
 	type = QUOTE;
 	return (type);
 }

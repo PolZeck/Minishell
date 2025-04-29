@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 09:57:55 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 16:12:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,26 +86,19 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	char		*cmd_path;
 	struct stat	st;
 
-	if (!cmd || !cmd->args)
+	if (!cmd || !cmd->args || !cmd->args[0])
 		return ;
-	if (!cmd->args[0] || cmd->args[0][0] == '\0')
-	{
-		print_error("bash: ", "", ": command not found\n");
-		*get_exit_status() = 127;
-		return ;
-	}
-
 	if (validate_redirections(cmd))
 	{
 		*get_exit_status() = 1;
 		return ;
 	}
-	// if (cmd->args[0][0] == '\0')
-	// {
-	// 	print_error("bash: ", "", ": command not found\n");
-	// 	*get_exit_status() = 127;
-	// 	return ;
-	// }
+	if (cmd->args[0][0] == '\0')
+	{
+		print_error("bash: ", "", ": command not found\n");
+		*get_exit_status() = 127;
+		return ;
+	}
 	if (is_builtin(cmd->args[0]))
 	{
 		execute_builtin(cmd, data);
@@ -186,6 +179,7 @@ void	execute_command(t_cmd *cmd, t_data *data)
 			}
 			node = node->next;
 		}
+
 		if (execve(cmd_path, cmd->args, data->env) == -1)
 		{
 			print_error("bash: ", cmd_path, ": ");

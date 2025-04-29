@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 09:38:34 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/04/25 15:55:41 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ int				count_args(t_token *tokens);
 int				check_unclosed_quotes(char *input);
 int				is_builtin(char *cmd);
 int				is_operator(char c);
-int				check_syntax(t_token *token);
 
 char			*expand_env_var(char *token,
 					t_quote_type quote_type, t_data *data);
