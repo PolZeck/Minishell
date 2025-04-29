@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 10:53:42 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/04/29 11:57:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ t_cmd	*parse_tokens(t_token *tokens)
 	t_cmd	*head;
 	int		arg_count;
 
-	if (!tokens || tokens->type == PIPE)
+	if (!tokens)
+		return (NULL);
+	if (tokens->type == PIPE)
 	{
 		ft_printf("bash: syntax error near unexpected token `|'\n");
 		*get_exit_status() = 2;
