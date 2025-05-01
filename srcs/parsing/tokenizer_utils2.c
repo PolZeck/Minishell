@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 12:15:29 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/01 13:21:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,30 @@ void	handle_operator_token(t_token **tokens,
 	t_token_type	type;
 	t_token			*new;
 
+	// info->next_is_delimiter = 0;
 	j = 0;
 	op[j++] = info->input[(*info->i)++];
 	if ((op[0] == '<' || op[0] == '>') && info->input[(*info->i)] == op[0])
 		op[j++] = info->input[(*info->i)++];
 	op[j] = '\0';
+
 	type = get_token_type_from_op(op);
-	if (type == HEREDOC)
-		info->next_is_delimiter = 1;
 	new = create_token(op, type, NO_QUOTE, info->data);
+
 	if (!*tokens)
 		*tokens = new;
 	else
 		(*last)->next = new;
 	*last = new;
+
+	// ✅ On active le flag SEULEMENT APRÈS avoir traité le token de l'opérateur
+	if (type == HEREDOC)
+		info->next_is_delimiter = 1;
+	else
+		info->next_is_delimiter = 0; // 🔒 réinitialisation propre
+
 }
+
 
 void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
 {

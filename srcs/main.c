@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 12:17:19 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/01 13:19:21 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,41 +51,41 @@
 // }
 
 
-// void	debug_print_commands(t_cmd *cmd_list)
-// {
-// 	int i = 1;
-// 	while (cmd_list)
-// 	{
-// 		printf("=== Command %d ===\n", i);
-// 		for (int j = 0; cmd_list->args && cmd_list->args[j]; j++)
-// 			printf("  Arg[%d]: %s\n", j, cmd_list->args[j]);
+void	debug_print_commands(t_cmd *cmd_list)
+{
+	int i = 1;
+	while (cmd_list)
+	{
+		printf("=== Command %d ===\n", i);
+		for (int j = 0; cmd_list->args && cmd_list->args[j]; j++)
+			printf("  Arg[%d]: %s\n", j, cmd_list->args[j]);
 
-// 		if (cmd_list->redirs)
-// 		{
-// 			t_list *tmp = cmd_list->redirs;
-// 			while (tmp)
-// 			{
-// 				t_redir *r = tmp->content;
-// 				if (r->type == REDIR_IN)
-// 					printf("  <  infile: %s\n", r->file);
-// 				else if (r->type == REDIR_OUT)
-// 					printf("  >  outfile: %s\n", r->file);
-// 				else if (r->type == APPEND)
-// 					printf("  >> append to: %s\n", r->file);
-// 				else if (r->type == HEREDOC)
-// 					printf("  << heredoc delimiter: %s\n", r->file);
-// 				tmp = tmp->next;
-// 			}
-// 		}
-// 		else
-// 			printf("  No redirections.\n");
+		if (cmd_list->redirs)
+		{
+			t_list *tmp = cmd_list->redirs;
+			while (tmp)
+			{
+				t_redir *r = tmp->content;
+				if (r->type == REDIR_IN)
+					printf("  <  infile: %s\n", r->file);
+				else if (r->type == REDIR_OUT)
+					printf("  >  outfile: %s\n", r->file);
+				else if (r->type == APPEND)
+					printf("  >> append to: %s\n", r->file);
+				else if (r->type == HEREDOC)
+					printf("  << heredoc delimiter: %s\n", r->file);
+				tmp = tmp->next;
+			}
+		}
+		else
+			printf("  No redirections.\n");
 
-// 		if (cmd_list->invalid)
-// 			printf("  ❌ Invalid command!\n");
-// 		cmd_list = cmd_list->next;
-// 		i++;
-// 	}
-// }
+		if (cmd_list->invalid)
+			printf("  ❌ Invalid command!\n");
+		cmd_list = cmd_list->next;
+		i++;
+	}
+}
 
 #include "minishell.h"
 
@@ -166,6 +166,7 @@ int	main(int argc, char **argv, char **envp)
 		data.tokens = tokenize(input, &data);
 		// print_tokens_debug(data.tokens); // 👈 juste ici pour voir les types
 		cmd = parse_tokens(data.tokens);
+		// debug_print_commands(cmd);
 		if (cmd)
 			execute_pipeline(cmd, &data);
 		free_tokens(data.tokens);

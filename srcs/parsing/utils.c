@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:40:18 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/01 13:03:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*expand_env_var(char *token, t_quote_type quote_type, t_data *data)
 
 	if (quote_type == SINGLE_QUOTE)
 		return (ft_strdup(token));
+	if (ft_strcmp(token, "$$") == 0)
+		return (ft_itoa(getpid()));
 	if (!token || token[0] != '$')
 		return (ft_strdup(token));
 	if (ft_strcmp(token, "$?") == 0)

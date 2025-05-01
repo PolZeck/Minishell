@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 12:16:51 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/01 13:08:13 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	handle_redir_in(t_cmd *cmd, t_token **tokens)
 		cmd->invalid = 1;
 		return ;
 	}
-	if ((*tokens)->type != WORD)
+	if ((*tokens)->type != WORD && (*tokens)->type != DELIMITER)
 	{
 		if ((*tokens)->type == REDIR_IN || (*tokens)->type == REDIR_OUT
 			|| (*tokens)->type == APPEND || (*tokens)->type == HEREDOC
@@ -70,7 +70,7 @@ void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 	t_token	*token;
 
 	token = *tokens;
-	if (token->next && token->next->type == WORD)
+	if (token->next && (token->next->type == WORD || token->next->type == DELIMITER))
 	{
 		if (append)
 			add_redir(cmd, APPEND, ft_strdup(token->next->value));
@@ -87,6 +87,7 @@ void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 		cmd->invalid = 1;
 	}
 }
+
 
 
 void	add_redir_fd(t_cmd *cmd, int type, int fd)
