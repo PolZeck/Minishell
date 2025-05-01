@@ -3,32 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:03:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:53:50 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/01 12:11:47 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 t_token	*create_token(char *value, t_token_type type,
-						t_quote_type quote_type, t_data *data)
+	t_quote_type quote_type, t_data *data)
 {
 	t_token	*token;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		return (NULL);
-	if (quote_type == SINGLE_QUOTE)
+	return (NULL);
+
+	// 🚨 Ne pas expand un DELIMITER
+	if (quote_type == SINGLE_QUOTE || type == DELIMITER)
 		token->value = ft_strdup(value);
 	else
 		token->value = expand_env_var(value, quote_type, data);
+
 	token->type = type;
 	token->quote_type = quote_type;
 	token->next = NULL;
 	return (token);
 }
+
 
 int	check_unclosed_quotes(char *input)
 {

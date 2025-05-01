@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 15:18:40 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/01 12:14:58 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	handle_input_token(t_token_list *tlist,
 	if (info->input[*(info->i)] == ' ')
 	{
 		flush_buffer_to_token(tlist->tokens,
-			tlist->last, buffer, current_quote_type);
+			tlist->last, buffer, current_quote_type, info);
 		current_quote_type = NO_QUOTE;
 		(*(info->i))++;
 		return ;
@@ -28,7 +28,7 @@ static void	handle_input_token(t_token_list *tlist,
 	if (is_operator(info->input[*(info->i)]))
 	{
 		flush_buffer_to_token(tlist->tokens,
-			tlist->last, buffer, current_quote_type);
+			tlist->last, buffer, current_quote_type, info);
 		current_quote_type = NO_QUOTE;
 		info->quote = 0;
 		handle_operator_token(tlist->tokens, tlist->last, info);
@@ -48,7 +48,7 @@ static void	handle_input_token(t_token_list *tlist,
 			(*(info->i))++; // on saute le $
 			return ;
 		}
-		handle_variable_expansion(buffer, info->input, info->i, info->data);
+		handle_variable_expansion(buffer, info->input, info->i, info->data, info);
 		return ;
 	}
 	append_word(buffer, info->input, info->i);
@@ -81,7 +81,7 @@ t_token	*tokenize(char *input, t_data *data)
 	while (input[i])
 		handle_input_token(&tlist, &buffer, &info);
 	if (*buffer)
-		flush_buffer_to_token(&tokens, &last, &buffer, NO_QUOTE);
+		flush_buffer_to_token(&tokens, &last, &buffer, NO_QUOTE, &info);
 	free(buffer);
 	return (tokens);
 }

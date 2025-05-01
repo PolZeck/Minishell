@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 14:09:51 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/01 12:16:51 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,18 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	char	*delimiter;
 
 	*tokens = (*tokens)->next;
-	if (!(*tokens) || (*tokens)->type != WORD)
+	if (!(*tokens) || ((*tokens)->type != WORD && (*tokens)->type != QUOTE && (*tokens)->type != DELIMITER))
 	{
 		ft_printf("Erreur : heredoc sans délimiteur\n");
 		cmd->invalid = 1;
 		return ;
 	}
+
+	// 🔥 PATCH ICI — on taggue le token comme DELIMITER
+	(*tokens)->type = DELIMITER;
+
 	delimiter = (*tokens)->value;
+
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
@@ -153,6 +158,7 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	}
 	add_redir_fd(cmd, HEREDOC, pipefd[0]);
 }
+
 
 t_redir	*create_redir(int type, char *file)
 {

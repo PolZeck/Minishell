@@ -6,35 +6,47 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 15:08:57 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/01 12:15:29 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type)
+void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type, t_parseinfo *info)
 {
-    t_token *new;
+	t_token			*new;
+	t_token_type	final_type;
 
-    if (!*buffer)
+	if (!*buffer)
 		return ;
 	if (!**buffer && quote_type == NO_QUOTE)
 		return ;
-    new = malloc(sizeof(t_token));
-    if (!new)
-        return ;
-    new->value = ft_strdup(*buffer); // même si buffer est "", on duplique ""
-    new->type = WORD;
-    new->quote_type = quote_type;
-    new->next = NULL;
-    if (!*tokens)
-        *tokens = new;
-    else
-        (*last)->next = new;
-    *last = new;
-    free(*buffer);
-    *buffer = ft_strdup("");
+
+	// ✅ Gestion du HEREDOC → DELIMITER
+	final_type = WORD;
+	if (info && info->next_is_delimiter)
+	{
+		final_type = DELIMITER;
+		info->next_is_delimiter = 0;
+	}
+
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return ;
+	new->value = ft_strdup(*buffer); // même si buffer est "", on duplique ""
+	new->type = final_type;
+	new->quote_type = quote_type;
+	new->next = NULL;
+
+	if (!*tokens)
+		*tokens = new;
+	else
+		(*last)->next = new;
+	*last = new;
+
+	free(*buffer);
+	*buffer = ft_strdup("");
 }
+
 
 
 void	handle_operator_token(t_token **tokens,
@@ -51,6 +63,8 @@ void	handle_operator_token(t_token **tokens,
 		op[j++] = info->input[(*info->i)++];
 	op[j] = '\0';
 	type = get_token_type_from_op(op);
+	if (type == HEREDOC)
+		info->next_is_delimiter = 1;
 	new = create_token(op, type, NO_QUOTE, info->data);
 	if (!*tokens)
 		*tokens = new;
@@ -85,7 +99,7 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
 		while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
 		{
 			if (info->input[*(info->i)] == '$')
-				handle_variable_expansion(&sub, info->input, info->i, info->data);
+				handle_variable_expansion(&sub, info->input, info->i, info->data, info);
 			else
 			{
 				start = *(info->i);
@@ -110,7 +124,7 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
 
 
 void	handle_variable_expansion(char **buffer,
-	char *input, int *i, t_data *data)
+	char *input, int *i, t_data *data, t_parseinfo *info)
 {
 	int		start;
 	char	*var;
@@ -119,6 +133,20 @@ void	handle_variable_expansion(char **buffer,
 	char	*to_append;
 	char	*tmp;
 
+	if (info && info->next_is_delimiter)
+	{
+		// Copie brute du nom de la variable sans expansion
+		int start = *i;
+		(*i)++; // skip '$'
+		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+			(*i)++;
+		char *raw = ft_substr(input, start, *i - start);
+		char *tmp = ft_strjoin(*buffer, raw);
+		free(*buffer);
+		free(raw);
+		*buffer = tmp;
+		return ;
+	}
 	if (input[*i] == '"' || input[*i] == '\'')
 		return ; // on ne fait pas d'expansion, on laisse la quote être gérée ailleurs
 	(*i)++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/28 14:34:55 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/01 12:17:19 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,33 @@
 // 	}
 // }
 
+#include "minishell.h"
+
+char	*get_token_type_name(t_token_type type)
+{
+	if (type == WORD) return "WORD";
+	if (type == PIPE) return "PIPE";
+	if (type == REDIR_IN) return "REDIR_IN";
+	if (type == REDIR_OUT) return "REDIR_OUT";
+	if (type == APPEND) return "APPEND";
+	if (type == HEREDOC) return "HEREDOC";
+	if (type == ENV_VAR) return "ENV_VAR";
+	if (type == QUOTE) return "QUOTE";
+	if (type == T_SPACE) return "T_SPACE";
+	if (type == DELIMITER) return "DELIMITER";
+	return "UNKNOWN";
+}
+
+void	print_tokens_debug(t_token *tokens)
+{
+	while (tokens)
+	{
+		printf("[%-10s] -> \"%s\"\n",
+			get_token_type_name(tokens->type),
+			tokens->value ? tokens->value : "(null)");
+		tokens = tokens->next;
+	}
+}
 
 
 /*
@@ -137,6 +164,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		data.tokens = tokenize(input, &data);
+		// print_tokens_debug(data.tokens); // 👈 juste ici pour voir les types
 		cmd = parse_tokens(data.tokens);
 		if (cmd)
 			execute_pipeline(cmd, &data);

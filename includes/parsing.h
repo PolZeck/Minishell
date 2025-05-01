@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 12:03:35 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/01 12:14:38 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ typedef enum e_token_type
 	HEREDOC,
 	ENV_VAR,
 	QUOTE,
-	T_SPACE
+	T_SPACE,
+	DELIMITER
 }	t_token_type;
 
 typedef enum e_quote_type
@@ -93,6 +94,7 @@ typedef struct s_parseinfo
 	int				*i;
 	char			quote;
 	t_quote_type	*quote_type;
+	int		next_is_delimiter;
 }	t_parseinfo;
 
 char			*ft_getenv(t_data *data, const char *name);
@@ -123,13 +125,12 @@ void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append);
 void			handle_heredoc(t_cmd *cmd, t_token **tokens);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
 void			process_word_or_quote(t_quote *q, t_token_info *info);
-void			flush_buffer_to_token(t_token **tokens, t_token **last,
-					char **buffer, t_quote_type quote_type);
+void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type, t_parseinfo *info);
 void			handle_operator_token(t_token **tokens,
 					t_token **last, t_parseinfo *info);
 void			handle_quotes_in_token(char **buffer, t_parseinfo *info);
 void			handle_variable_expansion(char **buffer,
-					char *input, int *i, t_data *data);
+					char *input, int *i, t_data *data, t_parseinfo *info);
 void			append_word(char **buffer, char *input, int *i);
 
 void			free_tokens(t_token *tokens);
