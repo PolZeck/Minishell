@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 13:08:13 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/01 14:14:21 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,16 +110,23 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	char	*delimiter;
 
 	*tokens = (*tokens)->next;
-	if (!(*tokens) || ((*tokens)->type != WORD && (*tokens)->type != QUOTE && (*tokens)->type != DELIMITER))
+
+	if (!(*tokens))
 	{
-		ft_printf("Erreur : heredoc sans délimiteur\n");
+		syntax_error("newline");
+		cmd->invalid = 1;
+		return ;
+	}
+	if ((*tokens)->type != WORD && (*tokens)->type != QUOTE && (*tokens)->type != DELIMITER)
+	{
+		// 🔥 Harmonisé avec redir_in/out : affiche bien `<<`, `|`, etc.
+		syntax_error((*tokens)->value);
 		cmd->invalid = 1;
 		return ;
 	}
 
-	// 🔥 PATCH ICI — on taggue le token comme DELIMITER
+	// ✅ On taggue explicitement comme DELIMITER (sans changer le flux)
 	(*tokens)->type = DELIMITER;
-
 	delimiter = (*tokens)->value;
 
 	if (pipe(pipefd) == -1)
@@ -128,11 +135,12 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 		cmd->invalid = 1;
 		return ;
 	}
+
 	signal(SIGINT, heredoc_sigint_handler);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line) // Ctrl+D ou erreur
+		if (!line) // Ctrl+D
 			break ;
 		if (heredoc_interrupted) // Ctrl+C
 		{
@@ -149,6 +157,7 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	}
 	close(pipefd[1]);
 	setup_signals();
+
 	if (heredoc_interrupted)
 	{
 		close(pipefd[0]);
@@ -157,8 +166,11 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 		heredoc_interrupted = 0;
 		return ;
 	}
+
 	add_redir_fd(cmd, HEREDOC, pipefd[0]);
 }
+
+
 
 
 t_redir	*create_redir(int type, char *file)

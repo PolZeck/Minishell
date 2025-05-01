@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 13:21:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/01 13:37:26 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_qu
 		return ;
 	if (!**buffer && quote_type == NO_QUOTE)
 		return ;
-
+		
+	info->next_is_delimiter = 0;
 	// ✅ Gestion du HEREDOC → DELIMITER
 	final_type = WORD;
 	if (info && info->next_is_delimiter)
@@ -144,6 +145,7 @@ void	handle_variable_expansion(char **buffer,
 
 	if (info && info->next_is_delimiter)
 	{
+		// info->next_is_delimiter = 0;
 		// Copie brute du nom de la variable sans expansion
 		int start = *i;
 		(*i)++; // skip '$'

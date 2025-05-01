@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 12:14:58 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/01 13:38:35 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ t_token	*tokenize(char *input, t_data *data)
 	info.i = &i;
 	info.quote = 0;
 	info.quote_type = NULL;
+	info.next_is_delimiter = 0;
 	while (input[i])
 		handle_input_token(&tlist, &buffer, &info);
 	if (*buffer)
