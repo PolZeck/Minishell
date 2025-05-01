@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 16:07:01 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/01 14:50:47 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,74 @@ static int	handle_invalid_identifier(char *arg)
 	return (0);
 }
 
+char	*clean_spaces(const char *str)
+{
+	char	*res;
+	int		i = 0, j = 0;
+	int		in_word = 0;
+
+	if (!str)
+		return (NULL);
+	res = malloc(ft_strlen(str) + 1);
+	if (!res)
+		return (NULL);
+
+	while (str[i])
+	{
+		if (str[i] != ' ' && str[i] != '\t')
+		{
+			if (in_word && j > 0 && res[j - 1] == ' ')
+				;
+			res[j++] = str[i];
+			in_word = 1;
+		}
+		else if (in_word)
+		{
+			res[j++] = ' ';
+			in_word = 0;
+		}
+		i++;
+	}
+	if (j > 0 && res[j - 1] == ' ')
+		j--;
+	res[j] = '\0';
+	return (res);
+}
+
 static void	add_or_replace_var(t_data *data, char *arg)
 {
 	char	*eq;
 	char	*name;
+	char	*value;
+	char	*trimmed;
+	char	*final;
 	int		idx;
 	int		len;
 
 	eq = ft_strchr(arg, '=');
 	if (!eq)
 	{
-		// Cas sans '='
 		if (var_exists(data->env, arg) == -1)
-		{
 			data->env = append_env(data->env, arg);
-		}
 		return ;
 	}
 	len = eq - arg;
 	name = ft_substr(arg, 0, len);
+	value = ft_strdup(eq + 1);
+	trimmed = clean_spaces(value);
+	free(value);
+	final = ft_strjoin(name, "=");
+	char *joined = ft_strjoin(final, trimmed);
+	free(final);
+	free(trimmed);
 	idx = var_exists(data->env, name);
 	free(name);
 	if (idx >= 0)
-		data->env = replace_env(data->env, arg, idx);
+		data->env = replace_env(data->env, joined, idx);
 	else
-		data->env = append_env(data->env, arg);
+		data->env = append_env(data->env, joined);
+	free(joined);
 }
-
-
 
 static void	sort_env(char **env)
 {
@@ -121,7 +161,6 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 	i = 1;
 	while (cmd->args[i])
 	{
-		// ⚠️ Si l'argument commence par '-' : option invalide
 		if (cmd->args[i][0] == '-')
 		{
 			ft_putstr_fd("minishell: export: ", 2);
@@ -130,8 +169,6 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 			*get_exit_status() = 2;
 			return (2);
 		}
-
-
 		if (!is_valid_identifier_export(cmd->args[i]))
 		{
 			handle_invalid_identifier(cmd->args[i]);
@@ -141,6 +178,5 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 		add_or_replace_var(data, cmd->args[i]);
 		i++;
 	}
-
 	return (*get_exit_status());
 }
