@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:08:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 16:27:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/02 12:12:15 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,23 @@
 static int	is_valid_identifier_unset(char *var)
 {
 	int	i;
+	int	has_underscore;
 
-	i = 0;
-	if (!var || !ft_isalpha(var[0]))
+	if (!var || !*var)
 		return (0);
+	has_underscore = 0;
+	i = 0;
 	while (var[i])
 	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
-			return (0);
+		if (var[i] == '_')
+			has_underscore = 1;
+		else if (!ft_isalnum(var[i]))
+			return (-1); // caractère interdit (hors underscore)
 		i++;
 	}
-	return (1);
+	if (has_underscore)
+		return (0); // ignorer silencieusement
+	return (1); // valide
 }
 
 static int	match_var(char *env_var, char *key)
@@ -76,22 +82,26 @@ static char	**remove_var(char **env, char *key)
 int	builtin_unset(t_cmd *cmd, t_data *data)
 {
 	int	i;
+	int	status;
 
 	i = 1;
+	status = 0;
 	while (cmd->args[i])
 	{
-		if (!is_valid_identifier_unset(cmd->args[i]))
+		int check = is_valid_identifier_unset(cmd->args[i]);
+		if (check == 1)
+			data->env = remove_var(data->env, cmd->args[i]);
+		else if (check == -1)
 		{
 			ft_putstr_fd("bash: unset: `", 2);
 			ft_putstr_fd(cmd->args[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
-			*get_exit_status() = 1;
+			status = 1;
 		}
-		else
-			data->env = remove_var(data->env, cmd->args[i]);
+		// si check == 0 : on ignore silencieusement
 		i++;
 	}
-	if (*get_exit_status() != 1)
-		*get_exit_status() = 0;
-	return (*get_exit_status());
+	*get_exit_status() = status;
+	return (status);
 }
+
