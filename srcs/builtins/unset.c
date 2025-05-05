@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:08:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/02 12:12:15 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 17:25:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,15 @@ int	builtin_unset(t_cmd *cmd, t_data *data)
 	status = 0;
 	while (cmd->args[i])
 	{
+		if (cmd->args[i][0] == '-' && cmd->args[i][1]) // détecte les options invalides
+		{
+			ft_putstr_fd("bash: unset: ", 2);
+			write(2, cmd->args[i], 2); // écrit juste "-H"
+			ft_putstr_fd(": invalid option\n", 2);
+			*get_exit_status() = 2;
+			return (2);
+		}
+
 		int check = is_valid_identifier_unset(cmd->args[i]);
 		if (check == 1)
 			data->env = remove_var(data->env, cmd->args[i]);
@@ -98,7 +107,6 @@ int	builtin_unset(t_cmd *cmd, t_data *data)
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			status = 1;
 		}
-		// si check == 0 : on ignore silencieusement
 		i++;
 	}
 	*get_exit_status() = status;
