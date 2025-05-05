@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 13:40:34 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/05 15:21:35 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 15:29:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ int	handle_signal_status(int status)
 	}
 	return (128 + sig);
 }
-
-
 
 int	wait_for_processes(t_pipex *pipex)
 {

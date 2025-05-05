@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 11:50:36 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 15:37:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 
 	if (!cmd->args[1])
 	{
-		sorted = dup_env(data->env);
+		sorted = dup_env(data->env, 0);
 		if (!sorted)
 			return (1);
 		sort_env(sorted);

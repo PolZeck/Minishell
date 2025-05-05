@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 10:44:47 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 12:36:29 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 15:39:41 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static char	*increment_shlvl(const char *shlvl_entry)
 	return (new_entry);
 }
 
-char	**dup_env(char **envp)
+char	**dup_env(char **envp, int initial)
 {
 	int		i, j;
 	int		has_shlvl = 0;
@@ -88,10 +88,10 @@ char	**dup_env(char **envp)
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "SHLVL=", 6) == 0)
-		{
-			copy[j++] = increment_shlvl(envp[i]);
 			has_shlvl = 1;
-		}
+
+		if (initial && ft_strncmp(envp[i], "SHLVL=", 6) == 0)
+			copy[j++] = increment_shlvl(envp[i]);
 		else
 			copy[j++] = ft_strdup(envp[i]);
 		i++;
@@ -99,6 +99,8 @@ char	**dup_env(char **envp)
 	if (!has_shlvl)
 		copy[j++] = ft_strdup("SHLVL=1");
 	copy[j] = NULL;
+
+
 	return (copy);
 }
 

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 12:14:38 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 15:33:10 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int				is_operator(char c);
 
 char			*expand_env_var(char *token,
 					t_quote_type quote_type, t_data *data);
-char			**dup_env(char **envp);
+char	**dup_env(char **envp, int initial);
 
 t_cmd			*parse_tokens(t_token *tokens);
 t_cmd			*create_cmd(t_token *tokens);
