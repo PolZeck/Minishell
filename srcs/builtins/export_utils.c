@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:21:27 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 13:26:06 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 12:10:45 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,3 +75,31 @@ char	**append_env(char **env, char *new_entry)
 	free_split(env);
 	return (new_env);
 }
+
+char	**replace_or_append_env(char **env, char *entry)
+{
+	int		len;
+	int		i;
+
+	if (!entry)
+		return (env);
+
+	// trouver la longueur du nom avant le '='
+	len = 0;
+	while (entry[len] && entry[len] != '=')
+		len++;
+
+	i = 0;
+	while (env && env[i])
+	{
+		if (ft_strncmp(env[i], entry, len) == 0 && env[i][len] == '=')
+		{
+			free(env[i]);
+			env[i] = ft_strdup(entry);
+			return (env);
+		}
+		i++;
+	}
+	return (append_env(env, entry));
+}
+

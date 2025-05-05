@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 15:49:45 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 12:11:44 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <termios.h>
+# include <limits.h>
 
 typedef struct s_cmd	t_cmd;
 typedef struct s_data	t_data;

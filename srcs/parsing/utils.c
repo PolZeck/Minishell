@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 13:03:31 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 11:43:12 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,32 @@ int	is_builtin(char *cmd)
 
 char	**dup_env(char **envp)
 {
-	int		i;
 	char	**copy;
+	char	*cwd;
 
-	i = 0;
+	if (!envp || !*envp)
+	{
+		copy = malloc(sizeof(char *) * 5); // +1 slot
+		if (!copy)
+			return (NULL);
+
+		cwd = getcwd(NULL, 0);
+		if (cwd)
+		{
+			copy[0] = ft_strjoin("PWD=", cwd);
+			free(cwd);
+		}
+		else
+			copy[0] = ft_strdup("PWD=");
+
+		copy[1] = ft_strdup("SHLVL=1");
+		copy[2] = ft_strdup("_=/usr/bin/env");
+		copy[3] = ft_strdup("OLDPWD"); // ✅ sans égal = export vide
+		copy[4] = NULL;
+		return (copy);
+	}
+
+	int i = 0;
 	while (envp[i])
 		i++;
 	copy = malloc(sizeof(char *) * (i + 1));
@@ -120,3 +142,4 @@ char	**dup_env(char **envp)
 	copy[i] = NULL;
 	return (copy);
 }
+
