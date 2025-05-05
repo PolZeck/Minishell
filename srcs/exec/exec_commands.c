@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 16:32:13 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:29:38 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,9 @@ int	validate_redirections(t_cmd *cmd)
 		redir = node->content;
 		if (redir->type == REDIR_IN)
 		{
-			if (!redir->file)
+			if (!redir->file && redir->type != HEREDOC)
 			{
+				fprintf(stderr, "[ERROR] validate_redirections: file is NULL (type = %d)\n", redir->type);
 				ft_putstr_fd("minishell: redirection file missing\n", 2);
 				return (1);
 			}
@@ -103,17 +104,19 @@ int	validate_redirections(t_cmd *cmd)
 
 void apply_redirections_in_child(t_cmd *cmd)
 {
-	t_list *node = cmd->redirs;
-	int input_fd = -1;
-	int output_fd = -1;
+	t_list	*node = cmd->redirs;
+	int		input_fd = -1;
+	int		output_fd = -1;
 
 	while (node)
 	{
 		t_redir *redir = node->content;
 		int fd = -1;
 
-		if (redir->type == HEREDOC && redir->fd != -1)
+		if (redir->type == HEREDOC)
 		{
+			if (redir->fd == -1)
+				exit(1);
 			if (input_fd != -1)
 				close(input_fd);
 			input_fd = redir->fd;
@@ -162,6 +165,8 @@ void apply_redirections_in_child(t_cmd *cmd)
 		close(output_fd);
 	}
 }
+
+
 
 void	execute_command(t_cmd *cmd, t_data *data)
 {
@@ -244,10 +249,15 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-
-		// ➔ Appliquer les redirections dans le processus enfant
 		apply_redirections_in_child(cmd);
-
+		if (!cmd->args)
+			fprintf(stderr, "[ERROR] cmd->args is NULL\n");
+		else
+		{
+			int i = 0;
+			while (cmd->args[i])
+				i++;
+		}
 		execve(cmd_path, cmd->args, data->env);
 		perror(cmd_path);
 		exit(126);
