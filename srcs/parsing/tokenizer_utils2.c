@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 15:11:18 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 17:07:22 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_qu
 
 
 
+
 void	handle_operator_token(t_token **tokens,
 	t_token **last, t_parseinfo *info)
 {
@@ -83,7 +84,7 @@ void	handle_operator_token(t_token **tokens,
 }
 
 
-void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
+void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, t_token **last)
 {
 	char	quote;
 	int		start;
@@ -119,7 +120,7 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
 				tmp = ft_substr(info->input, start, *(info->i) - start);
 				char *joined = ft_strjoin(sub, tmp);
 				free(sub);
-				free(tmp); // ✅ ici tu libères la mémoire
+				free(tmp);
 				sub = joined;
 			}
 		}
@@ -130,7 +131,15 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info)
 	free(*buffer);
 	free(sub);
 	*buffer = tmp;
+
+	// ✅ PATCH : flush explicite pour les quotes vides
+	if ((*buffer)[0] == '\0' && *(info->quote_type) != NO_QUOTE)
+	{
+		flush_buffer_to_token(tokens, last, buffer, *(info->quote_type), info);
+		*(info->quote_type) = NO_QUOTE; // reset après flush
+	}
 }
+
 
 
 void	handle_variable_expansion(char **buffer,
