@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 13:17:56 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 11:28:52 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,18 @@ t_cmd	*parse_tokens(t_token *tokens)
 	}
 	if (cmd && cmd->args)
 		cmd->args[arg_count] = NULL;
+	t_cmd *cur = head;
+	while (cur)
+	{
+		if (cur->args)
+		{
+			int i = 0;
+			while (cur->args[i])
+				i++;
+			cur->args[i] = NULL;
+		}
+		cur = cur->next;
+	}
 	return (head);
 }
 

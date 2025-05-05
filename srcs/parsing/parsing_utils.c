@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 14:14:21 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 14:49:05 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,24 @@
 
 void	handle_argument(t_cmd *cmd, int *arg_count, char *arg)
 {
-	cmd->args[*arg_count] = ft_strdup(arg);
+	int		new_size;
+	char	**new_args;
+
+	new_size = (*arg_count) + 2;
+	new_args = malloc(sizeof(char *) * new_size);
+	if (!new_args)
+		return ;
+
+	int i = 0;
+	while (i < *arg_count)
+	{
+		new_args[i] = cmd->args[i];
+		i++;
+	}
+	new_args[i] = ft_strdup(arg);
+	new_args[i + 1] = NULL;
+	free(cmd->args);
+	cmd->args = new_args;
 	(*arg_count)++;
 }
 
@@ -63,8 +80,6 @@ void	handle_redir_in(t_cmd *cmd, t_token **tokens)
 	add_redir(cmd, REDIR_IN, ft_strdup((*tokens)->value));
 }
 
-
-
 void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 {
 	t_token	*token;
@@ -88,8 +103,6 @@ void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 	}
 }
 
-
-
 void	add_redir_fd(t_cmd *cmd, int type, int fd)
 {
 	t_redir	*redir;
@@ -108,9 +121,9 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	int		pipefd[2];
 	char	*line;
 	char	*delimiter;
+	t_redir *redir;
 
 	*tokens = (*tokens)->next;
-
 	if (!(*tokens))
 	{
 		syntax_error("newline");
@@ -119,18 +132,15 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	}
 	if ((*tokens)->type != WORD && (*tokens)->type != QUOTE && (*tokens)->type != DELIMITER)
 	{
-		// 🔥 Harmonisé avec redir_in/out : affiche bien `<<`, `|`, etc.
 		syntax_error((*tokens)->value);
 		cmd->invalid = 1;
 		return ;
 	}
-
-	// ✅ On taggue explicitement comme DELIMITER (sans changer le flux)
 	(*tokens)->type = DELIMITER;
 	delimiter = (*tokens)->value;
-
 	if (pipe(pipefd) == -1)
 	{
+		printf("TEST4 ICI");
 		perror("pipe");
 		cmd->invalid = 1;
 		return ;
@@ -140,9 +150,9 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line) // Ctrl+D
+		if (!line)
 			break ;
-		if (heredoc_interrupted) // Ctrl+C
+		if (heredoc_interrupted)
 		{
 			free(line);
 			break ;
@@ -167,11 +177,17 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 		return ;
 	}
 
-	add_redir_fd(cmd, HEREDOC, pipefd[0]);
+	redir = malloc(sizeof(t_redir));
+	if (!redir)
+	{
+		close(pipefd[0]);
+		return ;
+	}
+	redir->type = HEREDOC;
+	redir->fd = pipefd[0];
+	redir->file = ft_strdup(".heredoc_dummy");
+	ft_lstadd_back(&cmd->redirs, ft_lstnew(redir));
 }
-
-
-
 
 t_redir	*create_redir(int type, char *file)
 {

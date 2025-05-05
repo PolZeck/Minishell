@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 16:04:24 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 13:28:50 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		}
 		node = node->next;
 	}
-
-	// ➔ Maintenant exécuter le builtin
 	if (!cmd->args[0])
 		return ;
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
@@ -74,7 +72,6 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		*get_exit_status() = builtin_unset(cmd, data);
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		*get_exit_status() = builtin_env(cmd, data);
-
 	// ➔ Puis restaurer l'input et l'output d'origine
 	dup2(save_stdin, STDIN_FILENO);
 	dup2(save_stdout, STDOUT_FILENO);

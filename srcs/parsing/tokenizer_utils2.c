@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 13:37:26 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 15:11:18 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,21 @@ void	handle_variable_expansion(char **buffer,
 	{
 		var = ft_strdup("$?");
 		(*i)++;
+	}
+	else if (ft_isdigit(input[*i]))
+	{
+		// Si c'est un chiffre seul (non valable comme nom de variable), on ignore l'expansion
+		(*i)++;
+		// Et on ajoute ce qu’il y a après, littéralement
+		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+		{
+			char tmp[2] = { input[*i], '\0' };
+			char *joined = ft_strjoin(*buffer, tmp);
+			free(*buffer);
+			*buffer = joined;
+			(*i)++;
+		}
+		return ;
 	}
 	else
 	{
