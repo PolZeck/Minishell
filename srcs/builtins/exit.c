@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/25 15:40:20 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 15:48:27 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+static int	is_within_ll_range(const char *str)
+{
+	char	*endptr = NULL;
+	long long val;
+
+	errno = 0;
+	if (!ft_strtoll(str, &val))
+	return (0);
+	if (errno == ERANGE || *endptr != '\0')
+		return (0);
+	return (1);
+}
 
 static int	is_numeric_arg(char *str)
 {
@@ -51,7 +64,7 @@ int	builtin_exit(t_cmd *cmd, t_data *data)
 	int	exit_code;
 
 	ft_putstr_fd("exit\n", 1);
-	if (cmd->args[1] && !is_numeric_arg(cmd->args[1]))
+	if (cmd->args[1] && (!is_numeric_arg(cmd->args[1]) || !is_within_ll_range(cmd->args[1])))
 	{
 		print_numeric_error(cmd->args[1]);
 		*get_exit_status() = 2;
