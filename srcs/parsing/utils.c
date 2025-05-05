@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 13:03:31 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 12:36:04 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,25 +98,4 @@ int	is_builtin(char *cmd)
 		|| ft_strcmp(cmd, "exit") == 0)
 		return (1);
 	return (0);
-}
-
-char	**dup_env(char **envp)
-{
-	int		i;
-	char	**copy;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	copy = malloc(sizeof(char *) * (i + 1));
-	if (!copy)
-		return (NULL);
-	i = 0;
-	while (envp[i])
-	{
-		copy[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	copy[i] = NULL;
-	return (copy);
 }

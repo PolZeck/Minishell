@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 13:40:34 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/28 14:01:42 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:29:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,18 @@ void	close_and_perr_fork(t_pipex *pipex)
 
 int	handle_signal_status(int status)
 {
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (0);
+	int sig = WTERMSIG(status);
+
+	if (sig == SIGINT)
+	{
+		return (130); // standard: 128 + SIGINT
+	}
+	else if (sig == SIGQUIT)
+	{
+		write(1, "Quit (core dumped)\n", 20);
+		return (131); // standard: 128 + SIGQUIT
+	}
+	return (128 + sig);
 }
 
 int	wait_for_processes(t_pipex *pipex)
@@ -59,20 +68,31 @@ int	wait_for_processes(t_pipex *pipex)
 	int	i;
 	int	status;
 	int	final_status;
+	int	received_sigint;
 
 	final_status = 0;
+	received_sigint = 0;
 	i = -1;
 	while (++i < pipex->num_cmds)
 	{
 		waitpid(pipex->pid[i], &status, 0);
-		if (i == pipex->num_cmds - 1)
+
+		if (WIFSIGNALED(status))
 		{
-			if (WIFEXITED(status))
-				final_status = WEXITSTATUS(status);
-			if (WIFSIGNALED(status))
-				final_status = handle_signal_status(status);
+			int sig = WTERMSIG(status);
+			if (sig == SIGINT)
+				received_sigint = 1; // ✅ on a vu au moins un SIGINT
+
+			if (i == pipex->num_cmds - 1)
+				final_status = 128 + sig;
 		}
+		else if (i == pipex->num_cmds - 1 && WIFEXITED(status))
+			final_status = WEXITSTATUS(status);
 	}
+	if (received_sigint)
+		write(1, "\n", 1); // ✅ une seule fois à la fin si au moins un SIGINT
+
 	clean(pipex);
 	return (final_status);
 }
+

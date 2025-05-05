@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:47:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 16:45:31 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 15:25:46 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define BUILTINS_H
 
 # include "minishell.h"
+# include <limits.h>
 
 typedef struct s_cmd	t_cmd;
 typedef struct s_data	t_data;
@@ -29,5 +30,6 @@ int		is_valid_identifier_export(char *str);
 int		var_exists(char **env, char *name);
 char	**replace_env(char **env, char *new_entry, int idx);
 char	**append_env(char **env, char *new_entry);
+char	**replace_or_append_env(char **env, char *entry);
 
 #endif

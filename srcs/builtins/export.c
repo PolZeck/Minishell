@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 14:50:47 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 15:37:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,12 @@ static void	print_export(char **env)
 	i = 0;
 	while (env[i])
 	{
+		// ✅ On saute "_=..." comme Bash le fait
+		if (ft_strncmp(env[i], "_=", 2) == 0)
+		{
+			i++;
+			continue;
+		}
 		eq = ft_strchr(env[i], '=');
 		if (eq)
 		{
@@ -143,6 +149,7 @@ static void	print_export(char **env)
 	}
 }
 
+
 int	builtin_export(t_cmd *cmd, t_data *data)
 {
 	int		i;
@@ -150,7 +157,7 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 
 	if (!cmd->args[1])
 	{
-		sorted = dup_env(data->env);
+		sorted = dup_env(data->env, 0);
 		if (!sorted)
 			return (1);
 		sort_env(sorted);

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:20:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/23 13:08:02 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 11:46:08 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,14 @@ int	builtin_env(t_cmd *cmd, t_data *data)
 	i = 0;
 	while (data->env[i])
 	{
-		ft_putstr_fd(data->env[i], 1);
-		ft_putstr_fd("\n", 1);
+		if (ft_strchr(data->env[i], '=')) // ✅ Affiche uniquement si '=' présent
+		{
+			ft_putstr_fd(data->env[i], 1);
+			ft_putstr_fd("\n", 1);
+		}
 		i++;
 	}
 	*get_exit_status() = 0;
 	return (0);
 }
+
