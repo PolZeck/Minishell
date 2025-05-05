@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 12:15:40 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 13:25:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static int	cd_too_many_args(char **args)
 static char	*get_cd_target(char **args, t_data *data)
 {
 	char	*home;
-	// char	*expanded;
 
 	if (args[1] == NULL)
 	{
@@ -40,7 +39,6 @@ static char	*get_cd_target(char **args, t_data *data)
 		}
 		return (ft_strdup(home));
 	}
-	// ✅ Expansion du ~ vers $HOME
 	if (args[1][0] == '~')
 	{
 		home = ft_getenv(data, "HOME");
@@ -50,11 +48,10 @@ static char	*get_cd_target(char **args, t_data *data)
 			*get_exit_status() = 1;
 			return (NULL);
 		}
-		if (args[1][1] == '\0') // cd ~
+		if (args[1][1] == '\0')
 			return (ft_strdup(home));
 		else if (args[1][1] == '/')
-			return (ft_strjoin(home, args[1] + 1)); // cd ~/dir
-		// sinon laisse tomber, Bash ne gère pas ~user dans ce cas
+			return (ft_strjoin(home, args[1] + 1));
 	}
 	return (ft_strdup(args[1]));
 }
@@ -69,8 +66,7 @@ static int	cd_change_directory(char *target, t_data *data)
 
 	old_pwd = ft_getenv(data, "PWD");
 	if (old_pwd)
-		old_pwd_copy = ft_strdup(old_pwd); // ✅ on sauvegarde la valeur
-
+		old_pwd_copy = ft_strdup(old_pwd);
 	if (chdir(target) != 0)
 	{
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
@@ -86,7 +82,6 @@ static int	cd_change_directory(char *target, t_data *data)
 		pwd_var = ft_strjoin("PWD=", cwd);
 		data->env = replace_or_append_env(data->env, pwd_var);
 		free(pwd_var);
-
 		if (old_pwd_copy)
 		{
 			oldpwd_var = ft_strjoin("OLDPWD=", old_pwd_copy);
@@ -94,10 +89,9 @@ static int	cd_change_directory(char *target, t_data *data)
 			free(oldpwd_var);
 		}
 	}
-	free(old_pwd_copy); // ✅ clean final
+	free(old_pwd_copy);
 	return (0);
 }
-
 
 int	builtin_cd(t_cmd *cmd, t_data *data)
 {
@@ -109,7 +103,7 @@ int	builtin_cd(t_cmd *cmd, t_data *data)
 	target = get_cd_target(cmd->args, data);
 	if (!target)
 		return (1);
-	result = cd_change_directory(target, data); // ✅ on passe data
+	result = cd_change_directory(target, data);
 	free(target);
 	return (result);
 }

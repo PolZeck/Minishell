@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 13:19:21 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 14:38:18 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ int	main(int argc, char **argv, char **envp)
 	// t_token	*tokens;
 	t_cmd	*cmd;
 	t_data	data;
+	struct termios term;
 
 	(void)argc;
 	(void)argv;
@@ -135,12 +136,8 @@ int	main(int argc, char **argv, char **envp)
 	data.env = dup_env(envp);
 	if (!data.env)
 		return (1);
+		
 	setup_signals();
-	// ✅ Réactivation explicite des signaux clavier (comme Ctrl-\)
-	#include <termios.h>
-
-	struct termios term;
-
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag |= ISIG;        // permet à Ctrl-C et Ctrl-\ d’envoyer des signaux
 	term.c_cc[VQUIT] = 28;       // remet Ctrl-\ (char code 28) comme touche de SIGQUIT
@@ -164,7 +161,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		data.tokens = tokenize(input, &data);
-		// print_tokens_debug(data.tokens); // 👈 juste ici pour voir les types
+		// print_tokens_debug(data.tokens);
 		cmd = parse_tokens(data.tokens);
 		// debug_print_commands(cmd);
 		if (cmd)
