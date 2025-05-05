@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 11:08:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 15:45:22 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:30:47 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ int				ft_putchar(char c);
 int				ft_putstr(char *str);
 int				ft_handle_unsigned(unsigned int num);
 int				ft_strcmp(char *s1, char *s2);
-long long		ft_strtoll(const char *str, long long *result);
 
 char			*ft_itoa_unsigned(unsigned int num);
 char			*ft_itoa_gnl(int n);

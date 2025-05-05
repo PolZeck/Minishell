@@ -6,40 +6,61 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 15:48:27 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 16:34:52 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include <limits.h>
 
-static int	is_within_ll_range(const char *str)
-{
-	char	*endptr = NULL;
-	long long val;
-
-	errno = 0;
-	if (!ft_strtoll(str, &val))
-	return (0);
-	if (errno == ERANGE || *endptr != '\0')
-		return (0);
-	return (1);
-}
-
-static int	is_numeric_arg(char *str)
+static int	is_strict_numeric(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (!str)
+	if (!str || !str[0])
 		return (0);
-	if (str[0] == '-' || str[0] == '+')
+	if (str[i] == '+' || str[i] == '-')
 		i++;
+	if (!str[i])
+		return (0);
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
 			return (0);
 		i++;
 	}
+	return (1);
+}
+
+static int	str_to_llong(const char *str, long long *out)
+{
+	int			sign;
+	long long	result;
+	int			i;
+	int			digit;
+
+	sign = 1;
+	result = 0;
+	i = 0;
+	if (!str || !str[0])
+		return (0);
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i])
+	{
+		digit = str[i++] - '0';
+		if (sign == 1 && (result > (LLONG_MAX - digit) / 10))
+			return (0);
+		if (sign == -1 && (-result < (LLONG_MIN + digit) / 10))
+			return (0);
+		result = result * 10 + digit;
+	}
+	*out = result * sign;
 	return (1);
 }
 
@@ -61,10 +82,12 @@ static void	exit_cleanup(t_cmd *cmd, t_data *data, int exit_code)
 
 int	builtin_exit(t_cmd *cmd, t_data *data)
 {
-	int	exit_code;
+	long long	exit_ll;
+	int			exit_code;
 
 	ft_putstr_fd("exit\n", 1);
-	if (cmd->args[1] && (!is_numeric_arg(cmd->args[1]) || !is_within_ll_range(cmd->args[1])))
+	if (cmd->args[1] && (!is_strict_numeric(cmd->args[1])
+			|| !str_to_llong(cmd->args[1], &exit_ll)))
 	{
 		print_numeric_error(cmd->args[1]);
 		*get_exit_status() = 2;
@@ -77,7 +100,7 @@ int	builtin_exit(t_cmd *cmd, t_data *data)
 		return (1);
 	}
 	if (cmd->args[1])
-		exit_code = ft_atoi(cmd->args[1]);
+		exit_code = (unsigned char)exit_ll;
 	else
 		exit_code = 0;
 	*get_exit_status() = exit_code;

@@ -6,7 +6,7 @@
 #    By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pol               #+#    #+#              #
-#    Updated: 2025/05/05 15:44:22 by lcosson          ###   ########.fr        #
+#    Updated: 2025/05/05 16:30:53 by lcosson          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ SRCS	= ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 		  ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 		  ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c \
 		  ft_lstmap.c ft_strcmp.c ft_strtok.c ft_strtok_r.c ft_strspn.c \
-		  ft_strcspn.c ft_strjoin_char.c ft_strtoll.c
+		  ft_strcspn.c ft_strjoin_char.c
 
 OBJS	= $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 DEPS	= $(patsubst %.c, $(DEP_DIR)/%.d, $(SRCS))
