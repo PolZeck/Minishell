@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 16:32:13 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 12:26:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_command_path(char *cmd)
+char	*find_command_path(char *cmd, t_data *data)
 {
 	char	*path;
 	char	**paths;
@@ -22,7 +22,7 @@ char	*find_command_path(char *cmd)
 
 	if (!cmd || !*cmd)
 		return (NULL);
-	path = getenv("PATH");
+	path = ft_getenv(data, "PATH");
 	if (!path)
 		return (NULL);
 	paths = ft_split(path, ':');
@@ -223,7 +223,7 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	}
 	else
 	{
-		cmd_path = find_command_path(cmd->args[0]);
+		cmd_path = find_command_path(cmd->args[0], data);
 		if (!cmd_path)
 		{
 			ft_putstr_fd("bash: ", STDERR_FILENO);
