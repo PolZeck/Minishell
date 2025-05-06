@@ -6,12 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 10:44:47 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 15:39:41 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 15:30:07 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-#include <string.h>
 
 char	*ft_getenv(t_data *data, const char *name)
 {
@@ -51,11 +50,13 @@ static char	*increment_shlvl(const char *shlvl_entry)
 
 char	**dup_env(char **envp, int initial)
 {
-	int		i, j;
-	int		has_shlvl = 0;
+	int		i;
+	int		j;
+	int		has_shlvl;
 	char	**copy;
 	char	*cwd;
 
+	has_shlvl = 0;
 	if (!envp || !*envp)
 	{
 		copy = malloc(sizeof(char *) * 5);
@@ -75,21 +76,18 @@ char	**dup_env(char **envp, int initial)
 		copy[4] = NULL;
 		return (copy);
 	}
-
-	// Compte les entrées
-	for (i = 0; envp[i]; i++)
-		;
-	copy = malloc(sizeof(char *) * (i + 2)); // +1 pour SHLVL si absent
+	i = 0;
+	while (envp[i])
+		i++;
+	copy = malloc(sizeof(char *) * (i + 2));
 	if (!copy)
 		return (NULL);
-
 	i = 0;
 	j = 0;
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "SHLVL=", 6) == 0)
 			has_shlvl = 1;
-
 		if (initial && ft_strncmp(envp[i], "SHLVL=", 6) == 0)
 			copy[j++] = increment_shlvl(envp[i]);
 		else
@@ -99,9 +97,17 @@ char	**dup_env(char **envp, int initial)
 	if (!has_shlvl)
 		copy[j++] = ft_strdup("SHLVL=1");
 	copy[j] = NULL;
-
-
 	return (copy);
 }
 
+void	free_env(char **env)
+{
+	int	i;
 
+	if (!env)
+		return ;
+	i = 0;
+	while (env[i])
+		free(env[i++]);
+	free(env);
+}

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 17:04:27 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 15:32:46 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	handle_input_token(t_token_list *tlist,
 	char **buffer, t_parseinfo *info)
 {
 	static t_quote_type	current_quote_type;
+	char				next;
 
 	if (info->input[*(info->i)] == ' ')
 	{
@@ -42,13 +43,14 @@ static void	handle_input_token(t_token_list *tlist,
 	}
 	if (info->input[*(info->i)] == '$')
 	{
-		char next = info->input[*(info->i) + 1];
+		next = info->input[*(info->i) + 1];
 		if (next == '\'' || next == '\"')
 		{
-			(*(info->i))++; // on saute le $
+			(*(info->i))++;
 			return ;
 		}
-		handle_variable_expansion(buffer, info->input, info->i, info->data, info);
+		handle_variable_expansion(buffer,
+			info->input, info->i, info);
 		return ;
 	}
 	append_word(buffer, info->input, info->i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 16:15:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 11:20:01 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/06 15:13:45 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ void	handle_argument(t_cmd *cmd, int *arg_count, char *arg)
 {
 	int		new_size;
 	char	**new_args;
+	int		i;
 
 	new_size = (*arg_count) + 2;
 	new_args = malloc(sizeof(char *) * new_size);
 	if (!new_args)
 		return ;
-
-	int i = 0;
+	i = 0;
 	while (i < *arg_count)
 	{
 		new_args[i] = cmd->args[i];
@@ -85,7 +85,8 @@ void	handle_redir_out(t_cmd *cmd, t_token **tokens, int append)
 	t_token	*token;
 
 	token = *tokens;
-	if (token->next && (token->next->type == WORD || token->next->type == DELIMITER))
+	if (token->next && (token->next->type == WORD
+			|| token->next->type == DELIMITER))
 	{
 		if (append)
 			add_redir(cmd, APPEND, ft_strdup(token->next->value));
@@ -116,12 +117,12 @@ void	add_redir_fd(t_cmd *cmd, int type, int fd)
 	ft_lstadd_back(&cmd->redirs, ft_lstnew(redir));
 }
 
-void generate_random_name(char *output, size_t len)
+void	generate_random_name(char *output, size_t len)
 {
-	const char charset[] = "abcdefghijklmnopqrstuvwxyz0123456789";
-	unsigned char buf[12];
-	int fd;
-	size_t i;
+	const char		charset[] = "abcdefghijklmnopqrstuvwxyz0123456789";
+	unsigned char	buf[12];
+	int				fd;
+	size_t			i;
 
 	fd = open("/dev/urandom", O_RDONLY);
 	if (fd < 0)
@@ -162,7 +163,8 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 		cmd->invalid = 1;
 		return ;
 	}
-	if ((*tokens)->type != WORD && (*tokens)->type != QUOTE && (*tokens)->type != DELIMITER)
+	if ((*tokens)->type != WORD && (*tokens)->type != QUOTE
+		&& (*tokens)->type != DELIMITER)
 	{
 		syntax_error((*tokens)->value);
 		cmd->invalid = 1;
@@ -170,7 +172,6 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	}
 	(*tokens)->type = DELIMITER;
 	delimiter = (*tokens)->value;
-
 	generate_random_name(randname, 12);
 	tmp_path = ft_strjoin("/tmp/", "heredoc_");
 	if (!tmp_path)
@@ -179,7 +180,6 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	free(tmp_path);
 	if (!filename)
 		return ;
-
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd < 0)
 	{
@@ -188,14 +188,13 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 		cmd->invalid = 1;
 		return ;
 	}
-
 	signal(SIGINT, heredoc_sigint_handler);
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
 			break ;
-		if (heredoc_interrupted)
+		if (g_heredoc_interrupted)
 		{
 			free(line);
 			break ;
@@ -210,17 +209,15 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	}
 	close(fd);
 	setup_signals();
-
-	if (heredoc_interrupted)
+	if (g_heredoc_interrupted)
 	{
 		unlink(filename);
 		free(filename);
 		cmd->invalid = 1;
 		*get_exit_status() = 1;
-		heredoc_interrupted = 0;
+		g_heredoc_interrupted = 0;
 		return ;
 	}
-
 	redir = malloc(sizeof(t_redir));
 	if (!redir)
 	{
@@ -240,7 +237,6 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	}
 	ft_lstadd_back(&cmd->redirs, ft_lstnew(redir));
 }
-
 
 t_redir	*create_redir(int type, char *file)
 {

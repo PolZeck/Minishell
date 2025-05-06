@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 11:42:32 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 15:43:24 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void			handle_operator_token(t_token **tokens,
 					t_token **last, t_parseinfo *info);
 void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, t_token **last);
 void			handle_variable_expansion(char **buffer,
-					char *input, int *i, t_data *data, t_parseinfo *info);
+					char *input, int *i, t_parseinfo *info);
 void			append_word(char **buffer, char *input, int *i);
 
 void			free_tokens(t_token *tokens);

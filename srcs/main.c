@@ -6,50 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 11:58:28 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 15:15:44 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// void	display_parsed_commands(t_cmd *cmd)
-// {
-// 	t_cmd	*current;
-// 	int		i;
-
-// 	current = cmd;
-
-// 	while (current)
-// 	{
-// 		if (!current->args || !current->args[0])
-// 		{
-// 			current = current->next;
-// 			continue;
-// 		}
-// 		ft_printf("Commande : %s\n", current->args[0]);
-// 		i = 1;
-// 		while (current->args[i])
-// 		{
-// 			ft_printf("Arg[%d]: %s\n", i, current->args[i]);
-// 			i++;
-// 		}
-// 		if (current->infile)
-// 		{
-// 			if (current->append == -1)
-// 				ft_printf("Lecture depuis un HEREDOC avec délimiteur : %s\n",
-// 					current->infile);
-// 			else
-// 				ft_printf("Lecture depuis : %s\n", current->infile);
-// 		}
-// 		if (current->outfile)
-// 			ft_printf("Écriture vers : %s (Append : %d)\n",
-// 				current->outfile, current->append);
-// 		if (current->next)
-// 			ft_printf("⬇ Pipe vers la prochaine commande ⬇\n");
-// 		current = current->next;
-// 	}
-// }
-
 
 void	debug_print_commands(t_cmd *cmd_list)
 {
@@ -87,34 +48,6 @@ void	debug_print_commands(t_cmd *cmd_list)
 	}
 }
 
-#include "minishell.h"
-
-char	*get_token_type_name(t_token_type type)
-{
-	if (type == WORD) return "WORD";
-	if (type == PIPE) return "PIPE";
-	if (type == REDIR_IN) return "REDIR_IN";
-	if (type == REDIR_OUT) return "REDIR_OUT";
-	if (type == APPEND) return "APPEND";
-	if (type == HEREDOC) return "HEREDOC";
-	if (type == ENV_VAR) return "ENV_VAR";
-	if (type == QUOTE) return "QUOTE";
-	if (type == T_SPACE) return "T_SPACE";
-	if (type == DELIMITER) return "DELIMITER";
-	return "UNKNOWN";
-}
-
-void	print_tokens_debug(t_token *tokens)
-{
-	while (tokens)
-	{
-		printf("[%-10s] -> \"%s\"\n",
-			get_token_type_name(tokens->type),
-			tokens->value ? tokens->value : "(null)");
-		tokens = tokens->next;
-	}
-}
-
 void	debug_tokens(t_token *tokens)
 {
 	int i = 0;
@@ -125,8 +58,6 @@ void	debug_tokens(t_token *tokens)
 		i++;
 	}
 }
-
-
 
 /*
 	fonction main, entrée du programme,
@@ -144,15 +75,13 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-
 	data.env = dup_env(envp, 1);
 	if (!data.env)
 		return (1);
-		
 	setup_signals();
 	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag |= ISIG;        // permet à Ctrl-C et Ctrl-\ d’envoyer des signaux
-	term.c_cc[VQUIT] = 28;       // remet Ctrl-\ (char code 28) comme touche de SIGQUIT
+	term.c_lflag |= ISIG;
+	term.c_cc[VQUIT] = 28;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	while (1)
 	{
@@ -174,8 +103,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		data.tokens = tokenize(input, &data);
 		// debug_tokens(data.tokens);
-
-		// print_tokens_debug(data.tokens);
 		cmd = parse_tokens(data.tokens);
 		// debug_print_commands(cmd);
 		if (cmd)

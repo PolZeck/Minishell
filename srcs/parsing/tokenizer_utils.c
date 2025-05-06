@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 13:03:07 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 13:26:20 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 14:56:54 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,16 @@ t_token	*create_token(char *value, t_token_type type,
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-	return (NULL);
-
-	// 🚨 Ne pas expand un DELIMITER
+		return (NULL);
 	if (type == DELIMITER || quote_type == SINGLE_QUOTE)
 		token->value = ft_strdup(value);
 	else
 		token->value = expand_env_var(value, quote_type, data);
-
-
 	token->type = type;
 	token->quote_type = quote_type;
 	token->next = NULL;
 	return (token);
 }
-
 
 int	check_unclosed_quotes(char *input)
 {
@@ -61,7 +56,8 @@ void	add_token(t_token **tokens, t_token **last,
 {
 	t_token	*new_token;
 
-	new_token = create_token(info.buffer, info.type, info.in_single_quotes, data);
+	new_token = create_token(info.buffer, info.type,
+			info.in_single_quotes, data);
 	if (!(*tokens))
 		*tokens = new_token;
 	else

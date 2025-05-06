@@ -6,12 +6,14 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 14:00:12 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 15:45:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type, t_parseinfo *info)
+
+void	flush_buffer_to_token(t_token **tokens, t_token **last,
+		char **buffer, t_quote_type quote_type, t_parseinfo *info)
 {
 	t_token			*new;
 	t_token_type	final_type;
@@ -20,37 +22,28 @@ void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_qu
 		return ;
 	if ((!*buffer || ft_strlen(*buffer) == 0) && quote_type == NO_QUOTE)
 		return ;
-	
-		
 	info->next_is_delimiter = 0;
-	// ✅ Gestion du HEREDOC → DELIMITER
 	final_type = WORD;
 	if (info && info->next_is_delimiter)
 	{
 		final_type = DELIMITER;
 		info->next_is_delimiter = 0;
 	}
-	// printf("FLUSH [%s] quote_type=%d\n", *buffer, quote_type);
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return ;
-	new->value = ft_strdup(*buffer); // même si buffer est "", on duplique ""
+	new->value = ft_strdup(*buffer);
 	new->type = final_type;
 	new->quote_type = quote_type;
 	new->next = NULL;
-
 	if (!*tokens)
 		*tokens = new;
 	else
 		(*last)->next = new;
 	*last = new;
-
 	free(*buffer);
 	*buffer = ft_strdup("");
 }
-
-
-
 
 void	handle_operator_token(t_token **tokens,
 	t_token **last, t_parseinfo *info)
@@ -60,166 +53,193 @@ void	handle_operator_token(t_token **tokens,
 	t_token_type	type;
 	t_token			*new;
 
-	// info->next_is_delimiter = 0;
 	j = 0;
 	op[j++] = info->input[(*info->i)++];
 	if ((op[0] == '<' || op[0] == '>') && info->input[(*info->i)] == op[0])
 		op[j++] = info->input[(*info->i)++];
 	op[j] = '\0';
-
 	type = get_token_type_from_op(op);
 	new = create_token(op, type, NO_QUOTE, info->data);
-
 	if (!*tokens)
 		*tokens = new;
 	else
 		(*last)->next = new;
 	*last = new;
-
-	// ✅ On active le flag SEULEMENT APRÈS avoir traité le token de l'opérateur
 	if (type == HEREDOC)
 		info->next_is_delimiter = 1;
 	else
-		info->next_is_delimiter = 0; // 🔒 réinitialisation propre
-
+		info->next_is_delimiter = 0;
 }
 
+static void	init_quote(char quote, t_parseinfo *info)
+{
+	if (quote == '\'' && *(info->quote_type) == NO_QUOTE)
+		*(info->quote_type) = SINGLE_QUOTE;
+	else if (quote == '\"' && *(info->quote_type) == NO_QUOTE)
+		*(info->quote_type) = DOUBLE_QUOTE;
+	(*(info->i))++;
+}
+
+static char	*handle_single_quote(t_parseinfo *info)
+{
+	int		start;
+
+	start = *(info->i);
+	while (info->input[*(info->i)] && info->input[*(info->i)] != '\'')
+		(*(info->i))++;
+	return (ft_substr(info->input, start, *(info->i) - start));
+}
+
+static void	handle_double_quote(char **sub, t_parseinfo *info)
+{
+	int		start;
+	char	*tmp;
+	char	*joined;
+
+	*sub = ft_strdup("");
+	while (info->input[*(info->i)] && info->input[*(info->i)] != '\"')
+	{
+		if (info->input[*(info->i)] == '$')
+			handle_variable_expansion(sub, info->input, info->i, info);
+		else
+		{
+			start = *(info->i);
+			while (info->input[*(info->i)] && info->input[*(info->i)] != '$'
+				&& info->input[*(info->i)] != '\"')
+				(*(info->i))++;
+			tmp = ft_substr(info->input, start, *(info->i) - start);
+			joined = ft_strjoin(*sub, tmp);
+			free(*sub);
+			free(tmp);
+			*sub = joined;
+		}
+	}
+}
+
+static void	merge_and_flush(char **buffer, char *sub, t_parseinfo *info,
+	t_token **tokens_and_last[2])
+{
+	char	*tmp;
+	char	next;
+
+	if (!(sub[0] == '\0' && (*buffer)[0] != '\0'))
+	{
+		tmp = ft_strjoin(*buffer, sub);
+		free(*buffer);
+		free(sub);
+		*buffer = tmp;
+	}
+	else
+		free(sub);
+	next = info->input[*(info->i)];
+	if (next == '\0' || next == ' ' || is_operator(next))
+		flush_buffer_to_token(tokens_and_last[0], tokens_and_last[1],
+			buffer, *(info->quote_type), info);
+	*(info->quote_type) = NO_QUOTE;
+}
 
 void	handle_quotes_in_token(char **buffer, t_parseinfo *info,
 	t_token **tokens, t_token **last)
 {
 	char	quote;
-	int		start;
 	char	*sub;
-	char	*tmp;
+	t_token	**tokens_and_last[2];
 
 	quote = info->input[*(info->i)];
-	if (quote == '\'' && *(info->quote_type) == NO_QUOTE)
-	*(info->quote_type) = SINGLE_QUOTE;
-	else if (quote == '\"' && *(info->quote_type) == NO_QUOTE)
-	*(info->quote_type) = DOUBLE_QUOTE;
-	(*(info->i))++;
-
-	// lecture du contenu entre quotes
+	init_quote(quote, info);
 	if (quote == '\'')
-	{
-	start = *(info->i);
-	while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
-	(*(info->i))++;
-	sub = ft_substr(info->input, start, *(info->i) - start);
-	}
+		sub = handle_single_quote(info);
 	else
-	{
-	sub = ft_strdup("");
-	while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
-	{
-	if (info->input[*(info->i)] == '$')
-	handle_variable_expansion(&sub, info->input, info->i, info->data, info);
-	else
-	{
-	start = *(info->i);
-	while (info->input[*(info->i)] && info->input[*(info->i)] != '$' && info->input[*(info->i)] != quote)
-	(*(info->i))++;
-	tmp = ft_substr(info->input, start, *(info->i) - start);
-	char *joined = ft_strjoin(sub, tmp);
-	free(sub);
-	free(tmp);
-	sub = joined;
-	}
-	}
-	}
+		handle_double_quote(&sub, info);
 	if (info->input[*(info->i)] == quote)
-	(*(info->i))++;
-
-	// ⛔️ Cas particulier : quote vide MAIS un buffer existe déjà → on concatène silencieusement
-	if (!(sub[0] == '\0' && (*buffer)[0] != '\0'))
-	{
-	tmp = ft_strjoin(*buffer, sub);
-	free(*buffer);
-	free(sub);
-	*buffer = tmp;
-	}
-	else
-	free(sub);
-
-	// 🔁 Flush si on est à la fin d’un mot
-	char next = info->input[*(info->i)];
-	if (next == '\0' || next == ' ' || is_operator(next))
-	flush_buffer_to_token(tokens, last, buffer, *(info->quote_type), info);
-
-	*(info->quote_type) = NO_QUOTE;
+		(*(info->i))++;
+	tokens_and_last[0] = tokens;
+	tokens_and_last[1] = last;
+	merge_and_flush(buffer, sub, info, tokens_and_last);
 }
 
-
-
-
-void	handle_variable_expansion(char **buffer,
-	char *input, int *i, t_data *data, t_parseinfo *info)
+static void	append_raw_variable(char **buffer, char *input, int *i)
 {
 	int		start;
-	char	*var;
+	char	*raw;
+	char	*tmp;
+
+	start = *i;
+	(*i)++;
+	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+		(*i)++;
+	raw = ft_substr(input, start, *i - start);
+	tmp = ft_strjoin(*buffer, raw);
+	free(*buffer);
+	free(raw);
+	*buffer = tmp;
+}
+
+static int	handle_digit_expansion(char **buffer, char *input, int *i)
+{
+	char	tmp_str[2];
+	char	*joined;
+
+	if (!ft_isdigit(input[*i]))
+		return (0);
+	(*i)++;
+	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+	{
+		tmp_str[0] = input[*i];
+		tmp_str[1] = '\0';
+		joined = ft_strjoin(*buffer, tmp_str);
+		free(*buffer);
+		*buffer = joined;
+		(*i)++;
+	}
+	return (1);
+}
+
+static char	*extract_variable(char *input, int *i)
+{
+	int		start;
 	char	*var_name;
+	char	*var;
+
+	if (input[*i] == '?')
+	{
+		(*i)++;
+		return (ft_strdup("$?"));
+	}
+	start = *i;
+	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+		(*i)++;
+	var_name = ft_substr(input, start, *i - start);
+	var = ft_strjoin("$", var_name);
+	free(var_name);
+	return (var);
+}
+
+void	handle_variable_expansion(char **buffer,
+	char *input, int *i, t_parseinfo *info)
+{
+	char	*var;
 	char	*value;
 	char	*to_append;
 	char	*tmp;
 
 	if (info && info->next_is_delimiter)
-	{
-		// info->next_is_delimiter = 0;
-		// Copie brute du nom de la variable sans expansion
-		int start = *i;
-		(*i)++; // skip '$'
-		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
-			(*i)++;
-		char *raw = ft_substr(input, start, *i - start);
-		char *tmp = ft_strjoin(*buffer, raw);
-		free(*buffer);
-		free(raw);
-		*buffer = tmp;
-		return ;
-	}
+		return (append_raw_variable(buffer, input, i));
 	if (input[*i] == '"' || input[*i] == '\'')
-		return ; // on ne fait pas d'expansion, on laisse la quote être gérée ailleurs
-	(*i)++;
-	if (input[*i] == '?')
-	{
-		var = ft_strdup("$?");
-		(*i)++;
-	}
-	else if (ft_isdigit(input[*i]))
-	{
-		// Si c'est un chiffre seul (non valable comme nom de variable), on ignore l'expansion
-		(*i)++;
-		// Et on ajoute ce qu’il y a après, littéralement
-		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
-		{
-			char tmp[2] = { input[*i], '\0' };
-			char *joined = ft_strjoin(*buffer, tmp);
-			free(*buffer);
-			*buffer = joined;
-			(*i)++;
-		}
 		return ;
-	}
-	else
-	{
-		start = *i;
-		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
-			(*i)++;
-		var_name = ft_substr(input, start, *i - start);     // ✅ ALLOC
-		var = ft_strjoin("$", var_name);                    // ✅ ALLOC
-		free(var_name);                                     // ✅ LIBÉRÉ
-	}
-	value = expand_env_var(var, 0, data);                   // ✅ PEUT FAIRE strdup
-	to_append = ft_strdup(value);                           // ✅ ALLOC
-	tmp = ft_strjoin(*buffer, to_append);                   // ✅ ALLOC
+	(*i)++;
+	if (handle_digit_expansion(buffer, input, i))
+		return ;
+	var = extract_variable(input, i);
+	value = expand_env_var(var, 0, info->data);
+	to_append = ft_strdup(value);
+	tmp = ft_strjoin(*buffer, to_append);
 	free(*buffer);
 	free(var);
 	free(to_append);
 	free(value);
 	*buffer = tmp;
 }
-
 
 void	append_word(char **buffer, char *input, int *i)
 {

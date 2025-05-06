@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_memory.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 11:18:31 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/06 15:30:17 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,16 +105,4 @@ void	free_split(char **split)
 	while (split[i])
 		free(split[i++]);
 	free(split);
-}
-
-void	free_env(char **env)
-{
-	int	i;
-
-	if (!env)
-		return ;
-	i = 0;
-	while (env[i])
-		free(env[i++]);
-	free(env);
 }

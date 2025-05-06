@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 13:52:53 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 14:52:32 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ t_cmd	*parse_tokens(t_token *tokens)
 	t_cmd	*cmd;
 	t_cmd	*head;
 	int		arg_count;
-  
+	char	**split;
+	int		i;
+	t_cmd	*cur;
+
 	if (!tokens)
 		return (NULL);
 	if (tokens->type == PIPE)
@@ -52,33 +55,26 @@ t_cmd	*parse_tokens(t_token *tokens)
 			arg_count = 0;
 			continue ;
 		}
-		else if (tokens->type == WORD || tokens->type == QUOTE || tokens->type == DELIMITER)
+		else if (tokens->type == WORD || tokens->type == QUOTE
+			|| tokens->type == DELIMITER)
 		{
-			// printf("DEBUG token: [%s], quote_type: %d\n", tokens->value, tokens->quote_type);
-			// si le token vient d'une expansion, est non-quoté, et contient des espaces → word splitting
-			if (tokens->quote_type == NO_QUOTE
-				&& ft_strchr(tokens->value, ' ')
-				&& tokens->type == WORD
-				&& tokens->value[0] != '\0'
+			if (tokens->quote_type == NO_QUOTE && ft_strchr(tokens->value, ' ')
+				&& tokens->type == WORD && tokens->value[0] != '\0'
 				&& !ft_strchr(tokens->value, '\'')
-				&& !ft_strchr(tokens->value, '\"')
-				&& tokens->value[0] != ' ') // pas de split si leading space			
+				&& !ft_strchr(tokens->value, '\"') && tokens->value[0] != ' ')
 			{
-				char **split = ft_split(tokens->value, ' ');
-				for (int i = 0; split && split[i]; i++)
+				split = ft_split(tokens->value, ' ');
+				i = 0;
+				while (split && split[i])
 				{
 					if (split[i][0] != '\0')
 						handle_argument(cmd, &arg_count, split[i]);
-					// printf("ARG[%d] = [%s] (quote_type: %d)\n", arg_count, tokens->value, tokens->quote_type);
-
+					i++;
 				}
 				free_split(split);
 			}
 			else
-			{
 				handle_argument(cmd, &arg_count, tokens->value);
-				// printf("ARG[%d] = [%s] (quote_type: %d)\n", arg_count, tokens->value, tokens->quote_type);
-			}
 		}
 		else if (!handle_redirections(cmd, &tokens))
 		{
@@ -94,39 +90,23 @@ t_cmd	*parse_tokens(t_token *tokens)
 	}
 	if (cmd && cmd->args)
 		cmd->args[arg_count] = NULL;
-	t_cmd *cur = head;
+	cur = head;
 	while (cur)
 	{
 		if (cur->args)
 		{
-			int i = 0;
+			i = 0;
 			while (cur->args[i])
 				i++;
 			cur->args[i] = NULL;
 		}
 		cur = cur->next;
 	}
-	// t_cmd *tmp = head;
-	// while (tmp)
-	// {
-	// 	if (tmp->args)
-	// 	{
-	// 		int k = 0;
-	// 		while (tmp->args[k])
-	// 		{
-	// 			printf("ARG[%d] = [%s]\n", k, tmp->args[k]);
-	// 			k++;
-	// 		}
-	// 	}
-	// 	tmp = tmp->next;
-	// }
-
 	return (head);
 }
 
 static int	handle_redirections(t_cmd *cmd, t_token **tokens)
 {
-
 	if ((*tokens)->type == REDIR_IN)
 		handle_redir_in(cmd, tokens);
 	else if ((*tokens)->type == REDIR_OUT)
@@ -139,4 +119,3 @@ static int	handle_redirections(t_cmd *cmd, t_token **tokens)
 		return (0);
 	return (1);
 }
-
