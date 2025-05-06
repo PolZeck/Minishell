@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 17:04:50 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 11:58:28 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,18 @@ void	print_tokens_debug(t_token *tokens)
 	}
 }
 
+void	debug_tokens(t_token *tokens)
+{
+	int i = 0;
+	while (tokens)
+	{
+		printf("TOKEN[%d] = [%s], quote_type = %d\n", i, tokens->value, tokens->quote_type);
+		tokens = tokens->next;
+		i++;
+	}
+}
+
+
 
 /*
 	fonction main, entrée du programme,
@@ -161,6 +173,8 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		data.tokens = tokenize(input, &data);
+		// debug_tokens(data.tokens);
+
 		// print_tokens_debug(data.tokens);
 		cmd = parse_tokens(data.tokens);
 		// debug_print_commands(cmd);

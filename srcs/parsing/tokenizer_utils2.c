@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 11:40:45 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 12:11:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,8 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, 
 	// ne rien faire si quote vide et rien dans le buffer
 	if (sub[0] == '\0' && (*buffer)[0] == '\0')
 	{
-		free(sub);
+		// ✅ flush explicit même si sub est vide
+		flush_buffer_to_token(tokens, last, buffer, *(info->quote_type), info);
 		*(info->quote_type) = NO_QUOTE;
 		return ;
 	}

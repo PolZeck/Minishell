@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 10:46:16 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 11:58:35 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,16 @@ t_cmd	*parse_tokens(t_token *tokens)
 				{
 					if (split[i][0] != '\0')
 						handle_argument(cmd, &arg_count, split[i]);
+					// printf("ARG[%d] = [%s] (quote_type: %d)\n", arg_count, tokens->value, tokens->quote_type);
+
 				}
 				free_split(split);
 			}
 			else
+			{
 				handle_argument(cmd, &arg_count, tokens->value);
+				// printf("ARG[%d] = [%s] (quote_type: %d)\n", arg_count, tokens->value, tokens->quote_type);
+			}
 		}
 		else if (!handle_redirections(cmd, &tokens))
 		{
