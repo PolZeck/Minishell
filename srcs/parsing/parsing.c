@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 17:05:20 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 10:46:16 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,22 @@ t_cmd	*parse_tokens(t_token *tokens)
 		}
 		else if (tokens->type == WORD || tokens->type == QUOTE || tokens->type == DELIMITER)
 		{
-			handle_argument(cmd, &arg_count, tokens->value);
+			// printf("DEBUG token: [%s], quote_type: %d\n", tokens->value, tokens->quote_type);
+			// si le token vient d'une expansion, est non-quoté, et contient des espaces → word splitting
+			if (tokens->quote_type == NO_QUOTE
+				&& ft_strchr(tokens->value, ' ')
+				&& tokens->value[0] != '\0')
+			{
+				char **split = ft_split(tokens->value, ' ');
+				for (int i = 0; split && split[i]; i++)
+				{
+					if (split[i][0] != '\0')
+						handle_argument(cmd, &arg_count, split[i]);
+				}
+				free_split(split);
+			}
+			else
+				handle_argument(cmd, &arg_count, tokens->value);
 		}
 		else if (!handle_redirections(cmd, &tokens))
 		{
@@ -82,6 +97,21 @@ t_cmd	*parse_tokens(t_token *tokens)
 		}
 		cur = cur->next;
 	}
+	// t_cmd *tmp = head;
+	// while (tmp)
+	// {
+	// 	if (tmp->args)
+	// 	{
+	// 		int k = 0;
+	// 		while (tmp->args[k])
+	// 		{
+	// 			printf("ARG[%d] = [%s]\n", k, tmp->args[k]);
+	// 			k++;
+	// 		}
+	// 	}
+	// 	tmp = tmp->next;
+	// }
+
 	return (head);
 }
 
