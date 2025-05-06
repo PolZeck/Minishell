@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 13:25:20 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 14:53:10 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,87 +23,85 @@ static int	cd_too_many_args(char **args)
 	return (0);
 }
 
-
 static char	*get_cd_target(char **args, t_data *data)
 {
 	char	*home;
+	char	*target;
 
-	if (args[1] == NULL)
+	home = NULL;
+	target = NULL;
+	if (!args[1])
+		home = get_home(data);
+	else if (args[1][0] == '~')
+		home = get_home(data);
+	if (!home && !args[1])
+		return (NULL);
+	if (!args[1])
+		target = ft_strdup(home);
+	else if (args[1][0] == '~' && args[1][1])
+		target = ft_strjoin(home, args[1] + 1);
+	else if (args[1][0] == '~')
+		target = ft_strdup(home);
+	else
+		target = ft_strdup(args[1]);
+	return (target);
+}
+
+static void	update_env_pwd(t_data *data, char *old_pwd)
+{
+	char	cwd[PATH_MAX];
+	char	*new_pwd;
+	char	*oldpwd;
+
+	if (!getcwd(cwd, sizeof(cwd)))
+		return ;
+	new_pwd = ft_strjoin("PWD=", cwd);
+	data->env = replace_or_append_env(data->env, new_pwd);
+	free(new_pwd);
+	if (old_pwd)
 	{
-		home = ft_getenv(data, "HOME");
-		if (!home || !*home)
-		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
-			*get_exit_status() = 1;
-			return (NULL);
-		}
-		return (ft_strdup(home));
+		oldpwd = ft_strjoin("OLDPWD=", old_pwd);
+		data->env = replace_or_append_env(data->env, oldpwd);
+		free(oldpwd);
 	}
-	if (args[1][0] == '~')
-	{
-		home = ft_getenv(data, "HOME");
-		if (!home || !*home)
-		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
-			*get_exit_status() = 1;
-			return (NULL);
-		}
-		if (args[1][1] == '\0')
-			return (ft_strdup(home));
-		else if (args[1][1] == '/')
-			return (ft_strjoin(home, args[1] + 1));
-	}
-	return (ft_strdup(args[1]));
 }
 
 static int	cd_change_directory(char *target, t_data *data)
 {
-	char	cwd[PATH_MAX];
-	char	*old_pwd = NULL;
-	char	*old_pwd_copy = NULL;
-	char	*pwd_var;
-	char	*oldpwd_var;
+	char	*old_pwd;
+	char	*old_copy;
+	int		ret;
 
 	old_pwd = ft_getenv(data, "PWD");
+	old_copy = NULL;
 	if (old_pwd)
-		old_pwd_copy = ft_strdup(old_pwd);
-	if (chdir(target) != 0)
+		old_copy = ft_strdup(old_pwd);
+	ret = chdir(target);
+	if (ret != 0)
 	{
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 		perror(target);
 		*get_exit_status() = 1;
-		free(old_pwd_copy);
+		free(old_copy);
 		return (1);
 	}
 	*get_exit_status() = 0;
-
-	if (getcwd(cwd, sizeof(cwd)))
-	{
-		pwd_var = ft_strjoin("PWD=", cwd);
-		data->env = replace_or_append_env(data->env, pwd_var);
-		free(pwd_var);
-		if (old_pwd_copy)
-		{
-			oldpwd_var = ft_strjoin("OLDPWD=", old_pwd_copy);
-			data->env = replace_or_append_env(data->env, oldpwd_var);
-			free(oldpwd_var);
-		}
-	}
-	free(old_pwd_copy);
+	update_env_pwd(data, old_copy);
+	free(old_copy);
 	return (0);
 }
 
 int	builtin_cd(t_cmd *cmd, t_data *data)
 {
 	char	*target;
-	int		result;
+	int		res;
 
 	if (cd_too_many_args(cmd->args))
 		return (1);
 	target = get_cd_target(cmd->args, data);
 	if (!target)
 		return (1);
-	result = cd_change_directory(target, data);
+	res = cd_change_directory(target, data);
 	free(target);
-	return (result);
+	return (res);
 }

@@ -1,37 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 11:20:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 14:56:13 by lcosson          ###   ########.fr       */
+/*   Created: 2025/05/06 14:52:18 by lcosson           #+#    #+#             */
+/*   Updated: 2025/05/06 14:55:43 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	builtin_env(t_cmd *cmd, t_data *data)
+char	*get_home(t_data *data)
 {
-	int	i;
+	char	*home;
 
-	if (cmd->args[1])
+	home = ft_getenv(data, "HOME");
+	if (!home || !*home)
 	{
-		ft_putstr_fd("env: No arguments allowed\n", 2);
+		ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
 		*get_exit_status() = 1;
-		return (1);
+		return (NULL);
 	}
-	i = 0;
-	while (data->env[i])
-	{
-		if (ft_strchr(data->env[i], '='))
-		{
-			ft_putstr_fd(data->env[i], 1);
-			ft_putstr_fd("\n", 1);
-		}
-		i++;
-	}
-	*get_exit_status() = 0;
-	return (0);
+	return (home);
 }
