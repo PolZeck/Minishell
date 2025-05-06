@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 17:07:22 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 10:58:23 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_qu
 
 	if (!*buffer)
 		return ;
-	if (!**buffer && quote_type == NO_QUOTE)
+	if ((!*buffer || ft_strlen(*buffer) == 0) && quote_type == NO_QUOTE)
 		return ;
+	
 		
 	info->next_is_delimiter = 0;
 	// ✅ Gestion du HEREDOC → DELIMITER
@@ -29,7 +30,7 @@ void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_qu
 		final_type = DELIMITER;
 		info->next_is_delimiter = 0;
 	}
-
+	// printf("FLUSH [%s] quote_type=%d\n", *buffer, quote_type);
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return ;
@@ -97,6 +98,7 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, 
 	else if (quote == '\"' && *(info->quote_type) == NO_QUOTE)
 		*(info->quote_type) = DOUBLE_QUOTE;
 	(*(info->i))++;
+
 	if (quote == '\'')
 	{
 		start = *(info->i);
@@ -127,18 +129,34 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, 
 	}
 	if (info->input[*(info->i)] == quote)
 		(*(info->i))++;
+
+	// ne rien faire si quote vide et rien dans le buffer
+	if (sub[0] == '\0' && (*buffer)[0] == '\0')
+	{
+		free(sub);
+		*(info->quote_type) = NO_QUOTE;
+		return ;
+	}
+
+	// concatène
 	tmp = ft_strjoin(*buffer, sub);
 	free(*buffer);
 	free(sub);
 	*buffer = tmp;
 
-	// ✅ PATCH : flush explicite pour les quotes vides
-	if ((*buffer)[0] == '\0' && *(info->quote_type) != NO_QUOTE)
+	// si on est à la fin de la chaîne OU devant un séparateur, flush
+	char next = info->input[*(info->i)];
+	if (next == '\0' || next == ' ' || next == '\t' || next == '|' || next == '<' || next == '>')
 	{
 		flush_buffer_to_token(tokens, last, buffer, *(info->quote_type), info);
-		*(info->quote_type) = NO_QUOTE; // reset après flush
 	}
+
+	*(info->quote_type) = NO_QUOTE;
 }
+
+
+
+
 
 
 
