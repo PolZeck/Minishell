@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 16:40:10 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/06 07:49:23 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ int	builtin_exit(t_cmd *cmd, t_data *data)
 	long long	exit_ll;
 	int			exit_code;
 
-	ft_putstr_fd("exit\n", 1);
+	if (!data->in_pipeline)
+		ft_putstr_fd("exit\n", 1);
 	if (cmd->args[1] && (!is_strict_numeric(cmd->args[1])
 			|| !str_to_llong(cmd->args[1], &exit_ll)))
 	{
