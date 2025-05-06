@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 11:28:52 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/05 17:05:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ t_cmd	*parse_tokens(t_token *tokens)
 			continue ;
 		}
 		else if (tokens->type == WORD || tokens->type == QUOTE || tokens->type == DELIMITER)
+		{
 			handle_argument(cmd, &arg_count, tokens->value);
+		}
 		else if (!handle_redirections(cmd, &tokens))
 		{
 			free_cmds(head);

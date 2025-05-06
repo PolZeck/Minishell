@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 13:38:35 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/05 17:04:27 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	handle_input_token(t_token_list *tlist,
 	if (info->input[*(info->i)] == '\'' || info->input[*(info->i)] == '\"')
 	{
 		info->quote_type = &current_quote_type;
-		handle_quotes_in_token(buffer, info);
+		handle_quotes_in_token(buffer, info, tlist->tokens, tlist->last);
 		return ;
 	}
 	if (info->input[*(info->i)] == '$')
@@ -53,8 +53,6 @@ static void	handle_input_token(t_token_list *tlist,
 	}
 	append_word(buffer, info->input, info->i);
 }
-
-
 
 t_token	*tokenize(char *input, t_data *data)
 {

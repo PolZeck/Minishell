@@ -129,7 +129,7 @@ void			process_word_or_quote(t_quote *q, t_token_info *info);
 void flush_buffer_to_token(t_token **tokens, t_token **last, char **buffer, t_quote_type quote_type, t_parseinfo *info);
 void			handle_operator_token(t_token **tokens,
 					t_token **last, t_parseinfo *info);
-void			handle_quotes_in_token(char **buffer, t_parseinfo *info);
+void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, t_token **last);
 void			handle_variable_expansion(char **buffer,
 					char *input, int *i, t_data *data, t_parseinfo *info);
 void			append_word(char **buffer, char *input, int *i);
