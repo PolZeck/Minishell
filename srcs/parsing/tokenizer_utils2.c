@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 10:58:23 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 11:40:45 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,10 +153,6 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, 
 
 	*(info->quote_type) = NO_QUOTE;
 }
-
-
-
-
 
 
 
