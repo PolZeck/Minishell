@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:20:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 11:58:35 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 13:52:53 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,11 @@ t_cmd	*parse_tokens(t_token *tokens)
 			// si le token vient d'une expansion, est non-quoté, et contient des espaces → word splitting
 			if (tokens->quote_type == NO_QUOTE
 				&& ft_strchr(tokens->value, ' ')
-				&& tokens->value[0] != '\0')
+				&& tokens->type == WORD
+				&& tokens->value[0] != '\0'
+				&& !ft_strchr(tokens->value, '\'')
+				&& !ft_strchr(tokens->value, '\"')
+				&& tokens->value[0] != ' ') // pas de split si leading space			
 			{
 				char **split = ft_split(tokens->value, ' ');
 				for (int i = 0; split && split[i]; i++)

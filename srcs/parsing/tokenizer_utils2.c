@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 12:45:23 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 12:11:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 14:00:12 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ void	handle_operator_token(t_token **tokens,
 }
 
 
-void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, t_token **last)
+void	handle_quotes_in_token(char **buffer, t_parseinfo *info,
+	t_token **tokens, t_token **last)
 {
 	char	quote;
 	int		start;
@@ -94,66 +95,61 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, 
 
 	quote = info->input[*(info->i)];
 	if (quote == '\'' && *(info->quote_type) == NO_QUOTE)
-		*(info->quote_type) = SINGLE_QUOTE;
+	*(info->quote_type) = SINGLE_QUOTE;
 	else if (quote == '\"' && *(info->quote_type) == NO_QUOTE)
-		*(info->quote_type) = DOUBLE_QUOTE;
+	*(info->quote_type) = DOUBLE_QUOTE;
 	(*(info->i))++;
 
+	// lecture du contenu entre quotes
 	if (quote == '\'')
 	{
-		start = *(info->i);
-		while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
-			(*(info->i))++;
-		sub = ft_substr(info->input, start, *(info->i) - start);
+	start = *(info->i);
+	while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
+	(*(info->i))++;
+	sub = ft_substr(info->input, start, *(info->i) - start);
 	}
 	else
 	{
-		sub = ft_strdup("");
-		while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
-		{
-			if (info->input[*(info->i)] == '$')
-				handle_variable_expansion(&sub, info->input, info->i, info->data, info);
-			else
-			{
-				start = *(info->i);
-				while (info->input[*(info->i)] && info->input[*(info->i)] != '$'
-					&& info->input[*(info->i)] != quote)
-					(*(info->i))++;
-				tmp = ft_substr(info->input, start, *(info->i) - start);
-				char *joined = ft_strjoin(sub, tmp);
-				free(sub);
-				free(tmp);
-				sub = joined;
-			}
-		}
+	sub = ft_strdup("");
+	while (info->input[*(info->i)] && info->input[*(info->i)] != quote)
+	{
+	if (info->input[*(info->i)] == '$')
+	handle_variable_expansion(&sub, info->input, info->i, info->data, info);
+	else
+	{
+	start = *(info->i);
+	while (info->input[*(info->i)] && info->input[*(info->i)] != '$' && info->input[*(info->i)] != quote)
+	(*(info->i))++;
+	tmp = ft_substr(info->input, start, *(info->i) - start);
+	char *joined = ft_strjoin(sub, tmp);
+	free(sub);
+	free(tmp);
+	sub = joined;
+	}
+	}
 	}
 	if (info->input[*(info->i)] == quote)
-		(*(info->i))++;
+	(*(info->i))++;
 
-	// ne rien faire si quote vide et rien dans le buffer
-	if (sub[0] == '\0' && (*buffer)[0] == '\0')
+	// ⛔️ Cas particulier : quote vide MAIS un buffer existe déjà → on concatène silencieusement
+	if (!(sub[0] == '\0' && (*buffer)[0] != '\0'))
 	{
-		// ✅ flush explicit même si sub est vide
-		flush_buffer_to_token(tokens, last, buffer, *(info->quote_type), info);
-		*(info->quote_type) = NO_QUOTE;
-		return ;
-	}
-
-	// concatène
 	tmp = ft_strjoin(*buffer, sub);
 	free(*buffer);
 	free(sub);
 	*buffer = tmp;
-
-	// si on est à la fin de la chaîne OU devant un séparateur, flush
-	char next = info->input[*(info->i)];
-	if (next == '\0' || next == ' ' || next == '\t' || next == '|' || next == '<' || next == '>')
-	{
-		flush_buffer_to_token(tokens, last, buffer, *(info->quote_type), info);
 	}
+	else
+	free(sub);
+
+	// 🔁 Flush si on est à la fin d’un mot
+	char next = info->input[*(info->i)];
+	if (next == '\0' || next == ' ' || is_operator(next))
+	flush_buffer_to_token(tokens, last, buffer, *(info->quote_type), info);
 
 	*(info->quote_type) = NO_QUOTE;
 }
+
 
 
 
