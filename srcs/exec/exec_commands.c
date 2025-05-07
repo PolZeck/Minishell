@@ -46,6 +46,7 @@ char	*find_command_path(char *cmd, t_data *data)
 	return (NULL);
 }
 
+
 void	print_error(char *prefix, char *cmd, char *message)
 {
 	ft_putstr_fd(prefix, STDERR_FILENO);

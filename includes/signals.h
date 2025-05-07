@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:39:00 by pledieu           #+#    #+#             */
-/*   Updated: 2025/04/29 13:38:35 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/06 15:14:08 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <signal.h>
 # include "minishell.h"
 
-extern volatile sig_atomic_t heredoc_interrupted;
+extern volatile sig_atomic_t g_heredoc_interrupted;
 
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);

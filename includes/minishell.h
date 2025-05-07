@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 14:38:57 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 09:42:35 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 # include <signal.h>
 # include <termios.h>
 # include <limits.h>
+# include <stdbool.h>
+
 
 typedef struct s_cmd	t_cmd;
 typedef struct s_data	t_data;

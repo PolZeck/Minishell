@@ -6,7 +6,7 @@
 #    By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/07 10:50:03 by lcosson          ###   ########.fr        #
+#    Updated: 2025/05/07 12:10:18 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,11 +49,15 @@ MSH_DEP		= $(DEP_DIR)/minishell
 VALGRIND_SUPP = readline.supp
 
 # === Fichiers Sources Minishell ===
-MSH_SRCS	= main.c parsing/parsing.c parsing/tokenizer.c parsing/utils.c parsing/tokenizer_utils.c\
-              parsing/tokenizer_utils2.c parsing/parsing_utils.c parsing/utils_memory.c parsing/tokenizer_utils3.c\
-              parsing/env_utils.c\
-			  signals/signals.c signals/signals_utils.c signals/exit_status.c\
-			  exec/exec_builtins.c\
+MSH_SRCS	= main.c parsing/tokenizer/tokenizer.c parsing/utils.c parsing/tokenizer/tokenizer_words.c\
+              parsing/tokenizer/tokenizer_tokens.c parsing/parser/parsing_redir.c parsing/parser/parsing_redir_utils.c parsing/utils_memory.c parsing/tokenizer/tokenizer_quotes.c\
+			  parsing/tokenizer/tokenizer_operators.c parsing/tokenizer/tokenizer_init.c\
+              parsing/dup_env_utils.c parsing/quotes_token.c parsing/variable_expansion.c parsing/parser/parsing_pipes.c parsing/handle_heredoc.c parsing/parser/parsing_arguments.c\
+			  parsing/flush_buffer_to_token.c parsing/parser/parse_tokens.c parsing/parser/parse_tokens_loop.c parsing/parser/parse_tokens_content.c parsing/cmd_utils.c\
+			  parsing/cmd_free.c parsing/dup_env.c parsing/handle_input_token.c \
+			  signals/signals.c signals/signals_utils.c signals/exit_status.c \
+			  exec/exec_builtins.c \
+
 			  exec/exec.c exec/exec_commands.c\
 			  exec/exec_pipex_builtins.c\
 			  builtins/cd.c builtins/cd_utils.c builtins/echo.c builtins/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export.c builtins/export_utils.c \
@@ -104,6 +108,16 @@ $(MSH_OBJ)/parsing/%.o: $(PARSING_DIR)/%.c | $(MSH_OBJ)/parsing $(MSH_DEP)/parsi
 	@echo "🔹 Compiling $<..."
 	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(PARSING_DIR)/%.c, $(MSH_DEP)/parsing/%.d, $<)
 
+$(MSH_OBJ)/parsing/parser/%.o: $(SRC_DIR)/parsing/parser/%.c | $(MSH_OBJ)/parsing/parser $(MSH_DEP)/parsing/parser
+	@mkdir -p $(dir $@)
+	@echo "🔹 Compiling $<..."
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(SRC_DIR)/%.c, $(MSH_DEP)/%.d, $<)
+
+$(MSH_OBJ)/parsing/tokenizer/%.o: $(SRC_DIR)/parsing/tokenizer/%.c | $(MSH_OBJ)/parsing/tokenizer $(MSH_DEP)/parsing/tokenizer
+	@mkdir -p $(dir $@)
+	@echo "🔹 Compiling $<..."
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(SRC_DIR)/%.c, $(MSH_DEP)/%.d, $<)
+
 $(MSH_OBJ)/signals/%.o: $(SIGNALS_DIR)/%.c | $(MSH_OBJ)/signals $(MSH_DEP)/signals
 	@mkdir -p $(dir $@)
 	@echo "🔹 Compiling $<..."
@@ -128,6 +142,8 @@ $(MSH_OBJ)/exec/%.o: $(PIPEX_DIR)/%.c | $(MSH_OBJ)/pipex $(MSH_DEP)/pipex
 $(MSH_OBJ):
 	@mkdir -p $(MSH_OBJ)
 	@mkdir -p $(MSH_OBJ)/parsing
+	@mkdir -p $(MSH_OBJ)/parsing/parser
+	@mkdir -p $(MSH_OBJ)/parsing/tokenizer
 	@mkdir -p $(MSH_OBJ)/signals
 	@mkdir -p $(MSH_OBJ)/exec
 	@mkdir -p $(MSH_OBJ)/builtins
@@ -136,10 +152,13 @@ $(MSH_OBJ):
 $(MSH_DEP):
 	@mkdir -p $(MSH_DEP)
 	@mkdir -p $(MSH_DEP)/parsing
+	@mkdir -p $(MSH_DEP)/parsing/parser
+	@mkdir -p $(MSH_DEP)/parsing/tokenizer
 	@mkdir -p $(MSH_DEP)/signals
 	@mkdir -p $(MSH_DEP)/exec
 	@mkdir -p $(MSH_DEP)/builtins
 	@mkdir -p $(MSH_DEP)/pipex
+
 
 # === Clean ===
 clean:

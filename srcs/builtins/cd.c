@@ -79,7 +79,7 @@ static int	cd_change_directory(char *target, t_data *data)
 	ret = chdir(target);
 	if (ret != 0)
 	{
-		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd("bash: cd: ", STDERR_FILENO);
 		perror(target);
 		*get_exit_status() = 1;
 		free(old_copy);

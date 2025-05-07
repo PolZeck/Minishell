@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_memory.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:45:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 11:18:31 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:30:08 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,49 +49,6 @@ void	free_tokens(t_token *tokens)
 			free(tokens->value);
 		free(tokens);
 		tokens = tmp;
-	}
-}
-
-void	free_cmds(t_cmd *cmd)
-{
-	t_cmd	*tmp;
-	int		i;
-	t_list	*node;
-	t_list	*next;
-	t_redir	*redir;
-
-	while (cmd)
-	{
-		tmp = cmd->next;
-		if (cmd->args)
-		{
-			i = 0;
-			while (cmd->args[i])
-				free(cmd->args[i++]);
-			free(cmd->args);
-		}
-		node = cmd->redirs;
-		while (node)
-		{
-			next = node->next;
-			redir = (t_redir *)node->content;
-			if (redir)
-			{
-				if (redir->file)
-				{
-					if (redir->type == HEREDOC)
-						unlink(redir->file);
-					free(redir->file);
-				}
-				if (redir->type == HEREDOC && redir->fd != -1)
-					close(redir->fd);
-				free(redir);
-			}
-			free(node);
-			node = next;
-		}
-		free(cmd);
-		cmd = tmp;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 12:36:04 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 09:57:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,34 +52,6 @@ int	count_args(t_token *tokens)
 	return (count);
 }
 
-t_cmd	*create_cmd(t_token *tokens)
-{
-	t_cmd	*cmd;
-	int		i;
-	int		arg_count;
-
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	arg_count = count_args(tokens);
-	cmd->args = malloc(sizeof(char *) * (arg_count + 1));
-	if (!cmd->args)
-	{
-		free(cmd);
-		return (NULL);
-	}
-	i = 0;
-	while (i <= arg_count)
-	{
-		cmd->args[i] = NULL;
-		i++;
-	}
-	cmd->redirs = NULL;
-	cmd->invalid = 0;
-	cmd->next = NULL;
-	return (cmd);
-}
-
 int	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
@@ -98,4 +70,12 @@ int	is_builtin(char *cmd)
 		|| ft_strcmp(cmd, "exit") == 0)
 		return (1);
 	return (0);
+}
+
+void	syntax_error(char *token)
+{
+	ft_putstr_fd("bash: syntax error near unexpected token `", 2);
+	ft_putstr_fd(token, 2);
+	ft_putstr_fd("'\n", 2);
+	*get_exit_status() = 2;
 }

@@ -1,31 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_utils3.c                                 :+:      :+:    :+:   */
+/*   tokenizer_quotes.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/26 13:22:40 by pledieu           #+#    #+#             */
-/*   Updated: 2025/03/27 16:06:15 by pledieu          ###   ########lyon.fr   */
+/*   Created: 2025/05/07 11:05:36 by pledieu           #+#    #+#             */
+/*   Updated: 2025/05/07 11:06:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-t_token_type	get_token_type_from_op(char *op)
-{
-	if (ft_strcmp(op, "|") == 0)
-		return (PIPE);
-	if (ft_strcmp(op, "<") == 0)
-		return (REDIR_IN);
-	if (ft_strcmp(op, ">") == 0)
-		return (REDIR_OUT);
-	if (ft_strcmp(op, ">>") == 0)
-		return (APPEND);
-	if (ft_strcmp(op, "<<") == 0)
-		return (HEREDOC);
-	return (WORD);
-}
+#include "parsing.h"
 
 void	handle_expansion(char *buffer, char *input, int *i, int *j)
 {
@@ -53,4 +38,24 @@ void	handle_expansion(char *buffer, char *input, int *i, int *j)
 		while (expanded[k])
 			buffer[(*j)++] = expanded[k++];
 	}
+}
+
+t_token_type	handle_quotes(t_quote *q)
+{
+	char			quote;
+	t_token_type	type;
+
+	quote = q->input[(*q->i)++];
+	q->in_single_quotes = (quote == '\'');
+	while (q->input[*q->i] && q->input[*q->i] != quote)
+	{
+		if (q->input[*q->i] == '$' && !(q->in_single_quotes))
+			handle_expansion(q->buffer, q->input, q->i, q->j);
+		else
+			q->buffer[(*q->j)++] = q->input[(*q->i)++];
+	}
+	if (q->input[*q->i] == quote)
+		(*q->i)++;
+	type = QUOTE;
+	return (type);
 }
