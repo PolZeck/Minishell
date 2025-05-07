@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 15:31:01 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 16:20:20 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ void	execute_command(t_cmd *cmd, t_data *data);
 void	apply_redirections_in_child(t_cmd *cmd);
 void	handle_child_output(t_redir *redir, int *out_fd);
 int		validate_redirections(t_cmd *cmd);
+void	print_err(char *prefix, char *cmd, char *message, int exit_code);
 
 #endif

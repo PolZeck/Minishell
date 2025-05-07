@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 15:34:32 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 16:20:09 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	precheck_command(t_cmd *cmd, t_data *data)
 		return (1);
 	if (cmd->args[0][0] == '\0')
 	{
-		print_error("bash: ", "", ": command not found\n", 127);
+		print_err("bash: ", "", ": command not found\n", 127);
 		return (1);
 	}
 	if (is_builtin(cmd->args[0]))
@@ -62,7 +62,7 @@ char	*resolve_cmd_path(t_cmd *cmd, t_data *data)
 	}
 	path = find_command_path(cmd->args[0], data);
 	if (!path)
-		print_error("bash: ", cmd->args[0], ": command not found\n", 127);
+		print_err("bash: ", cmd->args[0], ": command not found\n", 127);
 	return (path);
 }
 

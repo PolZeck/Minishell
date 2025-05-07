@@ -6,32 +6,11 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:40:14 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/09 15:28:52 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 16:22:19 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-void	check_open_files_bonus(int argc, char **argv, t_pipex *pipex)
-{
-	pipex->out_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (pipex->out_fd == -1)
-	{
-		ft_putstr_fd(argv[argc - 1], STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		perror("");
-		close_fds(pipex);
-		pipex->out_fd = -1;
-	}
-	pipex->in_fd = open(argv[1], O_RDONLY);
-	if (pipex->in_fd == -1)
-	{
-		ft_putstr_fd(argv[1], STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		perror("");
-		pipex->in_fd = -1;
-	}
-}
 
 static char	*handle_slash_case_bonus(char *cmd, t_pipex *pipex)
 {

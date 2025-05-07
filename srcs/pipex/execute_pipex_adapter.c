@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipex_adapter.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:50:45 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 15:19:11 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 16:24:19 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ int	execute_pipex_direct(t_cmd *cmds, t_data *data)
 	t_pipex	pipex;
 	t_cmd	*current;
 	int		i;
+	int		exit_code;
 
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-
 	ft_memset(&pipex, 0, sizeof(t_pipex));
 	pipex.in_fd = STDIN_FILENO;
 	pipex.out_fd = STDOUT_FILENO;
@@ -118,7 +118,6 @@ int	execute_pipex_direct(t_cmd *cmds, t_data *data)
 	pipex.pid = malloc(sizeof(pid_t) * pipex.num_cmds);
 	if (!pipex.pid)
 		return (1);
-
 	current = cmds;
 	i = 0;
 	while (current)
@@ -134,12 +133,8 @@ int	execute_pipex_direct(t_cmd *cmds, t_data *data)
 		i++;
 	}
 	close_fds(&pipex);
-
-	
-	// ✅ Nouvelle partie
-	int exit_code = wait_for_processes(&pipex);
+	exit_code = wait_for_processes(&pipex);
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, sigquit_handler);
 	return (exit_code);
-
 }
