@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:08:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 17:25:15 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 09:16:02 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ static int	is_valid_identifier_unset(char *var)
 		if (var[i] == '_')
 			has_underscore = 1;
 		else if (!ft_isalnum(var[i]))
-			return (-1); // caractère interdit (hors underscore)
+			return (-1);
 		i++;
 	}
 	if (has_underscore)
-		return (0); // ignorer silencieusement
-	return (1); // valide
+		return (0);
+	return (1);
 }
 
 static int	match_var(char *env_var, char *key)
@@ -88,10 +88,10 @@ int	builtin_unset(t_cmd *cmd, t_data *data)
 	status = 0;
 	while (cmd->args[i])
 	{
-		if (cmd->args[i][0] == '-' && cmd->args[i][1]) // détecte les options invalides
+		if (cmd->args[i][0] == '-' && cmd->args[i][1])
 		{
 			ft_putstr_fd("bash: unset: ", 2);
-			write(2, cmd->args[i], 2); // écrit juste "-H"
+			write(2, cmd->args[i], 2);
 			ft_putstr_fd(": invalid option\n", 2);
 			*get_exit_status() = 2;
 			return (2);

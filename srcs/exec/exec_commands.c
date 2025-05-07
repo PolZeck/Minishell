@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 12:26:31 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 08:30:14 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ char	*find_command_path(char *cmd, t_data *data)
 	free_split(paths);
 	return (NULL);
 }
-
 
 void print_error(char *prefix, char *cmd, char *message)
 {
@@ -165,8 +164,6 @@ void apply_redirections_in_child(t_cmd *cmd)
 		close(output_fd);
 	}
 }
-
-
 
 void	execute_command(t_cmd *cmd, t_data *data)
 {
@@ -297,4 +294,3 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	}
 	free(cmd_path);
 }
-

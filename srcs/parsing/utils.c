@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 12:36:04 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 09:11:51 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,12 @@ int	is_builtin(char *cmd)
 		|| ft_strcmp(cmd, "exit") == 0)
 		return (1);
 	return (0);
+}
+
+void	syntax_error(char *token)
+{
+	ft_putstr_fd("bash: syntax error near unexpected token `", 2);
+	ft_putstr_fd(token, 2);
+	ft_putstr_fd("'\n", 2);
+	*get_exit_status() = 2;
 }
