@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 13:25:20 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 10:08:42 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static int	cd_too_many_args(char **args)
 	return (0);
 }
 
-
 static char	*get_cd_target(char **args, t_data *data)
 {
 	char	*home;
@@ -33,7 +32,7 @@ static char	*get_cd_target(char **args, t_data *data)
 		home = ft_getenv(data, "HOME");
 		if (!home || !*home)
 		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
+			ft_putstr_fd("bash: cd: HOME not set\n", STDERR_FILENO);
 			*get_exit_status() = 1;
 			return (NULL);
 		}
@@ -44,7 +43,7 @@ static char	*get_cd_target(char **args, t_data *data)
 		home = ft_getenv(data, "HOME");
 		if (!home || !*home)
 		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
+			ft_putstr_fd("bash: cd: HOME not set\n", STDERR_FILENO);
 			*get_exit_status() = 1;
 			return (NULL);
 		}
@@ -69,7 +68,7 @@ static int	cd_change_directory(char *target, t_data *data)
 		old_pwd_copy = ft_strdup(old_pwd);
 	if (chdir(target) != 0)
 	{
-		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd("bash: cd: ", STDERR_FILENO);
 		perror(target);
 		*get_exit_status() = 1;
 		free(old_pwd_copy);

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:22:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:22:51 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 10:05:23 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ static t_token	*create_token_from_buffer(char **buffer,
 
 	if (!*buffer || (!ft_strlen(*buffer) && quote_type == NO_QUOTE))
 		return (NULL);
-	type = (info && info->next_is_delimiter) ? DELIMITER : WORD;
+	if (info && info->next_is_delimiter)
+		type = DELIMITER;
+	else
+		type = WORD;
 	info->next_is_delimiter = 0;
 	new = malloc(sizeof(t_token));
 	if (!new)

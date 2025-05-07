@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:26:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 10:07:02 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static void	handle_input_token(t_token_list *tlist,
 	append_word(buffer, info->input, info->i);
 }
 
-
 t_token	*tokenize(char *input, t_data *data)
 {
 	t_token			*tokens;
@@ -83,7 +82,6 @@ t_token	*tokenize(char *input, t_data *data)
 		flush_buffer_to_token(tlist, &buffer, NO_QUOTE, &info);
 	free(buffer);
 	return (tokens);
-
 }
 
 void	process_word_or_quote(t_quote *q, t_token_info *info)

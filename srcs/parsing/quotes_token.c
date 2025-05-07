@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:30:42 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:28:37 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 10:06:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ static void	merge_and_flush(char **buffer, char *sub, t_parseinfo *info,
 	*(info->quote_type) = NO_QUOTE;
 }
 
-
 void	handle_quotes_in_token(char **buffer, t_parseinfo *info,
 	t_token **tokens, t_token **last)
 {
@@ -99,4 +98,3 @@ void	handle_quotes_in_token(char **buffer, t_parseinfo *info,
 	token_list.last = last;
 	merge_and_flush(buffer, sub, info, token_list);
 }
-

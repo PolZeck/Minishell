@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:23:43 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 09:43:37 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PARSING_H
 
 # include "minishell.h"
+# include <stdbool.h>
+
 
 typedef enum e_token_type
 {
@@ -112,7 +114,6 @@ char			*expand_env_var(char *token,
 					t_quote_type quote_type, t_data *data);
 char	**dup_env(char **envp, int initial);
 
-t_cmd			*parse_tokens(t_token *tokens);
 t_cmd			*create_cmd(t_token *tokens);
 
 void			syntax_error(char *token);
@@ -151,5 +152,17 @@ t_token_type	handle_quotes(t_quote *q);
 t_token_type	get_token_type_from_op(char *op);
 t_token_type	handle_redirections_token(char *buffer,
 					char *input, int *i, int *j);
+
+//parse_token
+t_cmd	*parse_tokens(t_token *tokens);
+bool	handle_token_content(t_cmd *cmd, t_token **tokens,
+	int *arg_count, t_cmd *head);
+bool	should_split_token(t_token *token);
+void	finalize_args(t_cmd *head);
+bool	parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head);
+bool	handle_pipe_token(t_token **tokens, t_cmd **cmd,
+	int *arg_count, t_cmd *head);
+
+
 
 #endif
