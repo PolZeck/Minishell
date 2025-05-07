@@ -6,56 +6,79 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 13:28:50 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:48:20 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "pipex_bonus.h"
 
-void	execute_builtin(t_cmd *cmd, t_data *data)
+static int	open_input_redir(t_redir *redir)
 {
-	int		save_stdin;
-	int		save_stdout;
-	t_list	*node;
+	int	fd;
+
+	fd = open(redir->file, O_RDONLY);
+	if (fd == -1)
+	{
+		perror(redir->file);
+		*get_exit_status() = 1;
+	}
+	else
+	{
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+	}
+	return (fd);
+}
+
+static int	open_output_redir(t_redir *redir)
+{
+	int	fd;
+	int	flags;
+
+	flags = O_WRONLY | O_CREAT;
+	if (redir->type == APPEND)
+		flags |= O_APPEND;
+	else
+		flags |= O_TRUNC;
+	fd = open(redir->file, flags, 0644);
+	if (fd == -1)
+	{
+		perror(redir->file);
+		*get_exit_status() = 1;
+	}
+	else
+	{
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
+	return (fd);
+}
+
+static int	apply_redirs(t_list *redirs)
+{
 	t_redir	*redir;
+	t_list	*node;
 	int		fd;
 
-	save_stdin = dup(STDIN_FILENO);
-	save_stdout = dup(STDOUT_FILENO);
-
-	node = cmd->redirs;
+	node = redirs;
 	while (node)
 	{
 		redir = (t_redir *)node->content;
+		fd = -1;
 		if (redir->type == REDIR_IN || redir->type == HEREDOC)
-		{
-			fd = open(redir->file, O_RDONLY);
-			if (fd == -1)
-			{
-				perror(redir->file);
-				*get_exit_status() = 1;
-				return ;
-			}
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
+			fd = open_input_redir(redir);
 		else if (redir->type == REDIR_OUT || redir->type == APPEND)
-		{
-			int flags = O_WRONLY | O_CREAT;
-			flags |= (redir->type == APPEND) ? O_APPEND : O_TRUNC;
-			fd = open(redir->file, flags, 0644);
-			if (fd == -1)
-			{
-				perror(redir->file);
-				*get_exit_status() = 1;
-				return ;
-			}
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
+			fd = open_output_redir(redir);
+		if (fd == -1)
+			return (1);
 		node = node->next;
 	}
+	return (0);
+}
+
+static void	run_builtin(t_cmd *cmd, t_data *data)
+{
 	if (!cmd->args[0])
 		return ;
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
@@ -72,26 +95,20 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 		*get_exit_status() = builtin_unset(cmd, data);
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		*get_exit_status() = builtin_env(cmd, data);
-	// ➔ Puis restaurer l'input et l'output d'origine
+}
+
+void	execute_builtin(t_cmd *cmd, t_data *data)
+{
+	int	save_stdin;
+	int	save_stdout;
+
+	save_stdin = dup(STDIN_FILENO);
+	save_stdout = dup(STDOUT_FILENO);
+	if (apply_redirs(cmd->redirs))
+		return ;
+	run_builtin(cmd, data);
 	dup2(save_stdin, STDIN_FILENO);
 	dup2(save_stdout, STDOUT_FILENO);
 	close(save_stdin);
 	close(save_stdout);
-}
-
-
-void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex)
-{
-	t_cmd	cmd;
-	t_data	data;
-
-	cmd.args = args;
-	cmd.redirs = NULL;
-	cmd.invalid = 0;
-	cmd.next = NULL;
-	data.env = envp;
-	execute_builtin(&cmd, &data);
-	clean(pipex);
-	close_fds(pipex);
-	exit(*get_exit_status());
 }

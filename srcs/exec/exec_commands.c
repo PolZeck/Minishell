@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 12:26:31 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 11:16:58 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,11 @@ char	*find_command_path(char *cmd, t_data *data)
 	return (NULL);
 }
 
-
-void print_error(char *prefix, char *cmd, char *message)
+void	print_error(char *prefix, char *cmd, char *message)
 {
-    ft_putstr_fd(prefix, STDERR_FILENO);
-    ft_putstr_fd(cmd, STDERR_FILENO);
-    ft_putstr_fd(message, STDERR_FILENO);
+	ft_putstr_fd(prefix, STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(message, STDERR_FILENO);
 }
 
 int	validate_redirections(t_cmd *cmd)
@@ -166,8 +165,6 @@ void apply_redirections_in_child(t_cmd *cmd)
 	}
 }
 
-
-
 void	execute_command(t_cmd *cmd, t_data *data)
 {
 	pid_t		pid;
@@ -238,12 +235,8 @@ void	execute_command(t_cmd *cmd, t_data *data)
 			return ;
 		}
 	}
-
 	enable_ctrl_backslash();
-
-	// ➔ Sauvegarder stdout
 	saved_stdout = dup(STDOUT_FILENO);
-
 	pid = fork();
 	if (pid == 0)
 	{
@@ -265,15 +258,11 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	else if (pid > 0)
 	{
 		int status;
-
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
-
-		// ➔ Restaurer stdout
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdout);
-
 		disable_ctrl_backslash();
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, sigquit_handler);
@@ -297,4 +286,3 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	}
 	free(cmd_path);
 }
-
