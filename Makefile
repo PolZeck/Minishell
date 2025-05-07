@@ -6,7 +6,7 @@
 #    By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/07 13:37:28 by lcosson          ###   ########.fr        #
+#    Updated: 2025/05/07 14:04:38 by lcosson          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,13 +54,15 @@ MSH_SRCS	= main.c parsing/tokenizer/tokenizer.c parsing/utils.c parsing/tokenize
 			  parsing/tokenizer/tokenizer_operators.c parsing/tokenizer/tokenizer_init.c\
               parsing/dup_env_utils.c parsing/quotes_token.c parsing/variable_expansion.c parsing/parser/parsing_pipes.c parsing/handle_heredoc.c parsing/parser/parsing_arguments.c\
 			  parsing/flush_buffer_to_token.c parsing/parser/parse_tokens.c parsing/parser/parse_tokens_loop.c parsing/parser/parse_tokens_content.c parsing/cmd_utils.c\
-			  parsing/cmd_free.c parsing/dup_env.c parsing/handle_input_token.c parsing/create_tmp_file.c\
+			  parsing/create_tmp_file.c parsing/cmd_free.c parsing/dup_env.c parsing/handle_input_token.c \
 			  signals/signals.c signals/signals_utils.c signals/exit_status.c \
 			  exec/exec_builtins.c \
 			  exec/exec.c exec/exec_commands.c\
 			  exec/exec_pipex_builtins.c\
+			  exec/exec_path.c\
 			  builtins/cd.c builtins/cd_utils.c builtins/echo.c builtins/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export.c builtins/export_utils.c \
-			  builtins/export_utils2.c pipex/checks_bonus.c pipex/commands_bonus.c pipex/exit_bonus.c pipex/init_bonus.c pipex/main_bonus.c pipex/pipex_bonus.c  pipex/execute_pipex_adapter.c
+			  builtins/export_utils2.c builtins/exit_utils.c pipex/checks_bonus.c pipex/commands_bonus.c pipex/exit_bonus.c pipex/init_bonus.c pipex/main_bonus.c pipex/pipex_bonus.c  \
+			  pipex/execute_pipex_adapter.c 
 MSH_OBJS	= $(patsubst %.c, $(MSH_OBJ)/%.o, $(MSH_SRCS))
 MSH_DEPS	= $(patsubst %.c, $(MSH_DEP)/%.d, $(MSH_SRCS))
 
