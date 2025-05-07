@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:47:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 10:16:22 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 12:47:52 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,14 @@ int		var_exists(char **env, char *name);
 char	**replace_env(char **env, char *new_entry, int idx);
 char	**append_env(char **env, char *new_entry);
 char	**replace_or_append_env(char **env, char *entry);
+
+int	has_too_many_args(char **args);
+void	handle_invalid_argument(t_cmd *cmd, t_data *data);
+void	handle_too_many_arguments(void);
+int		str_to_llong(const char *str, long long *out);
+int	is_strict_numeric(char *str);
+void	print_numeric_error(char *arg);
+void	exit_cleanup(t_cmd *cmd, t_data *data, int exit_code);
+
 
 #endif

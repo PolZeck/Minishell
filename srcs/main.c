@@ -6,13 +6,13 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 15:15:44 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 12:23:50 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	debug_print_commands(t_cmd *cmd_list)
+/* void	debug_print_commands(t_cmd *cmd_list)
 {
 	int i = 1;
 	while (cmd_list)
@@ -47,17 +47,17 @@ void	debug_print_commands(t_cmd *cmd_list)
 		i++;
 	}
 }
-
 void	debug_tokens(t_token *tokens)
 {
 	int i = 0;
 	while (tokens)
 	{
-		printf("TOKEN[%d] = [%s], quote_type = %d\n", i, tokens->value, tokens->quote_type);
+		printf("TOKEN[%d] = [%s], quote_type = %d\n",
+		i, tokens->value, tokens->quote_type);
 		tokens = tokens->next;
 		i++;
 	}
-}
+} */
 
 /*
 	fonction main, entrée du programme,
@@ -67,11 +67,10 @@ void	debug_tokens(t_token *tokens)
 */
 int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
-	// t_token	*tokens;
-	t_cmd	*cmd;
-	t_data	data;
-	struct termios term;
+	char			*input;
+	t_cmd			*cmd;
+	t_data			data;
+	struct termios	term;
 
 	(void)argc;
 	(void)argv;
@@ -102,9 +101,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		data.tokens = tokenize(input, &data);
-		// debug_tokens(data.tokens);
 		cmd = parse_tokens(data.tokens);
-		// debug_print_commands(cmd);
 		if (cmd)
 			execute_pipeline(cmd, &data);
 		free_tokens(data.tokens);
