@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 11:09:12 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 13:36:46 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,5 +175,7 @@ void	init_parseinfo(t_parseinfo *info, char *input,
 	t_data *data, int *i);
 void	init_token_structs(t_token_list *tlist);
 
+int		if_g_heredoc_interrupted(t_cmd *cmd, char *filename);
+void	generate_random_name(char *output, size_t len);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:25:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 15:13:28 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 12:47:45 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,16 @@ void	heredoc_sigint_handler(int sig)
 	g_heredoc_interrupted = 1;
 	write(STDOUT_FILENO, "\n", 1);
 	rl_done = 1;
+}
+
+int	if_g_heredoc_interrupted(t_cmd *cmd, char *filename)
+{
+	if (!g_heredoc_interrupted)
+		return (0);
+	unlink(filename);
+	free(filename);
+	cmd->invalid = 1;
+	*get_exit_status() = 1;
+	g_heredoc_interrupted = 0;
+	return (1);
 }
