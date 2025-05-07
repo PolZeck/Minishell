@@ -6,11 +6,19 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 07:49:05 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 15:34:41 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_err(char *prefix, char *cmd, char *message, int exit_code)
+{
+	ft_putstr_fd(prefix, STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(message, STDERR_FILENO);
+	*get_exit_status() = exit_code;
+}
 
 void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 {

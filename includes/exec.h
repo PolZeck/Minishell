@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 12:25:38 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 15:31:01 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,14 @@
 
 typedef struct s_cmd	t_cmd;
 typedef struct s_data	t_data;
+typedef struct s_redir	t_redir;
 
 void	execute_builtin(t_cmd *cmd, t_data *data);
 void	execute_pipeline(t_cmd *cmd_list, t_data *data);
 char	*find_command_path(char *cmd, t_data *data);
 void	execute_command(t_cmd *cmd, t_data *data);
+void	apply_redirections_in_child(t_cmd *cmd);
+void	handle_child_output(t_redir *redir, int *out_fd);
+int		validate_redirections(t_cmd *cmd);
 
 #endif

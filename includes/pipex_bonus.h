@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/28 13:59:16 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 15:05:20 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ bool	check_redirections_failure(t_cmd *cmd);
 
 bool	has_input_redir(t_cmd *cmd);
 bool	has_output_redir(t_cmd *cmd);
-void 	apply_redirections(t_list *redirs);
+void	apply_redirections(t_list *redirs);
 int		wait_for_processes(t_pipex *pipex);
 
 #endif

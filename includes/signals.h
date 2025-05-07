@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:39:00 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 12:48:32 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 15:06:38 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <signal.h>
 # include "minishell.h"
 
-extern volatile sig_atomic_t g_heredoc_interrupted;
+extern volatile sig_atomic_t	g_heredoc_interrupted;
 
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);

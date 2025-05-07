@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 13:36:46 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 15:07:32 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "minishell.h"
 # include <stdbool.h>
-
 
 typedef enum e_token_type
 {
@@ -87,7 +86,7 @@ typedef struct s_data
 {
 	char	**env;
 	t_token	*tokens;
-	int in_pipeline;
+	int		in_pipeline;
 }	t_data;
 
 typedef struct s_parseinfo
@@ -97,7 +96,7 @@ typedef struct s_parseinfo
 	int				*i;
 	char			quote;
 	t_quote_type	*quote_type;
-	int		next_is_delimiter;
+	int				next_is_delimiter;
 }	t_parseinfo;
 
 char			*ft_getenv(t_data *data, const char *name);
@@ -112,7 +111,7 @@ int				is_operator(char c);
 
 char			*expand_env_var(char *token,
 					t_quote_type quote_type, t_data *data);
-char	**dup_env(char **envp, int initial);
+char			**dup_env(char **envp, int initial);
 
 t_cmd			*create_cmd(t_token *tokens);
 
@@ -127,11 +126,12 @@ void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append);
 void			handle_heredoc(t_cmd *cmd, t_token **tokens);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
 void			process_word_or_quote(t_quote *q, t_token_info *info);
-void	flush_buffer_to_token(t_token_list token_list,
-	char **buffer, t_quote_type quote_type, t_parseinfo *info);
+void			flush_buffer_to_token(t_token_list token_list,
+					char **buffer, t_quote_type quote_type, t_parseinfo *info);
 void			handle_operator_token(t_token **tokens,
 					t_token **last, t_parseinfo *info);
-void	handle_quotes_in_token(char **buffer, t_parseinfo *info, t_token **tokens, t_token **last);
+void			handle_quotes_in_token(char **buffer, t_parseinfo *info,
+					t_token **tokens, t_token **last);
 void			handle_variable_expansion(char **buffer,
 					char *input, int *i, t_parseinfo *info);
 void			append_word(char **buffer, char *input, int *i);
@@ -152,30 +152,30 @@ t_token_type	handle_quotes(t_quote *q);
 t_token_type	get_token_type_from_op(char *op);
 t_token_type	handle_redirections_token(char *buffer,
 					char *input, int *i, int *j);
-void	handle_input_token(t_token_list *tlist,
-				char **buffer, t_parseinfo *info);
+void			handle_input_token(t_token_list *tlist,
+					char **buffer, t_parseinfo *info);
 
 //parse_token
-t_cmd	*parse_tokens(t_token *tokens);
-bool	handle_token_content(t_cmd *cmd, t_token **tokens,
-	int *arg_count, t_cmd *head);
-bool	should_split_token(t_token *token);
-void	finalize_args(t_cmd *head);
-bool	parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head);
-bool	handle_pipe_token(t_token **tokens, t_cmd **cmd,
-	int *arg_count, t_cmd *head);
+t_cmd			*parse_tokens(t_token *tokens);
+bool			handle_token_content(t_cmd *cmd, t_token **tokens,
+					int *arg_count, t_cmd *head);
+bool			should_split_token(t_token *token);
+void			finalize_args(t_cmd *head);
+bool			parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head);
+bool			handle_pipe_token(t_token **tokens, t_cmd **cmd,
+					int *arg_count, t_cmd *head);
 
 //dup_env
 
-int	count_env(char **envp);
-char	*increment_shlvl(const char *shlvl_entry);
+int				count_env(char **envp);
+char			*increment_shlvl(const char *shlvl_entry);
 
 //tokenizer
-void	init_parseinfo(t_parseinfo *info, char *input,
-	t_data *data, int *i);
-void	init_token_structs(t_token_list *tlist);
+void			init_parseinfo(t_parseinfo *info, char *input,
+					t_data *data, int *i);
+void			init_token_structs(t_token_list *tlist);
 
-int		if_g_heredoc_interrupted(t_cmd *cmd, char *filename);
-void	generate_random_name(char *output, size_t len);
+int				if_g_heredoc_interrupted(t_cmd *cmd, char *filename);
+void			generate_random_name(char *output, size_t len);
 
 #endif
