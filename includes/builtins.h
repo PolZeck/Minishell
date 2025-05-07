@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:47:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 15:24:09 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:16:22 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int		builtin_pwd(t_cmd *cmd, t_data *data);
 int		builtin_env(t_cmd *cmd, t_data *data);
 int		builtin_unset(t_cmd *cmd, t_data *data);
 int		builtin_export(t_cmd *cmd, t_data *data);
+char	*clean_spaces(const char *str);
+void	add_or_replace_var(t_data *data, char *arg);
 int		is_valid_identifier_export(char *str);
+int		handle_invalid_identifier(char *arg);
 int		var_exists(char **env, char *name);
 char	**replace_env(char **env, char *new_entry, int idx);
 char	**append_env(char **env, char *new_entry);

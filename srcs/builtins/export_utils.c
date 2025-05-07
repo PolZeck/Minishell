@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:21:27 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/05 12:10:45 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 10:10:38 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,9 @@ char	**replace_or_append_env(char **env, char *entry)
 
 	if (!entry)
 		return (env);
-
-	// trouver la longueur du nom avant le '='
 	len = 0;
 	while (entry[len] && entry[len] != '=')
 		len++;
-
 	i = 0;
 	while (env && env[i])
 	{
@@ -102,4 +99,3 @@ char	**replace_or_append_env(char **env, char *entry)
 	}
 	return (append_env(env, entry));
 }
-
