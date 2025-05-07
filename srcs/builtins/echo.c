@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:34 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/01 12:41:04 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/06 14:55:59 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	builtin_echo(t_cmd *cmd)
 	}
 	while (cmd->args[i])
 	{
-		// ft_putstr_fd(cmd->args[i], 1);
 		ft_printf("%s", cmd->args[i]);
 		if (cmd->args[i + 1])
 			ft_printf(" ");

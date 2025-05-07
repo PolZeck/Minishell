@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   exec_pipex_builtins.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 11:20:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 14:56:13 by lcosson          ###   ########.fr       */
+/*   Created: 2025/05/07 10:48:13 by lcosson           #+#    #+#             */
+/*   Updated: 2025/05/07 10:48:45 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "minishell.h"
 
-int	builtin_env(t_cmd *cmd, t_data *data)
+void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex)
 {
-	int	i;
+	t_cmd	cmd;
+	t_data	data;
 
-	if (cmd->args[1])
-	{
-		ft_putstr_fd("env: No arguments allowed\n", 2);
-		*get_exit_status() = 1;
-		return (1);
-	}
-	i = 0;
-	while (data->env[i])
-	{
-		if (ft_strchr(data->env[i], '='))
-		{
-			ft_putstr_fd(data->env[i], 1);
-			ft_putstr_fd("\n", 1);
-		}
-		i++;
-	}
-	*get_exit_status() = 0;
-	return (0);
+	cmd.args = args;
+	cmd.redirs = NULL;
+	cmd.invalid = 0;
+	cmd.next = NULL;
+	data.env = envp;
+	execute_builtin(&cmd, &data);
+	clean(pipex);
+	close_fds(pipex);
+	exit(*get_exit_status());
 }
