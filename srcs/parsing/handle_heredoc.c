@@ -3,98 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   handle_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:00:19 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:03:51 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 13:38:20 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-void	generate_random_name(char *output, size_t len)
+static int	check_heredoc_syntax(t_cmd *cmd, t_token **tokens)
 {
-	const char		charset[] = "abcdefghijklmnopqrstuvwxyz0123456789";
-	unsigned char	buf[12];
-	int				fd;
-	size_t			i;
-
-	fd = open("/dev/urandom", O_RDONLY);
-	if (fd < 0)
-	{
-		write(2, "Erreur ouverture /dev/urandom\n", 31);
-		exit(1);
-	}
-	if (read(fd, buf, len) != (ssize_t)len)
-	{
-		write(2, "Erreur lecture /dev/urandom\n", 29);
-		close(fd);
-		exit(1);
-	}
-	close(fd);
-	i = 0;
-	while (i < len)
-	{
-		output[i] = charset[buf[i] % (sizeof(charset) - 1)];
-		i++;
-	}
-	output[len] = '\0';
-}
-
-void	handle_heredoc(t_cmd *cmd, t_token **tokens)
-{
-	char		randname[13];
-	char		*tmp_path;
-	char		*filename;
-	char		*line;
-	char		*delimiter;
-	t_redir		*redir;
-	int			fd;
-
 	*tokens = (*tokens)->next;
 	if (!(*tokens))
 	{
 		syntax_error("newline");
 		cmd->invalid = 1;
-		return ;
+		return (0);
 	}
-	if ((*tokens)->type != WORD && (*tokens)->type != QUOTE
-		&& (*tokens)->type != DELIMITER)
+	if ((*tokens)->type != WORD && (*tokens)->type
+		!= QUOTE && (*tokens)->type != DELIMITER)
 	{
 		syntax_error((*tokens)->value);
 		cmd->invalid = 1;
-		return ;
+		return (0);
 	}
 	(*tokens)->type = DELIMITER;
-	delimiter = (*tokens)->value;
+	return (1);
+}
+
+static int	open_heredoc_tmp(char **filename)
+{
+	char	randname[13];
+	char	*tmp;
+
 	generate_random_name(randname, 12);
-	tmp_path = ft_strjoin("/tmp/", "heredoc_");
-	if (!tmp_path)
-		return ;
-	filename = ft_strjoin(tmp_path, randname);
-	free(tmp_path);
-	if (!filename)
-		return ;
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if (fd < 0)
-	{
-		perror("open heredoc tmp file");
-		free(filename);
-		cmd->invalid = 1;
-		return ;
-	}
+	tmp = ft_strjoin("/tmp/", "heredoc_");
+	if (!tmp)
+		return (-1);
+	*filename = ft_strjoin(tmp, randname);
+	free(tmp);
+	if (!(*filename))
+		return (-1);
+	return (open(*filename, O_WRONLY | O_CREAT | O_TRUNC, 0600));
+}
+
+static void	write_heredoc_content(int fd, char *delimiter)
+{
+	char	*line;
+
 	signal(SIGINT, heredoc_sigint_handler);
 	while (1)
 	{
 		line = readline("> ");
-		if (!line)
-			break ;
-		if (g_heredoc_interrupted)
-		{
-			free(line);
-			break ;
-		}
-		if (ft_strcmp(line, delimiter) == 0)
+		if (!line || g_heredoc_interrupted || ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
@@ -102,23 +64,18 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
-	close(fd);
 	setup_signals();
-	if (g_heredoc_interrupted)
-	{
-		unlink(filename);
-		free(filename);
-		cmd->invalid = 1;
-		*get_exit_status() = 1;
-		g_heredoc_interrupted = 0;
-		return ;
-	}
+}
+
+static int	finalize_heredoc(t_cmd *cmd, char *filename)
+{
+	t_redir	*redir;
+
+	if (if_g_heredoc_interrupted(cmd, filename))
+		return (0);
 	redir = malloc(sizeof(t_redir));
 	if (!redir)
-	{
-		free(filename);
-		return ;
-	}
+		return (free(filename), 0);
 	redir->type = HEREDOC;
 	redir->file = filename;
 	redir->fd = open(filename, O_RDONLY);
@@ -128,7 +85,29 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 		free(redir->file);
 		free(redir);
 		cmd->invalid = 1;
-		return ;
+		return (0);
 	}
 	ft_lstadd_back(&cmd->redirs, ft_lstnew(redir));
+	return (1);
+}
+
+void	handle_heredoc(t_cmd *cmd, t_token **tokens)
+{
+	char	*filename;
+	int		fd;
+
+	if (!check_heredoc_syntax(cmd, tokens))
+		return ;
+	filename = NULL;
+	fd = open_heredoc_tmp(&filename);
+	if (fd < 0)
+	{
+		perror("open heredoc tmp file");
+		free(filename);
+		cmd->invalid = 1;
+		return ;
+	}
+	write_heredoc_content(fd, (*tokens)->value);
+	close(fd);
+	finalize_heredoc(cmd, filename);
 }

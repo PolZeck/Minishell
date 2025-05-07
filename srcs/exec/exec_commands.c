@@ -6,46 +6,11 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 11:16:58 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:53:55 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*find_command_path(char *cmd, t_data *data)
-{
-	char	*path;
-	char	**paths;
-	char	*prefix;
-	char	*full_path;
-	int		i;
-
-	if (!cmd || !*cmd)
-		return (NULL);
-	path = ft_getenv(data, "PATH");
-	if (!path)
-		return (NULL);
-	paths = ft_split(path, ':');
-	if (!paths)
-		return (NULL);
-	i = 0;
-	while (paths[i])
-	{
-		prefix = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(prefix, cmd);
-		free(prefix);
-		if (access(full_path, X_OK) == 0)
-		{
-			free_split(paths);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
-	}
-	free_split(paths);
-	return (NULL);
-}
-
 
 void	print_error(char *prefix, char *cmd, char *message)
 {
