@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 16:20:09 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 20:28:19 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,35 @@ void	wait_and_handle(pid_t pid, int saved_stdout)
 		else if (sig == SIGQUIT)
 			write(1, "Quit (core dumped)\n", 20);
 	}
+}
+
+void	execute_command_and_exit(t_cmd *cmd, t_data *data)
+{
+	char	*cmd_path;
+	int		saved_stdout;
+	pid_t	pid;
+
+	if (precheck_command(cmd, data))
+		exit(*get_exit_status());
+	cmd_path = resolve_cmd_path(cmd, data);
+	if (!cmd_path)
+		exit(*get_exit_status());
+	saved_stdout = dup(STDOUT_FILENO);
+	pid = fork();
+	if (pid == 0)
+		run_child(cmd, data, cmd_path); // dans run_child, tu clean tout avant execve
+	else if (pid > 0)
+		wait_and_handle(pid, saved_stdout);
+	else
+	{
+		perror("fork");
+		*get_exit_status() = 1;
+	}
+	free(cmd_path);
+	free_cmds(cmd);
+	free_tokens(data->tokens); // si dispo
+	free_env(data->env);  // ✅ ici, OK car on est dans le child du pipex
+	exit(*get_exit_status());
 }
 
 void	execute_command(t_cmd *cmd, t_data *data)

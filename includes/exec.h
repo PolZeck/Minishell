@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 16:20:20 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 20:18:23 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ void	apply_redirections_in_child(t_cmd *cmd);
 void	handle_child_output(t_redir *redir, int *out_fd);
 int		validate_redirections(t_cmd *cmd);
 void	print_err(char *prefix, char *cmd, char *message, int exit_code);
+void	execute_command_and_exit(t_cmd *cmd, t_data *data);
 
 #endif

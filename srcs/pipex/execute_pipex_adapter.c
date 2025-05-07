@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipex_adapter.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:50:45 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 16:24:19 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/07 20:18:43 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "minishell.h"
+
+
+
 
 static int	count_cmds(t_cmd *cmd)
 {
@@ -45,8 +48,8 @@ static pid_t	first_execution_direct(t_pipex *pipex, t_data *data)
 			dup2(pipex->pipe_fd[1], STDOUT_FILENO);
 		apply_redirections(pipex->current_cmd->redirs);
 		close_fds(pipex);
-		execute_command(pipex->current_cmd, data);
-		exit(*get_exit_status());
+		execute_command_and_exit(pipex->current_cmd, data);
+
 	}
 	close(pipex->pipe_fd[1]);
 	pipex->prev_pipe_fd = pipex->pipe_fd[0];
@@ -71,8 +74,8 @@ static pid_t	middle_execution_direct(t_pipex *pipex, t_data *data)
 			dup2(pipex->pipe_fd[1], STDOUT_FILENO);
 		apply_redirections(pipex->current_cmd->redirs);
 		close_fds(pipex);
-		execute_command(pipex->current_cmd, data);
-		exit(*get_exit_status());
+		execute_command_and_exit(pipex->current_cmd, data);
+
 	}
 	close(pipex->prev_pipe_fd);
 	close(pipex->pipe_fd[1]);
@@ -95,8 +98,8 @@ static pid_t	last_execution_direct(t_pipex *pipex, t_data *data)
 			dup2(pipex->out_fd, STDOUT_FILENO);
 		apply_redirections(pipex->current_cmd->redirs);
 		close_fds(pipex);
-		execute_command(pipex->current_cmd, data);
-		exit(*get_exit_status());
+		execute_command_and_exit(pipex->current_cmd, data);
+
 	}
 	close(pipex->prev_pipe_fd);
 	return (pid);
