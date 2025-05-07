@@ -6,7 +6,7 @@
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/07 09:55:08 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/05/07 11:08:46 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,10 +49,12 @@ MSH_DEP		= $(DEP_DIR)/minishell
 VALGRIND_SUPP = readline.supp
 
 # === Fichiers Sources Minishell ===
-MSH_SRCS	= main.c parsing/tokenizer.c parsing/utils.c parsing/tokenizer_utils.c\
-              parsing/tokenizer_utils2.c parsing/parsing_redir.c parsing/parsing_redir_utils.c parsing/utils_memory.c parsing/tokenizer_utils3.c\
-              parsing/env_utils.c parsing/quotes_token.c parsing/variable_expansion.c parsing/parsing_pipes.c parsing/handle_heredoc.c parsing/parsing_arguments.c\
+MSH_SRCS	= main.c parsing/tokenizer.c parsing/utils.c parsing/tokenizer_words.c\
+              parsing/tokenizer_tokens.c parsing/parsing_redir.c parsing/parsing_redir_utils.c parsing/utils_memory.c parsing/tokenizer_quotes.c\
+			  parsing/tokenizer_operators.c parsing/tokenizer_init.c\
+              parsing/dup_env_utils.c parsing/quotes_token.c parsing/variable_expansion.c parsing/parsing_pipes.c parsing/handle_heredoc.c parsing/parsing_arguments.c\
 			  parsing/flush_buffer_to_token.c parsing/parse_tokens.c parsing/parse_tokens_loop.c parsing/parse_tokens_content.c parsing/cmd_utils.c\
+			  parsing/cmd_free.c parsing/dup_env.c parsing/handle_input_token.c \
 			  signals/signals.c signals/signals_utils.c signals/exit_status.c \
 			  exec/exec_builtins.c \
 			  exec/exec.c exec/exec_commands.c\

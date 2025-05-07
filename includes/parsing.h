@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:43:37 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/07 11:09:12 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,8 @@ t_token_type	handle_quotes(t_quote *q);
 t_token_type	get_token_type_from_op(char *op);
 t_token_type	handle_redirections_token(char *buffer,
 					char *input, int *i, int *j);
+void	handle_input_token(t_token_list *tlist,
+				char **buffer, t_parseinfo *info);
 
 //parse_token
 t_cmd	*parse_tokens(t_token *tokens);
@@ -163,6 +165,15 @@ bool	parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head);
 bool	handle_pipe_token(t_token **tokens, t_cmd **cmd,
 	int *arg_count, t_cmd *head);
 
+//dup_env
+
+int	count_env(char **envp);
+char	*increment_shlvl(const char *shlvl_entry);
+
+//tokenizer
+void	init_parseinfo(t_parseinfo *info, char *input,
+	t_data *data, int *i);
+void	init_token_structs(t_token_list *tlist);
 
 
 #endif
