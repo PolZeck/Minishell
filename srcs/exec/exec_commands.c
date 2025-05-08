@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 20:28:19 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/08 12:23:57 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,20 @@ void	execute_command_and_exit(t_cmd *cmd, t_data *data)
 	pid_t	pid;
 
 	if (precheck_command(cmd, data))
+	{
+		free_cmds(cmd);
+		free_tokens(data->tokens);
+		free_env(data->env);
 		exit(*get_exit_status());
+	}
 	cmd_path = resolve_cmd_path(cmd, data);
 	if (!cmd_path)
+	{
+		free_cmds(cmd);
+		free_tokens(data->tokens);
+		free_env(data->env);
 		exit(*get_exit_status());
+	}
 	saved_stdout = dup(STDOUT_FILENO);
 	pid = fork();
 	if (pid == 0)

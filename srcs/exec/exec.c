@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 15:34:41 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/08 12:25:03 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,5 @@ void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 		data->in_pipeline = 1;
 		*get_exit_status() = execute_pipex_direct(cmd_list, data);
 	}
+	// free_cmds(cmd_list);
 }
