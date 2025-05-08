@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipex_adapter.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:50:45 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 20:18:43 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/08 13:42:14 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static pid_t	first_execution_direct(t_pipex *pipex, t_data *data)
 			dup2(pipex->pipe_fd[1], STDOUT_FILENO);
 		apply_redirections(pipex->current_cmd->redirs);
 		close_fds(pipex);
-		execute_command_and_exit(pipex->current_cmd, data);
+		execute_command_and_exit(pipex, data);
 
 	}
 	close(pipex->pipe_fd[1]);
@@ -74,7 +74,7 @@ static pid_t	middle_execution_direct(t_pipex *pipex, t_data *data)
 			dup2(pipex->pipe_fd[1], STDOUT_FILENO);
 		apply_redirections(pipex->current_cmd->redirs);
 		close_fds(pipex);
-		execute_command_and_exit(pipex->current_cmd, data);
+		execute_command_and_exit(pipex, data);
 
 	}
 	close(pipex->prev_pipe_fd);
@@ -98,8 +98,7 @@ static pid_t	last_execution_direct(t_pipex *pipex, t_data *data)
 			dup2(pipex->out_fd, STDOUT_FILENO);
 		apply_redirections(pipex->current_cmd->redirs);
 		close_fds(pipex);
-		execute_command_and_exit(pipex->current_cmd, data);
-
+		execute_command_and_exit(pipex, data);
 	}
 	close(pipex->prev_pipe_fd);
 	return (pid);
