@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 12:23:50 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/08 15:03:49 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		data.tokens = tokenize(input, &data);
 		cmd = parse_tokens(data.tokens);
+		data.cmds_head = cmd;
 		if (cmd)
 			execute_pipeline(cmd, &data);
 		free_tokens(data.tokens);
