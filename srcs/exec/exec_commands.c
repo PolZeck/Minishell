@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/08 12:23:57 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/08 13:40:47 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,23 +102,25 @@ void	wait_and_handle(pid_t pid, int saved_stdout)
 	}
 }
 
-void	execute_command_and_exit(t_cmd *cmd, t_data *data)
+void	execute_command_and_exit(t_pipex *pipex, t_data *data)
 {
 	char	*cmd_path;
 	int		saved_stdout;
 	pid_t	pid;
 
-	if (precheck_command(cmd, data))
+	if (precheck_command(pipex->current_cmd, data))
 	{
-		free_cmds(cmd);
+		free_cmds(pipex->current_cmd);
+		free(pipex->pid); 
 		free_tokens(data->tokens);
 		free_env(data->env);
 		exit(*get_exit_status());
 	}
-	cmd_path = resolve_cmd_path(cmd, data);
+	cmd_path = resolve_cmd_path(pipex->current_cmd, data);
 	if (!cmd_path)
 	{
-		free_cmds(cmd);
+		free_cmds(pipex->current_cmd);
+		free(pipex->pid); 
 		free_tokens(data->tokens);
 		free_env(data->env);
 		exit(*get_exit_status());
@@ -126,7 +128,7 @@ void	execute_command_and_exit(t_cmd *cmd, t_data *data)
 	saved_stdout = dup(STDOUT_FILENO);
 	pid = fork();
 	if (pid == 0)
-		run_child(cmd, data, cmd_path); // dans run_child, tu clean tout avant execve
+		run_child(pipex->current_cmd, data, cmd_path); // dans run_child, tu clean tout avant execve
 	else if (pid > 0)
 		wait_and_handle(pid, saved_stdout);
 	else
@@ -135,9 +137,10 @@ void	execute_command_and_exit(t_cmd *cmd, t_data *data)
 		*get_exit_status() = 1;
 	}
 	free(cmd_path);
-	free_cmds(cmd);
+	free(pipex->pid); 
+	free_cmds(pipex->current_cmd);
 	free_tokens(data->tokens); // si dispo
-	free_env(data->env);  // ✅ ici, OK car on est dans le child du pipex
+	free_env(data->env);  //  ici, OK car on est dans le child du pipex
 	exit(*get_exit_status());
 }
 
