@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/09 10:55:58 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/09 11:02:03 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,5 @@ pid_t	middle_execution_direct(t_pipex *pipex, t_data *data);
 pid_t	last_execution_direct(t_pipex *pipex, t_data *data);
 void	open_and_close_all_outputs(t_list *redirs);
 t_redir	*find_last_output_redirection(t_list *redirs);
-
 
 #endif
