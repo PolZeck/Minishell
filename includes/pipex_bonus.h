@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/07 15:05:20 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/09 09:29:42 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,8 @@ typedef struct s_pipex
 
 # define HERE_DOC_FILE ".here_doc_tmp"
 
-void	check_in_and_outfile_bonus(int argc, char **argv, t_pipex *pipex);
-void	check_open_files_bonus(int argc, char **argv, t_pipex *pipex);
-char	*check_addpath_cmd_bonus(char *cmd, char **envp, t_pipex *pipex);
-char	*my_addpath_cmd(char *cmd, char *path, t_pipex *pipex);
-char	*my_getpath(char **envp);
 
-void	execute_cmd(t_cmd *cmd, char **envp, t_pipex *pipex);
-pid_t	first_execution_bonus(int i, char **argv, char **envp, t_pipex *pipex);
-pid_t	last_execution_bonus(int i, char **argv, char **envp, t_pipex *pipex);
-pid_t	middle_execution_bonus(int i, char **argv, char **envp, t_pipex *pipex);
+char	*my_addpath_cmd(char *cmd, char *path, t_pipex *pipex);
 
 void	close_fds(t_pipex *pipex);
 void	my_perr(const char *msg, bool should_exit);
@@ -65,20 +57,8 @@ void	my_free(void *ptr);
 void	clean(t_pipex *pipex);
 void	handle_exec_error(char *path_cmd, char **tokenized_cmd);
 
-void	init_struct(int argc, char **argv, t_pipex *pipex);
-void	init_files(int argc, char **argv, t_pipex *pipex);
-void	init_files_heredoc(int argc, char **argv, t_pipex *pipex);
-void	init_pipes(t_pipex *pipex);
-void	close_and_perr_dup2(t_pipex *pipex);
-void	close_and_perr_fork(t_pipex *pipex);
-
-void	write_here_doc(char *limiter, t_pipex *pipex);
-int		my_pipex(char **argv, char **envp, t_pipex *pipex, t_cmd *cmd_list);
-char	*get_last_file_of_type(t_list *redirs, int type1, int type2);
-
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex);
 int		execute_pipex_direct(t_cmd *cmds, t_data *data);
-bool	check_redirections_failure(t_cmd *cmd);
 
 bool	has_input_redir(t_cmd *cmd);
 bool	has_output_redir(t_cmd *cmd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:42:11 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/07 16:43:39 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/09 09:20:56 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,32 +112,6 @@ void	apply_redirections(t_list *redirs)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-}
-
-void	execute_cmd(t_cmd *cmd, char **envp, t_pipex *pipex)
-{
-	char	*path_cmd;
-
-	if (!cmd || !cmd->args || !cmd->args[0])
-		exit(1);
-	if (is_builtin(cmd->args[0]))
-	{
-		apply_redirections(cmd->redirs);
-		execute_pipex_builtin(cmd->args, envp, pipex);
-		clean(pipex);
-		close_fds(pipex);
-		exit(EXIT_SUCCESS);
-	}
-	path_cmd = check_addpath_cmd_bonus(cmd->args[0], envp, pipex);
-	if (!path_cmd)
-	{
-		clean(pipex);
-		close_fds(pipex);
-		exit(127);
-	}
-	apply_redirections(cmd->redirs);
-	if (execve(path_cmd, cmd->args, envp) == -1)
-		handle_exec_error(path_cmd, cmd->args);
 }
 
 void	close_and_clean_in_fd(t_pipex *pipex)

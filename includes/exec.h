@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/08 13:37:36 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/09 09:17:29 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ typedef struct s_data	t_data;
 typedef struct s_redir	t_redir;
 typedef struct s_pipex	t_pipex;
 
+char	*find_command_path(char *cmd, t_data *data);
+int		validate_redirections(t_cmd *cmd);
 void	execute_builtin(t_cmd *cmd, t_data *data);
 void	execute_pipeline(t_cmd *cmd_list, t_data *data);
-char	*find_command_path(char *cmd, t_data *data);
 void	execute_command(t_cmd *cmd, t_data *data);
 void	apply_redirections_in_child(t_cmd *cmd);
 void	handle_child_output(t_redir *redir, int *out_fd);
-int		validate_redirections(t_cmd *cmd);
 void	print_err(char *prefix, char *cmd, char *message, int exit_code);
 void	execute_command_and_exit(t_pipex *pipex, t_data *data);
 

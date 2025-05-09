@@ -6,14 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:50:45 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/08 13:42:14 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/09 09:10:22 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
-
 
 static int	count_cmds(t_cmd *cmd)
 {
@@ -49,7 +46,6 @@ static pid_t	first_execution_direct(t_pipex *pipex, t_data *data)
 		apply_redirections(pipex->current_cmd->redirs);
 		close_fds(pipex);
 		execute_command_and_exit(pipex, data);
-
 	}
 	close(pipex->pipe_fd[1]);
 	pipex->prev_pipe_fd = pipex->pipe_fd[0];
@@ -75,7 +71,6 @@ static pid_t	middle_execution_direct(t_pipex *pipex, t_data *data)
 		apply_redirections(pipex->current_cmd->redirs);
 		close_fds(pipex);
 		execute_command_and_exit(pipex, data);
-
 	}
 	close(pipex->prev_pipe_fd);
 	close(pipex->pipe_fd[1]);
