@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/09 09:29:42 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/09 09:32:57 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,6 @@ typedef struct s_pipex
 # define FALSE 0
 
 # define HERE_DOC_FILE ".here_doc_tmp"
-
-
-char	*my_addpath_cmd(char *cmd, char *path, t_pipex *pipex);
 
 void	close_fds(t_pipex *pipex);
 void	my_perr(const char *msg, bool should_exit);
