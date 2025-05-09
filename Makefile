@@ -6,7 +6,7 @@
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/09 09:31:47 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/05/09 09:44:23 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ MSH_SRCS	= main.c parsing/tokenizer/tokenizer.c parsing/utils.c parsing/tokenize
 			  exec/exec_pipex_builtins.c\
 			  exec/exec_path.c\
 			  exec/exec_child.c\
+			  exec/exec_helpers.c\
 			  exec/exec_utils.c\
 			  builtins/cd.c builtins/cd_utils.c builtins/echo.c builtins/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export.c builtins/export_utils.c \
 			  builtins/export_utils2.c builtins/exit_utils.c pipex/commands_bonus.c pipex/exit_bonus.c pipex/wait_and_close.c \
