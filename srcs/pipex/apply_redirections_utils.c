@@ -1,57 +1,65 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands_bonus.c                                   :+:      :+:    :+:   */
+/*   apply_redirections_utils.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/25 12:42:11 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/09 10:24:10 by pledieu          ###   ########lyon.fr   */
+/*   Created: 2025/05/09 10:49:45 by pledieu           #+#    #+#             */
+/*   Updated: 2025/05/09 10:53:19 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-bool	has_input_redir(t_cmd *cmd)
+static void	open_and_close_output_file(t_redir *redir)
 {
-	t_list	*node;
-	t_redir	*redir;
+	int	fd;
+	int	flags;
 
-	if (!cmd)
-		return (false);
-	node = cmd->redirs;
-	while (node)
+	flags = O_WRONLY | O_CREAT;
+	if (redir->type == APPEND)
+		flags |= O_APPEND;
+	else
+		flags |= O_TRUNC;
+	fd = open(redir->file, flags, 0644);
+	if (fd == -1)
 	{
-		redir = (t_redir *)node->content;
-		if (redir->type == REDIR_IN || redir->type == HEREDOC)
-			return (true);
-		node = node->next;
+		perror(redir->file);
+		exit(1);
 	}
-	return (false);
+	close(fd);
 }
 
-bool	has_output_redir(t_cmd *cmd)
+void	open_and_close_all_outputs(t_list *redirs)
 {
 	t_list	*node;
 	t_redir	*redir;
 
-	if (!cmd)
-		return (false);
-	node = cmd->redirs;
+	node = redirs;
 	while (node)
 	{
-		redir = (t_redir *)node->content;
+		redir = node->content;
 		if (redir->type == REDIR_OUT || redir->type == APPEND)
-			return (true);
+			open_and_close_output_file(redir);
 		node = node->next;
 	}
-	return (false);
 }
 
-void	close_and_clean_in_fd(t_pipex *pipex)
+t_redir	*find_last_output_redirection(t_list *redirs)
 {
-	close(pipex->pipe_fd[1]);
-	close_fds(pipex);
-	clean (pipex);
-	exit(1);
+	t_list	*node;
+	t_redir	*last;
+	t_redir	*redir;
+
+	last = NULL;
+	node = redirs;
+	while (node)
+	{
+		redir = node->content;
+		if (redir->type == REDIR_OUT || redir->type == APPEND)
+			last = redir;
+		node = node->next;
+	}
+	return (last);
 }
