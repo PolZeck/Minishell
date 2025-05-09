@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:08:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 14:55:40 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/09 14:56:47 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,16 @@
 static int	is_valid_identifier_unset(char *var)
 {
 	int	i;
-	int	has_underscore;
 
 	if (!var || !*var)
 		return (0);
-	has_underscore = 0;
-	i = 0;
+	i = 1;
 	while (var[i])
 	{
-		if (var[i] == '_')
-			has_underscore = 1;
-		else if (!ft_isalnum(var[i]))
-			return (-1);
+		if (!ft_isalnum(var[i]))
+			return (0);
 		i++;
 	}
-	if (has_underscore)
-		return (0);
 	return (1);
 }
 
@@ -45,18 +39,16 @@ static int	match_var(char *env_var, char *key)
 			return (0);
 		i++;
 	}
-	if (env_var[i] == '=' && key[i] == '\0')
-		return (1);
-	return (0);
+	return (env_var[i] == '=' && key[i] == '\0');
 }
 
 static int	count_remaining_vars(char **env, char *key)
 {
-	int	count;
 	int	i;
+	int	count;
 
-	count = 0;
 	i = 0;
+	count = 0;
 	while (env[i])
 	{
 		if (!match_var(env[i], key))
@@ -72,18 +64,15 @@ static char	**copy_env_excluding_key(char **env, char *key, int new_count)
 	int		i;
 	int		j;
 
+	i = 0;
+	j = 0;
 	new_env = malloc(sizeof(char *) * (new_count + 1));
 	if (!new_env)
 		return (NULL);
-	i = 0;
-	j = 0;
 	while (env[i])
 	{
 		if (!match_var(env[i], key))
-		{
-			new_env[j] = ft_strdup(env[i]);
-			j++;
-		}
+			new_env[j++] = ft_strdup(env[i]);
 		i++;
 	}
 	new_env[j] = NULL;
@@ -94,28 +83,26 @@ static char	**copy_env_excluding_key(char **env, char *key, int new_count)
 int	builtin_unset(t_cmd *cmd, t_data *data)
 {
 	int	i;
-	int	valid;
 	int	count;
 
 	i = 1;
 	while (cmd->args[i])
 	{
-		valid = is_valid_identifier_unset(cmd->args[i]);
-		if (!valid)
+		if (cmd->args[i][0] == '-')
 		{
-			ft_putstr_fd("bash: unset: `", 2);
-			ft_putstr_fd(cmd->args[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-			*get_exit_status() = 1;
+			ft_putstr_fd("bash: unset: -", 2);
+			ft_putchar_fd(cmd->args[i][1], 2);
+			ft_putstr_fd(": invalid option\n", 2);
+			*get_exit_status() = 2;
+			return (2);
 		}
-		else
+		if (is_valid_identifier_unset(cmd->args[i]))
 		{
 			count = count_remaining_vars(data->env, cmd->args[i]);
 			data->env = copy_env_excluding_key(data->env, cmd->args[i], count);
 		}
 		i++;
 	}
-	if (*get_exit_status() != 1)
-		*get_exit_status() = 0;
-	return (*get_exit_status());
+	*get_exit_status() = 0;
+	return (0);
 }

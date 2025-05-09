@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:04:19 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/07 10:15:39 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/09 13:17:55 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*clean_spaces(const char *str)
 
 int	handle_invalid_identifier(char *arg)
 {
-	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd("bash: export: `", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
 	*get_exit_status() = 1;

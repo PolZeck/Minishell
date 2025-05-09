@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 10:21:56 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/09 13:18:02 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int	handle_export_arg(char *arg, t_data *data)
 {
 	if (arg[0] == '-')
 	{
-		ft_putstr_fd("minishell: export: ", 2);
+		ft_putstr_fd("bash: export: ", 2);
 		write(2, arg, 2);
 		ft_putstr_fd(": invalid option\n", 2);
 		*get_exit_status() = 2;

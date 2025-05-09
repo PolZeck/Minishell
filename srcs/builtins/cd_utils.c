@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:52:18 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/06 14:55:43 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/09 15:18:03 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_home(t_data *data)
 	char	*home;
 
 	home = ft_getenv(data, "HOME");
-	if (!home || !*home)
+	if (!home)
 	{
 		ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
 		*get_exit_status() = 1;

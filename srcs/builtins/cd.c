@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 14:53:10 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/09 15:33:39 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,17 @@ static char	*get_cd_target(char **args, t_data *data)
 
 	home = NULL;
 	target = NULL;
-	if (!args[1])
+	if (!args[1] || args[1][0] == '~')
 		home = get_home(data);
-	else if (args[1][0] == '~')
-		home = get_home(data);
-	if (!home && !args[1])
-		return (NULL);
 	if (!args[1])
-		target = ft_strdup(home);
-	else if (args[1][0] == '~' && args[1][1])
+	{
+		if (!home)
+			return (NULL);
+		if (home[0] == '\0')
+			return (ft_strdup("."));
+		return (ft_strdup(home));
+	}
+	if (args[1][0] == '~' && args[1][1])
 		target = ft_strjoin(home, args[1] + 1);
 	else if (args[1][0] == '~')
 		target = ft_strdup(home);
@@ -54,7 +56,15 @@ static void	update_env_pwd(t_data *data, char *old_pwd)
 	char	*oldpwd;
 
 	if (!getcwd(cwd, sizeof(cwd)))
+	{
+		ft_putstr_fd("bash: chdir: error retrieving current directory:",
+			STDERR_FILENO);
+		ft_putstr_fd(
+			" getcwd: cannot access parent directories",
+			STDERR_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 		return ;
+	}
 	new_pwd = ft_strjoin("PWD=", cwd);
 	data->env = replace_or_append_env(data->env, new_pwd);
 	free(new_pwd);
