@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:04:19 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/09 13:17:55 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/11 17:02:31 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static char	*get_cleaned_assignment(char *arg, char **name)
 	eq = ft_strchr(arg, '=');
 	*name = ft_substr(arg, 0, eq - arg);
 	value = ft_strdup(eq + 1);
-	trimmed = clean_spaces(value);
+	trimmed = ft_strdup(value);
 	free(value);
 	prefix = ft_strjoin(*name, "=");
 	result = ft_strjoin(prefix, trimmed);
