@@ -3,61 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/09 12:03:53 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/12 12:45:35 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/* void	debug_print_commands(t_cmd *cmd_list)
-{
-	int i = 1;
-	while (cmd_list)
-	{
-		printf("=== Command %d ===\n", i);
-		for (int j = 0; cmd_list->args && cmd_list->args[j]; j++)
-			printf("  Arg[%d]: %s\n", j, cmd_list->args[j]);
-
-		if (cmd_list->redirs)
-		{
-			t_list *tmp = cmd_list->redirs;
-			while (tmp)
-			{
-				t_redir *r = tmp->content;
-				if (r->type == REDIR_IN)
-					printf("  <  infile: %s\n", r->file);
-				else if (r->type == REDIR_OUT)
-					printf("  >  outfile: %s\n", r->file);
-				else if (r->type == APPEND)
-					printf("  >> append to: %s\n", r->file);
-				else if (r->type == HEREDOC)
-					printf("  << heredoc delimiter: %s\n", r->file);
-				tmp = tmp->next;
-			}
-		}
-		else
-			printf("  No redirections.\n");
-
-		if (cmd_list->invalid)
-			printf("  ❌ Invalid command!\n");
-		cmd_list = cmd_list->next;
-		i++;
-	}
-}
-void	debug_tokens(t_token *tokens)
-{
-	int i = 0;
-	while (tokens)
-	{
-		printf("TOKEN[%d] = [%s], quote_type = %d\n",
-		i, tokens->value, tokens->quote_type);
-		tokens = tokens->next;
-		i++;
-	}
-} */
 
 static void	init_terminal_settings(struct termios *term)
 {
@@ -82,7 +35,7 @@ static int	process_input(char *input, t_data *data)
 	add_history(input);
 	if (check_unclosed_quotes(input))
 	{
-		perror("Erreur : guillemets non fermés");
+		perror("Error : quotes unclosed");
 		free(input);
 		return (0);
 	}

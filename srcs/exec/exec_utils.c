@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 14:28:33 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/07 15:28:10 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/12 12:46:50 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	validate_output_redir(t_redir *redir)
 
 	if (!redir->file)
 	{
-		ft_putstr_fd("minishell: redirection file missing\n", 2);
+		ft_putstr_fd("bash: redirection file missing\n", 2);
 		return (1);
 	}
 	flags = O_WRONLY | O_CREAT;
@@ -69,7 +69,7 @@ int	validate_input_redir(t_redir *redir)
 
 	if (!redir->file && redir->type != HEREDOC)
 	{
-		ft_putstr_fd("minishell: redirection file missing\n", 2);
+		ft_putstr_fd("bash: redirection file missing\n", 2);
 		return (1);
 	}
 	fd = open(redir->file, O_RDONLY);

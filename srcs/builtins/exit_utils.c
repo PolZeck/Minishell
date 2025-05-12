@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:42:38 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 14:15:24 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/12 12:46:27 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_numeric_error(char *arg)
 {
-	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd("bash: exit: ", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
 	*get_exit_status() = 2;
@@ -50,7 +50,7 @@ void	handle_invalid_argument(t_cmd *cmd, t_data *data)
 
 void	handle_too_many_arguments(void)
 {
-	ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+	ft_putstr_fd("bash: exit: too many arguments\n", 2);
 	*get_exit_status() = 1;
 }
 
