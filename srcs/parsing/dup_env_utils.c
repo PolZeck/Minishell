@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup_env_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 10:44:47 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 10:37:12 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/12 14:05:42 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ char	*ft_getenv(t_data *data, const char *name)
 
 	if (!data || !data->env || !name)
 		return (NULL);
-	len = strlen(name);
+	len = ft_strlen(name);
 	i = 0;
 	while (data->env[i])
 	{
-		if (!strncmp(data->env[i], name, len) && data->env[i][len] == '=')
+		if (!ft_strncmp(data->env[i], name, len) && data->env[i][len] == '=')
 			return (data->env[i] + len + 1);
 		i++;
 	}

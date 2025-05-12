@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/08 13:23:46 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/12 14:04:35 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 		cmd_tmp = cmd_tmp->next;
 	}
 	if (!cmd_list)
-	{
-		fprintf(stderr, "DEBUG: cmd_list == NULL dans execute_pipeline\n");
 		return ;
-	}
 	if (count == 1)
 	{
 		data->in_pipeline = 0;
