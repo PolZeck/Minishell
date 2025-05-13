@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:28:41 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 10:30:59 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 12:32:00 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ char	**ft_split_charset(char *str, const char *charset)
 	int		i;
 
 	i = 0;
-	strings = malloc(sizeof(char *) * (count_strings_charset(str, charset) + 1));
+	strings = malloc
+		(sizeof(char *) * (count_strings_charset(str, charset) + 1));
 	if (!strings)
 		return (NULL);
 	while (*str != '\0')

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:25:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/09 11:20:26 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 11:24:29 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	sigint_handler(int sig)
 {
 	(void)sig;
 	write(1, "\n", 1);
+	*get_exit_status() = 130;
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();

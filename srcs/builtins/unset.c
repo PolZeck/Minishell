@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:08:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/09 14:56:47 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 11:54:57 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	match_var(char *env_var, char *key)
 			return (0);
 		i++;
 	}
-	return (env_var[i] == '=' && key[i] == '\0');
+	return ((env_var[i] == '=' || env_var[i] == '\0') && key[i] == '\0');
 }
 
 static int	count_remaining_vars(char **env, char *key)
