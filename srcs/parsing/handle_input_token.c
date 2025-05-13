@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_input_token.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:41:38 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 10:44:36 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 12:18:14 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static bool	handle_operator_token_lexing(t_token_list *tlist,
 {
 	if (!is_operator(info->input[*(info->i)]))
 		return (false);
-	flush_buffer_to_token(*tlist, buffer, *quote_type, info);
+	flush_buffer_to_token(*tlist, buffer, *quote_type, info, false);
 	*quote_type = NO_QUOTE;
 	info->quote = 0;
 	handle_operator_token(tlist->tokens, tlist->last, info);
@@ -39,7 +39,7 @@ static bool	handle_whitespace(t_token_list *tlist, char **buffer,
 {
 	if (info->input[*(info->i)] != ' ')
 		return (false);
-	flush_buffer_to_token(*tlist, buffer, *quote_type, info);
+	flush_buffer_to_token(*tlist, buffer, *quote_type, info, false);
 	*quote_type = NO_QUOTE;
 	(*(info->i))++;
 	return (true);
@@ -65,7 +65,7 @@ void	handle_input_token(t_token_list *tlist,
 			(*(info->i))++;
 			return ;
 		}
-		handle_variable_expansion(buffer, info->input, info->i, info);
+		handle_variable_expansion_tokenizer(tlist, buffer, info);
 		return ;
 	}
 	append_word(buffer, info->input, info->i);

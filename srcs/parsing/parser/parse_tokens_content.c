@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tokens_content.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:34:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 10:27:02 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 13:42:52 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,20 @@ bool	handle_token_content(t_cmd *cmd, t_token **tokens,
 
 bool	should_split_token(t_token *token)
 {
-	return (token->quote_type == NO_QUOTE
-		&& token->type == WORD
-		&& token->value[0] != '\0'
-		&& !ft_strchr(token->value, '\'')
-		&& !ft_strchr(token->value, '\"')
-		&& (ft_strchr(token->value, ' ') || ft_strchr(token->value, '\t'))
-		&& token->value[0] != ' ');
+	if (token->from_quotes)
+		return (false);
+	if (token->quote_type != NO_QUOTE)
+		return (false);
+	if (token->type != WORD)
+		return (false);
+	if (token->value[0] == '\0')
+		return (false);
+	if (ft_strchr(token->value, '\'') || ft_strchr(token->value, '\"'))
+		return (false);
+	if (!ft_strchr(token->value, ' ') && !ft_strchr(token->value, '\t'))
+		return (false);
+	if (token->value[0] == ' '
+		|| token->value[ft_strlen(token->value) - 1] == ' ')
+		return (false);
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:04:19 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/12 13:58:18 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/13 13:44:10 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,6 @@ static void	copy_cleaned(const char *str, char *res)
 	res[j] = '\0';
 }
 
-char	*clean_spaces(const char *str)
-{
-	char	*res;
-
-	if (!str)
-		return (NULL);
-	res = malloc(ft_strlen(str) + 1);
-	if (!res)
-		return (NULL);
-	copy_cleaned(str, res);
-	return (res);
-}
-
 int	handle_invalid_identifier(char *arg)
 {
 	ft_putstr_fd("bash: export: `", 2);
@@ -73,7 +60,7 @@ static char	*get_cleaned_assignment(char *arg, char **name)
 	eq = ft_strchr(arg, '=');
 	*name = ft_substr(arg, 0, eq - arg);
 	value = ft_strdup(eq + 1);
-	trimmed = clean_spaces(value);
+	trimmed = ft_strdup(value);
 	free(value);
 	prefix = ft_strjoin(*name, "=");
 	result = ft_strjoin(prefix, trimmed);

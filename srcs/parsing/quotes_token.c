@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:30:42 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 10:06:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 13:43:25 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,20 @@ static void	handle_double_quote(char **sub, t_parseinfo *info)
 static void	merge_and_flush(char **buffer, char *sub, t_parseinfo *info,
 	t_token_list token_list)
 {
-	char	*tmp;
-	char	next;
+	char			*tmp;
+	char			next;
+	t_quote_type	current;
 
-	if (!(sub[0] == '\0' && (*buffer)[0] != '\0'))
-	{
-		tmp = ft_strjoin(*buffer, sub);
-		free(*buffer);
-		free(sub);
-		*buffer = tmp;
-	}
-	else
-		free(sub);
+	tmp = ft_strjoin(*buffer, sub);
+	free(*buffer);
+	free(sub);
+	*buffer = tmp;
+	info->buffer_contains_quote = true;
 	next = info->input[*(info->i)];
-	if (next == '\0' || next == ' ' || is_operator(next))
-		flush_buffer_to_token(token_list, buffer,
-			*(info->quote_type), info);
+	current = *(info->quote_type);
 	*(info->quote_type) = NO_QUOTE;
+	if (next == '\0' || next == ' ' || is_operator(next))
+		flush_buffer_to_token(token_list, buffer, current, info, true);
 }
 
 void	handle_quotes_in_token(char **buffer, t_parseinfo *info,

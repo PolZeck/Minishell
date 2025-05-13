@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 10:41:05 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 11:10:02 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	exit_cleanup(t_cmd *cmd, t_data *data, int exit_code)
 	free_cmds(cmd);
 	free_tokens(data->tokens);
 	free_env(data->env);
-	close(data->in_fd);
+	//close(data->in_fd);
 	rl_clear_history();
 	exit(exit_code);
 }
