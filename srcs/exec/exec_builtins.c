@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 10:48:20 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/13 12:30:48 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,16 @@ static void	run_builtin(t_cmd *cmd, t_data *data)
 {
 	if (!cmd->args[0])
 		return ;
-	if (ft_strcmp(cmd->args[0], "cd") == 0)
+	if (ft_strcmp(cmd->args[0], ".") == 0)
+	{
+		if (!cmd->args[1])
+		{
+			ft_putstr_fd("bash: .: filename argument required\n", 2);
+			*get_exit_status() = 2;
+			return ;
+		}
+	}
+	else if (ft_strcmp(cmd->args[0], "cd") == 0)
 		*get_exit_status() = builtin_cd(cmd, data);
 	else if (ft_strcmp(cmd->args[0], "echo") == 0)
 		*get_exit_status() = builtin_echo(cmd);

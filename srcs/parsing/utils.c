@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 10:25:09 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 12:20:15 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ int	is_builtin(char *cmd)
 		|| ft_strcmp(cmd, "export") == 0
 		|| ft_strcmp(cmd, "unset") == 0
 		|| ft_strcmp(cmd, "env") == 0
-		|| ft_strcmp(cmd, "exit") == 0)
+		|| ft_strcmp(cmd, "exit") == 0
+		|| ft_strcmp(cmd, ".") == 0)
 		return (1);
 	return (0);
 }
