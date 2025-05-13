@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   flush_buffer_to_token.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:22:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 10:05:23 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 13:40:47 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-static t_token	*create_token_from_buffer(char **buffer,
+/* static t_token	*create_token_from_buffer(char **buffer,
 	t_quote_type quote_type, t_parseinfo *info)
 {
 	t_token			*new;
@@ -33,7 +33,7 @@ static t_token	*create_token_from_buffer(char **buffer,
 	new->quote_type = quote_type;
 	new->next = NULL;
 	return (new);
-}
+} */
 
 static void	append_token(t_token_list token_list, t_token *new)
 {
@@ -45,16 +45,37 @@ static void	append_token(t_token_list token_list, t_token *new)
 }
 
 void	flush_buffer_to_token(t_token_list token_list,
-	char **buffer, t_quote_type quote_type, t_parseinfo *info)
+	char **buffer, t_quote_type quote_type,
+	t_parseinfo *info, bool came_from_quote)
 {
 	t_token	*new;
+	char	**words;
+	int		i;
+	bool	actual_from_quotes;
 
-	if (!*buffer)
+	if (!*buffer || !**buffer)
 		return ;
-	new = create_token_from_buffer(buffer, quote_type, info);
-	if (!new)
-		return ;
-	append_token(token_list, new);
+	actual_from_quotes = came_from_quote || info->buffer_contains_quote;
+	if (quote_type == NO_QUOTE && !actual_from_quotes)
+	{
+		words = ft_split(*buffer, ' ');
+		if (!words)
+			return ;
+		i = 0;
+		while (words[i])
+		{
+			new = create_token(words[i], WORD, quote_type, info->data, actual_from_quotes);
+			append_token(token_list, new);
+			i++;
+		}
+		free_split(words);
+	}
+	else
+	{
+		new = create_token(*buffer, WORD, quote_type, info->data, actual_from_quotes);
+		append_token(token_list, new);
+	}
+	info->buffer_contains_quote = false;
 	free(*buffer);
 	*buffer = ft_strdup("");
 }

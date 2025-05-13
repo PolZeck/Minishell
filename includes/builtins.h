@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:47:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 14:12:06 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 13:44:14 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int		builtin_pwd(t_cmd *cmd, t_data *data);
 int		builtin_env(t_cmd *cmd, t_data *data);
 int		builtin_unset(t_cmd *cmd, t_data *data);
 int		builtin_export(t_cmd *cmd, t_data *data);
-char	*clean_spaces(const char *str);
 void	add_or_replace_var(t_data *data, char *arg);
 int		is_valid_identifier_export(char *str);
 int		handle_invalid_identifier(char *arg);
