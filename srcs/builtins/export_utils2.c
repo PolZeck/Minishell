@@ -3,42 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:04:19 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/13 13:44:10 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/13 13:48:36 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
-static void	copy_cleaned(const char *str, char *res)
-{
-	int	i;
-	int	j;
-	int	in_word;
-
-	i = 0;
-	j = 0;
-	in_word = 0;
-	while (str[i])
-	{
-		if (str[i] != ' ' && str[i] != '\t')
-		{
-			res[j++] = str[i];
-			in_word = 1;
-		}
-		else if (in_word)
-		{
-			res[j++] = ' ';
-			in_word = 0;
-		}
-		i++;
-	}
-	if (j > 0 && res[j - 1] == ' ')
-		j--;
-	res[j] = '\0';
-}
 
 int	handle_invalid_identifier(char *arg)
 {
