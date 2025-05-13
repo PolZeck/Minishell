@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 14:11:32 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 10:41:05 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	exit_cleanup(t_cmd *cmd, t_data *data, int exit_code)
 	free_cmds(cmd);
 	free_tokens(data->tokens);
 	free_env(data->env);
+	close(data->in_fd);
 	rl_clear_history();
 	exit(exit_code);
 }

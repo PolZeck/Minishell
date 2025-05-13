@@ -6,31 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:57:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 10:25:09 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*expand_env_var(char *token, t_quote_type quote_type, t_data *data)
-{
-	char	*env_value;
-
-	if (quote_type == SINGLE_QUOTE)
-		return (ft_strdup(token));
-	if (ft_strcmp(token, "$$") == 0)
-		return (ft_itoa(getpid()));
-	if (!token || token[0] != '$')
-		return (ft_strdup(token));
-	if (ft_strcmp(token, "$?") == 0)
-		return (ft_itoa(*get_exit_status()));
-	if (token[1] == '\0')
-		return (ft_strdup("$"));
-	env_value = ft_getenv(data, token + 1);
-	if (env_value)
-		return (ft_strdup(env_value));
-	return (ft_strdup(""));
-}
 
 int	count_args(t_token *tokens)
 {

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:34:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:51:33 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 10:27:02 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool	handle_token_content(t_cmd *cmd, t_token **tokens,
 	{
 		if (should_split_token(*tokens))
 		{
-			split = ft_split((*tokens)->value, ' ');
+			split = ft_split_charset((*tokens)->value, " \t");
 			i = 0;
 			while (split && split[i])
 			{
@@ -63,6 +63,6 @@ bool	should_split_token(t_token *token)
 		&& token->value[0] != '\0'
 		&& !ft_strchr(token->value, '\'')
 		&& !ft_strchr(token->value, '\"')
-		&& ft_strchr(token->value, ' ')
+		&& (ft_strchr(token->value, ' ') || ft_strchr(token->value, '\t'))
 		&& token->value[0] != ' ');
 }
