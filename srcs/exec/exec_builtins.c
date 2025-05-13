@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 12:30:48 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 15:08:33 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	apply_redirs(t_list *redirs)
 	return (0);
 }
 
-static void	run_builtin(t_cmd *cmd, t_data *data)
+void	run_builtin(t_cmd *cmd, t_data *data)
 {
 	if (!cmd->args[0])
 		return ;
@@ -114,10 +114,24 @@ void	execute_builtin(t_cmd *cmd, t_data *data)
 	save_stdin = dup(STDIN_FILENO);
 	save_stdout = dup(STDOUT_FILENO);
 	if (apply_redirs(cmd->redirs))
+	{
+		if (save_stdin != -1)
+			dup2(save_stdin, STDIN_FILENO);
+		if (save_stdout != -1)
+			dup2(save_stdout, STDOUT_FILENO);
+		if (save_stdin != -1)
+			close(save_stdin);
+		if (save_stdout != -1)
+			close(save_stdout);
 		return ;
+	}
 	run_builtin(cmd, data);
-	dup2(save_stdin, STDIN_FILENO);
-	dup2(save_stdout, STDOUT_FILENO);
-	close(save_stdin);
-	close(save_stdout);
+	if (save_stdin != -1)
+		dup2(save_stdin, STDIN_FILENO);
+	if (save_stdout != -1)
+		dup2(save_stdout, STDOUT_FILENO);
+	if (save_stdin != -1)
+		close(save_stdin);
+	if (save_stdout != -1)
+		close(save_stdout);
 }

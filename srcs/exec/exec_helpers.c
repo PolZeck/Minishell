@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_helpers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 09:39:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 12:54:04 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 15:05:06 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ int	precheck_command(t_cmd *cmd, t_data *data)
 	}
 	if (is_builtin(cmd->args[0]))
 	{
+		if (ft_strcmp(cmd->args[0], "exit") == 0)
+		{
+			run_builtin(cmd, data);
+			return (1);
+		}
 		execute_builtin(cmd, data);
 		return (1);
 	}

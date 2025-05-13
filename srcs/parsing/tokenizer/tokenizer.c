@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 12:18:23 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/13 14:23:21 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,13 @@ t_token	*tokenize(char *input, t_data *data)
 		return (NULL);
 	i = 0;
 	init_parseinfo(&info, input, data, &i);
+	info.data = data;
+	info.input = input;
+	info.i = &i;
+	info.quote = 0;
+	info.quote_type = NULL;
+	info.next_is_delimiter = 0;
+	info.buffer_contains_quote = false;
 	init_token_structs(&tlist);
 	return (tokenize_loop(buffer, &info, &tlist));
 }
