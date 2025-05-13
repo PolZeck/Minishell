@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:21:27 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 10:10:38 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/13 11:34:41 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int	var_exists(char **env, char *name)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
+		if (ft_strncmp(env[i], name, len) == 0 &&
+				(env[i][len] == '=' || env[i][len] == '\0'))
 			return (i);
 		i++;
 	}

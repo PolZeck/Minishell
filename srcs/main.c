@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 11:18:30 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/13 11:42:00 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	setup_signals();
 	init_terminal_settings(&term);
-	if (!isatty(STDIN_FILENO))
-		return (0);
+	// if (!isatty(STDIN_FILENO))
+	// 	return (0);
 	while (1)
 	{
 		disable_ctrl_backslash();
