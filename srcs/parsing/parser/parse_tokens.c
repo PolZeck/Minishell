@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:32:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:44:27 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 01:16:36 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static bool	validate_first_token(t_token *tokens)
 	return (true);
 }
 
-t_cmd	*parse_tokens(t_token *tokens)
+t_cmd	*parse_tokens(t_token *tokens, t_data *data)
 {
 	t_cmd	*cmd;
 	t_cmd	*head;
@@ -36,7 +36,7 @@ t_cmd	*parse_tokens(t_token *tokens)
 	if (!cmd)
 		return (NULL);
 	head = cmd;
-	if (!parse_all_tokens(tokens, cmd, head))
+	if (!parse_all_tokens(tokens, cmd, head, data))
 		return (NULL);
 	finalize_args(head);
 	return (head);

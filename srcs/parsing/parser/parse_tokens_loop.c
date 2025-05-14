@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tokens_loop.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:33:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 09:34:25 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 01:15:51 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-bool	parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head)
+bool	parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head, t_data *data)
 {
 	int	arg_count;
 
@@ -25,7 +25,8 @@ bool	parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head)
 				return (false);
 			continue ;
 		}
-		if (!handle_token_content(cmd, &tokens, &arg_count, head))
+		data->cmds_head= head;
+		if (!handle_token_content(cmd, &tokens, &arg_count, data))
 			return (false);
 		if (cmd->invalid)
 			return (free_cmds(head), false);

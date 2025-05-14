@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 01:00:11 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 01:16:53 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_redir
 	int		type;
 	char	*file;
 	int		fd;
+	bool	expand;
 }	t_redir;
 
 typedef struct s_cmd
@@ -129,7 +130,7 @@ void			handle_pipe(t_cmd **cmd, int *arg_count,
 					size_t *args_size, t_token **tokens);
 void			handle_redir_in(t_cmd *cmd, t_token **tokens);
 void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append);
-void			handle_heredoc(t_cmd *cmd, t_token **tokens);
+void			handle_heredoc(t_cmd *cmd, t_token **tokens, t_data	*data);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
 void			process_word_or_quote(t_quote *q, t_token_info *info);
 void			flush_buffer_to_token(t_token_list token_list,
@@ -163,12 +164,12 @@ void			handle_input_token(t_token_list *tlist,
 					char **buffer, t_parseinfo *info);
 
 //parse_token
-t_cmd			*parse_tokens(t_token *tokens);
-bool			handle_token_content(t_cmd *cmd, t_token **tokens,
-					int *arg_count, t_cmd *head);
+t_cmd	*parse_tokens(t_token *tokens, t_data *data);
+bool	handle_token_content(t_cmd *cmd, t_token **tokens,
+	int *arg_count, t_data	*data);
 bool			should_split_token(t_token *token);
 void			finalize_args(t_cmd *head);
-bool			parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head);
+bool	parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head, t_data *data);
 bool			handle_pipe_token(t_token **tokens, t_cmd **cmd,
 					int *arg_count, t_cmd *head);
 

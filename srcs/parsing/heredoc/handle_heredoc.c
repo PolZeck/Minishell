@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:00:19 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/14 12:59:18 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/15 01:29:06 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,50 @@ static int	open_heredoc_tmp(char **filename)
 	return (open(*filename, O_WRONLY | O_CREAT | O_TRUNC, 0600));
 }
 
-static void	write_heredoc_content(int fd, char *delimiter)
+char	*expand_line(char *line, t_data *data)
+{
+	int		i;
+	int		var_start;
+	char	*result;
+	char	*var;
+	char	*val;
+	char	*tmp;
+	char	next[2];
+
+	result = ft_strdup("");
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '$' && line[i + 1]
+			&& (ft_isalnum(line[i + 1]) || line[i + 1] == '_'))
+		{
+			var_start = ++i;
+			while (ft_isalnum(line[i]) || line[i] == '_')
+				i++;
+			var = ft_substr(line, var_start, i - var_start);
+			val = ft_getenv(data, var);
+			tmp = ft_strjoin(result, val ? val : "");
+			free(result);
+			result = tmp;
+			free(var);
+		}
+		else
+		{
+			next[0] = line[i];
+			next[1] = '\0';
+			tmp = ft_strjoin(result, next);
+			free(result);
+			result = tmp;
+			i++;
+		}
+	}
+	return (result);
+}
+
+static void	write_heredoc_content(int fd, char *delimiter, bool expand, t_data *data)
 {
 	char	*line;
+	char	*expanded;
 
 	signal(SIGINT, heredoc_sigint_handler);
 	while (1)
@@ -67,11 +108,19 @@ static void	write_heredoc_content(int fd, char *delimiter)
 			free(line);
 			break ;
 		}
-		ft_putendl_fd(line, fd);
+		if (expand)
+		{
+			expanded = expand_line(line, data); // tu la définiras après
+			ft_putendl_fd(expanded, fd);
+			free(expanded);
+		}
+		else
+			ft_putendl_fd(line, fd);
 		free(line);
 	}
 	setup_signals();
 }
+
 
 static int	finalize_heredoc(t_cmd *cmd, char *filename)
 {
@@ -97,9 +146,10 @@ static int	finalize_heredoc(t_cmd *cmd, char *filename)
 	return (1);
 }
 
-void	handle_heredoc(t_cmd *cmd, t_token **tokens)
+void	handle_heredoc(t_cmd *cmd, t_token **tokens, t_data	*data)
 {
 	char	*filename;
+	bool	expand;
 	int		fd;
 
 	if (g_heredoc_interrupted)
@@ -109,6 +159,10 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	}
 	if (!check_heredoc_syntax(cmd, tokens))
 		return ;
+
+	// ✅ juste ici : on déduit si on doit expand ou non la ligne
+	expand = ((*tokens)->quote_type != SINGLE_QUOTE);
+
 	filename = NULL;
 	fd = open_heredoc_tmp(&filename);
 	if (fd < 0)
@@ -118,7 +172,10 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 		cmd->invalid = 1;
 		return ;
 	}
-	write_heredoc_content(fd, (*tokens)->value);
+
+	// ✅ on passe expand + data
+	write_heredoc_content(fd, (*tokens)->value, expand, data);
 	close(fd);
+
 	finalize_heredoc(cmd, filename);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tokens_content.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:34:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 13:42:52 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/15 01:17:29 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-static int	handle_redirections(t_cmd *cmd, t_token **tokens)
+static int	handle_redirections(t_cmd *cmd, t_token **tokens, t_data *data)
 {
 	if ((*tokens)->type == REDIR_IN)
 		handle_redir_in(cmd, tokens);
@@ -21,14 +21,14 @@ static int	handle_redirections(t_cmd *cmd, t_token **tokens)
 	else if ((*tokens)->type == APPEND)
 		handle_redir_out(cmd, tokens, 1);
 	else if ((*tokens)->type == HEREDOC)
-		handle_heredoc(cmd, tokens);
+		handle_heredoc(cmd, tokens, data);
 	if (cmd->invalid)
 		return (0);
 	return (1);
 }
 
 bool	handle_token_content(t_cmd *cmd, t_token **tokens,
-	int *arg_count, t_cmd *head)
+	int *arg_count, t_data	*data)
 {
 	char	**split;
 	int		i;
@@ -51,8 +51,8 @@ bool	handle_token_content(t_cmd *cmd, t_token **tokens,
 		else
 			handle_argument(cmd, arg_count, (*tokens)->value);
 	}
-	else if (!handle_redirections(cmd, tokens))
-		return (free_cmds(head), false);
+	else if (!handle_redirections(cmd, tokens, data))
+		return (free_cmds(data->cmds_head), false);
 	return (true);
 }
 

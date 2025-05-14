@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/14 12:41:41 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/15 01:17:05 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	process_input(char *input, t_data *data)
 		return (0);
 	}
 	data->tokens = tokenize(input, data);
-	cmd = parse_tokens(data->tokens);
+	cmd = parse_tokens(data->tokens, data);
 	data->cmds_head = cmd;
 	if (cmd)
 		execute_pipeline(cmd, data);
