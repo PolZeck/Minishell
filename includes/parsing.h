@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 01:16:53 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 01:31:29 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,12 +164,13 @@ void			handle_input_token(t_token_list *tlist,
 					char **buffer, t_parseinfo *info);
 
 //parse_token
-t_cmd	*parse_tokens(t_token *tokens, t_data *data);
-bool	handle_token_content(t_cmd *cmd, t_token **tokens,
-	int *arg_count, t_data	*data);
+t_cmd			*parse_tokens(t_token *tokens, t_data *data);
+bool			handle_token_content(t_cmd *cmd, t_token **tokens,
+					int *arg_count, t_data	*data);
 bool			should_split_token(t_token *token);
 void			finalize_args(t_cmd *head);
-bool	parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head, t_data *data);
+bool			parse_all_tokens(t_token *tokens, t_cmd *cmd,
+					t_cmd *head, t_data *data);
 bool			handle_pipe_token(t_token **tokens, t_cmd **cmd,
 					int *arg_count, t_cmd *head);
 

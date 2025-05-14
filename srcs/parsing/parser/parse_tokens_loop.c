@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:33:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 01:15:51 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 01:30:58 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	parse_all_tokens(t_token *tokens, t_cmd *cmd, t_cmd *head, t_data *data)
 				return (false);
 			continue ;
 		}
-		data->cmds_head= head;
+		data->cmds_head = head;
 		if (!handle_token_content(cmd, &tokens, &arg_count, data))
 			return (false);
 		if (cmd->invalid)
