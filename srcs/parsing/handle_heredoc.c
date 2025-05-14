@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:00:19 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 13:38:20 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/14 12:59:18 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,13 @@ static void	write_heredoc_content(int fd, char *delimiter)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || g_heredoc_interrupted || ft_strcmp(line, delimiter) == 0)
+		if (!line)
+		{
+			if (g_heredoc_interrupted)
+				open("/dev/tty", O_RDONLY);
+			break ;
+		}
+		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
@@ -96,6 +102,11 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens)
 	char	*filename;
 	int		fd;
 
+	if (g_heredoc_interrupted)
+	{
+		cmd->invalid = 1;
+		return ;
+	}
 	if (!check_heredoc_syntax(cmd, tokens))
 		return ;
 	filename = NULL;

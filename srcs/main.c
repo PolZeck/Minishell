@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 15:03:39 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/14 12:41:41 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	main(int argc, char **argv, char **envp)
 	// 	return (0);
 	while (1)
 	{
+		g_heredoc_interrupted = 0;
 		disable_ctrl_backslash();
 		input = readline("minishell> ");
 		if (!input && handle_null_input(&data))

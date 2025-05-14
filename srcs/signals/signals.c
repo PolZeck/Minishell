@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 14:25:17 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 11:24:29 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/14 13:45:56 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	heredoc_sigint_handler(int sig)
 {
 	(void)sig;
 	g_heredoc_interrupted = 1;
+	close(STDIN_FILENO);
 	write(STDOUT_FILENO, "\n", 1);
 	rl_done = 1;
 }
