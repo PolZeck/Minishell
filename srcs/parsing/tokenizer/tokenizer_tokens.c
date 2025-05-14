@@ -6,14 +6,14 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:06:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/14 23:39:08 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 00:30:43 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
 t_token	*create_token(char *value, t_token_type type,
-	t_quote_type quote_type, t_data *data, bool from_quotes)
+	t_quote_type quote_type, t_data *data)
 {
 	t_token	*token;
 
@@ -26,7 +26,7 @@ t_token	*create_token(char *value, t_token_type type,
 		token->value = expand_env_var(value, quote_type, data);
 	token->type = type;
 	token->quote_type = quote_type;
-	token->from_quotes = from_quotes;
+	token->from_quotes = data->from_quotes;
 	token->next = NULL;
 	return (token);
 }
@@ -57,8 +57,9 @@ void	add_token(t_token **tokens, t_token **last,
 {
 	t_token	*new_token;
 
+	data->from_quotes = false;
 	new_token = create_token(info.buffer, info.type,
-			info.in_single_quotes, data, false);
+			info.in_single_quotes, data);
 	if (!(*tokens))
 		*tokens = new_token;
 	else

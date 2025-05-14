@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:41:38 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/14 23:47:36 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 00:09:11 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	handle_input_token(t_token_list *tlist,
 			(*(info->i))++;
 			return ;
 		}
-		handle_variable_expansion_tokenizer(tlist, buffer, info);
+		handle_variable_expansion_tokenizer(buffer, info);
 		return ;
 	}
 	append_word(buffer, info->input, info->i);

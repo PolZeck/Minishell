@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_operators.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:03:24 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 12:41:21 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/15 00:31:42 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	handle_operator_token(t_token **tokens,
 		op[j++] = info->input[(*info->i)++];
 	op[j] = '\0';
 	type = get_token_type_from_op(op);
-	new = create_token(op, type, NO_QUOTE, info->data, false);
+	info->data->from_quotes = false;
+	new = create_token(op, type, NO_QUOTE, info->data);
 	if (!*tokens)
 		*tokens = new;
 	else

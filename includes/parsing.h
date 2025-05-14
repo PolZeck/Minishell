@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/14 23:46:41 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 00:39:04 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ typedef struct s_data
 	t_token	*tokens;
 	int		in_pipeline;
 	t_cmd	*cmds_head;
+	bool	from_quotes;
 }	t_data;
 
 typedef struct s_parseinfo
@@ -101,6 +102,7 @@ typedef struct s_parseinfo
 	int				next_is_delimiter;
 	bool			buffer_contains_quote;
 	bool			came_from_quote;
+	bool			actual_from_quotes;
 }	t_parseinfo;
 
 char			*ft_getenv(t_data *data, const char *name);
@@ -150,7 +152,7 @@ void			free_split(char **split);
 
 t_token			*tokenize(char *input, t_data *data);
 t_token			*create_token(char *value, t_token_type type,
-					t_quote_type quote_type, t_data *data, bool from_quotes);
+				t_quote_type quote_type, t_data *data);
 
 t_token_type	handle_operator(char *buffer,
 					char *input, int *i, int *j);
@@ -183,7 +185,7 @@ void			init_token_structs(t_token_list *tlist);
 
 int				if_g_heredoc_interrupted(t_cmd *cmd, char *filename);
 void			generate_random_name(char *output, size_t len);
-void			handle_variable_expansion_tokenizer(t_token_list *tlist,
-					char **buffer, t_parseinfo *info);
+void			handle_variable_expansion_tokenizer( char **buffer, t_parseinfo *info);
+
 
 #endif

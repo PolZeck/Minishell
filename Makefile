@@ -6,7 +6,7 @@
 #    By: pol <pol@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/14 23:12:21 by pol              ###   ########.fr        #
+#    Updated: 2025/05/15 00:24:48 by pol              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ VALGRIND_SUPP = readline.supp
 # === Fichiers Sources Minishell ===
 MSH_SRCS	= main.c parsing/tokenizer/tokenizer.c parsing/utils_and_free/utils.c parsing/tokenizer/tokenizer_words.c\
               parsing/tokenizer/tokenizer_tokens.c parsing/parser/parsing_redir.c parsing/parser/parsing_redir_utils.c parsing/utils_and_free/utils_memory.c parsing/tokenizer/tokenizer_quotes.c\
-			  parsing/tokenizer/tokenizer_operators.c parsing/tokenizer/tokenizer_init.c\
+			  parsing/tokenizer/tokenizer_operators.c parsing/tokenizer/tokenizer_init.c parsing/tokenizer/handle_variable_expansion_tokenizer.c\
               parsing/env/dup_env_utils.c parsing/tokenizer/quotes_token.c parsing/env/variable_expansion.c parsing/parser/parsing_pipes.c parsing/heredoc/handle_heredoc.c parsing/parser/parsing_arguments.c\
 			  parsing/tokenizer/flush_buffer_to_token.c parsing/parser/parse_tokens.c parsing/parser/parse_tokens_loop.c parsing/parser/parse_tokens_content.c parsing/utils_and_free/cmd_utils.c\
 			  parsing/heredoc/create_tmp_file.c parsing/utils_and_free/cmd_free.c parsing/env/dup_env.c parsing/tokenizer/handle_input_token.c \
