@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 00:39:04 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 01:00:11 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,7 @@ void			handle_heredoc(t_cmd *cmd, t_token **tokens);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
 void			process_word_or_quote(t_quote *q, t_token_info *info);
 void			flush_buffer_to_token(t_token_list token_list,
-				char **buffer, t_quote_type quote_type,
-				t_parseinfo *info);
+					char **buffer, t_quote_type quote_type, t_parseinfo *info);
 
 void			handle_operator_token(t_token **tokens,
 					t_token **last, t_parseinfo *info);
@@ -152,7 +151,7 @@ void			free_split(char **split);
 
 t_token			*tokenize(char *input, t_data *data);
 t_token			*create_token(char *value, t_token_type type,
-				t_quote_type quote_type, t_data *data);
+					t_quote_type quote_type, t_data *data);
 
 t_token_type	handle_operator(char *buffer,
 					char *input, int *i, int *j);
@@ -185,7 +184,7 @@ void			init_token_structs(t_token_list *tlist);
 
 int				if_g_heredoc_interrupted(t_cmd *cmd, char *filename);
 void			generate_random_name(char *output, size_t len);
-void			handle_variable_expansion_tokenizer( char **buffer, t_parseinfo *info);
-
+void			handle_variable_expansion_tokenizer(char **buffer,
+					t_parseinfo *info);
 
 #endif

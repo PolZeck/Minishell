@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/09 11:02:17 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 00:53:14 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,11 @@ void	handle_child_output(t_redir *redir, int *out_fd);
 void	print_err(char *prefix, char *cmd, char *message, int exit_code);
 void	execute_command_and_exit(t_pipex *pipex, t_data *data);
 void	execute_command(t_cmd *cmd, t_data *data);
+void	save_stdio(int *save_stdin, int *save_stdout);
+void	restore_stdio(int save_stdin, int save_stdout);
 
 int		precheck_command(t_cmd *cmd, t_data *data);
+int		apply_redirs(t_list *redirs);
 char	*resolve_cmd_path(t_cmd *cmd, t_data *data);
 void	run_child(t_cmd *cmd, t_data *data, char *path);
 void	wait_and_handle(pid_t pid, int saved_stdout);

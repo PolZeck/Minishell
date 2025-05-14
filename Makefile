@@ -6,7 +6,7 @@
 #    By: pol <pol@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/15 00:24:48 by pol              ###   ########.fr        #
+#    Updated: 2025/05/15 00:54:20 by pol              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ MSH_SRCS	= main.c parsing/tokenizer/tokenizer.c parsing/utils_and_free/utils.c p
               parsing/env/dup_env_utils.c parsing/tokenizer/quotes_token.c parsing/env/variable_expansion.c parsing/parser/parsing_pipes.c parsing/heredoc/handle_heredoc.c parsing/parser/parsing_arguments.c\
 			  parsing/tokenizer/flush_buffer_to_token.c parsing/parser/parse_tokens.c parsing/parser/parse_tokens_loop.c parsing/parser/parse_tokens_content.c parsing/utils_and_free/cmd_utils.c\
 			  parsing/heredoc/create_tmp_file.c parsing/utils_and_free/cmd_free.c parsing/env/dup_env.c parsing/tokenizer/handle_input_token.c \
+			  exec/exec_stdio_utils.c exec/exec_redirs.c \
 			  signals/signals.c signals/signals_utils.c signals/exit_status.c \
 			  exec/exec_builtins.c \
 			  exec/exec.c exec/exec_commands.c\
