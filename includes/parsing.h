@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 13:45:11 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/14 23:46:41 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_parseinfo
 	t_quote_type	*quote_type;
 	int				next_is_delimiter;
 	bool			buffer_contains_quote;
+	bool			came_from_quote;
 }	t_parseinfo;
 
 char			*ft_getenv(t_data *data, const char *name);
@@ -130,8 +131,8 @@ void			handle_heredoc(t_cmd *cmd, t_token **tokens);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
 void			process_word_or_quote(t_quote *q, t_token_info *info);
 void			flush_buffer_to_token(t_token_list token_list,
-					char **buffer, t_quote_type quote_type,
-					t_parseinfo *info, bool came_from_quote);
+				char **buffer, t_quote_type quote_type,
+				t_parseinfo *info);
 
 void			handle_operator_token(t_token **tokens,
 					t_token **last, t_parseinfo *info);

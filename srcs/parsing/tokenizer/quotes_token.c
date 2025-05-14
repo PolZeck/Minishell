@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:30:42 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 13:43:25 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/14 23:48:26 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,10 @@ static void	merge_and_flush(char **buffer, char *sub, t_parseinfo *info,
 	current = *(info->quote_type);
 	*(info->quote_type) = NO_QUOTE;
 	if (next == '\0' || next == ' ' || is_operator(next))
-		flush_buffer_to_token(token_list, buffer, current, info, true);
+	{
+		info->came_from_quote = true;
+		flush_buffer_to_token(token_list, buffer, current, info);
+	}
 }
 
 void	handle_quotes_in_token(char **buffer, t_parseinfo *info,

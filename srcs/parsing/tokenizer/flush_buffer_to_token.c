@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:22:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/14 23:39:02 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/14 23:56:32 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ static t_token	*create_token_from_buffer(char **buffer,
 		type = DELIMITER;
 	else
 		type = WORD;
-	if (type == DELIMITER)
-		fprintf(stderr, "🧩 DELIMITER created with raw value = '%s'\n", *buffer);
 	info->next_is_delimiter = 0;
 	new = malloc(sizeof(t_token));
 	if (!new)
@@ -35,7 +33,7 @@ static t_token	*create_token_from_buffer(char **buffer,
 	new->quote_type = quote_type;
 	new->next = NULL;
 	return (new);
-} 
+}
 
 static void	append_token(t_token_list token_list, t_token *new)
 {
@@ -48,7 +46,7 @@ static void	append_token(t_token_list token_list, t_token *new)
 
 void	flush_buffer_to_token(t_token_list token_list,
 	char **buffer, t_quote_type quote_type,
-	t_parseinfo *info, bool came_from_quote)
+	t_parseinfo *info)
 {
 	t_token	*new;
 	char	**words;
@@ -57,7 +55,7 @@ void	flush_buffer_to_token(t_token_list token_list,
 
 	if (!*buffer || !**buffer)
 		return ;
-	actual_from_quotes = came_from_quote || info->buffer_contains_quote;
+	actual_from_quotes = info->came_from_quote || info->buffer_contains_quote;
 	if (quote_type == NO_QUOTE && !actual_from_quotes)
 	{
 		words = ft_split(*buffer, ' ');

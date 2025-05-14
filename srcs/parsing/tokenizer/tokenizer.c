@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:19:52 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 14:23:21 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/14 23:48:59 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ static t_token	*tokenize_loop(char *buffer,
 	while (info->input[*(info->i)])
 		handle_input_token(tlist, &buffer, info);
 	if (*buffer)
-		flush_buffer_to_token(*tlist, &buffer, NO_QUOTE, info, false);
+	{
+		info->came_from_quote = false;
+		flush_buffer_to_token(*tlist, &buffer, NO_QUOTE, info);
+	}
 	tokens = *tlist->tokens;
 	free(buffer);
 	return (tokens);
