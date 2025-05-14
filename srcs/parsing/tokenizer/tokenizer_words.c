@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_words.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:02:06 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 13:41:20 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/14 23:39:21 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,29 @@ void	handle_variable_expansion_tokenizer(t_token_list *tlist,
 	int		start;
 
 	(void)tlist;
+
+	// ✅ Cas spécial : on ne doit PAS expandre une variable si c'est un DELIMITER
+	if (info->next_is_delimiter)
+	{
+		int i = *(info->i);
+		int len = 1;
+
+		while (info->input[i + len] && (ft_isalnum(info->input[i + len]) || info->input[i + len] == '_'))
+			len++;
+
+		char *raw = ft_substr(info->input, i, len);
+		tmp = ft_strjoin(*buffer, raw);
+		free(*buffer);
+		*buffer = tmp;
+		free(raw);
+		*(info->i) += len;
+
+		// ✅ important : consommer le flag
+		info->next_is_delimiter = 0;
+		return ;
+	}
+
+	// 🧠 Cas $ tout seul ou suivi de caractère non variable
 	if (!info->input[*(info->i) + 1]
 		|| (!ft_isalnum(info->input[*(info->i) + 1])
 			&& info->input[*(info->i) + 1] != '_'
@@ -32,7 +55,9 @@ void	handle_variable_expansion_tokenizer(t_token_list *tlist,
 		(*info->i)++;
 		return ;
 	}
+
 	(*info->i)++;
+
 	if (info->input[*(info->i)] == '?')
 	{
 		value = ft_itoa(*get_exit_status());
@@ -51,6 +76,8 @@ void	handle_variable_expansion_tokenizer(t_token_list *tlist,
 			value = ft_strdup("");
 		free(var);
 	}
+
+	// Expansion dans les quotes
 	if (info->quote_type && *(info->quote_type) != NO_QUOTE)
 	{
 		tmp = ft_strjoin(*buffer, value);
@@ -59,11 +86,14 @@ void	handle_variable_expansion_tokenizer(t_token_list *tlist,
 		free(value);
 		return ;
 	}
+
+	// Expansion hors quotes
 	tmp = ft_strjoin(*buffer, value);
 	free(*buffer);
 	*buffer = tmp;
 	free(value);
 }
+
 
 void	append_word(char **buffer, char *input, int *i)
 {

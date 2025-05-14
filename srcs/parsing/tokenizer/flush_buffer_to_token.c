@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   flush_buffer_to_token.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:22:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 13:40:47 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/14 23:39:02 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-/* static t_token	*create_token_from_buffer(char **buffer,
+static t_token	*create_token_from_buffer(char **buffer,
 	t_quote_type quote_type, t_parseinfo *info)
 {
 	t_token			*new;
@@ -24,6 +24,8 @@
 		type = DELIMITER;
 	else
 		type = WORD;
+	if (type == DELIMITER)
+		fprintf(stderr, "🧩 DELIMITER created with raw value = '%s'\n", *buffer);
 	info->next_is_delimiter = 0;
 	new = malloc(sizeof(t_token));
 	if (!new)
@@ -33,7 +35,7 @@
 	new->quote_type = quote_type;
 	new->next = NULL;
 	return (new);
-} */
+} 
 
 static void	append_token(t_token_list token_list, t_token *new)
 {
@@ -64,7 +66,9 @@ void	flush_buffer_to_token(t_token_list token_list,
 		i = 0;
 		while (words[i])
 		{
-			new = create_token(words[i], WORD, quote_type, info->data, actual_from_quotes);
+			char *tmp = ft_strdup(words[i]);
+			new = create_token_from_buffer(&tmp, quote_type, info);
+			free(tmp);
 			append_token(token_list, new);
 			i++;
 		}

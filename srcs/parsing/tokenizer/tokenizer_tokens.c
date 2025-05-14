@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_tokens.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:06:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 12:41:03 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/14 23:39:08 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_token	*create_token(char *value, t_token_type type,
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	if (quote_type == SINGLE_QUOTE)
+	if (quote_type == SINGLE_QUOTE || type == DELIMITER)
 		token->value = ft_strdup(value);
 	else
 		token->value = expand_env_var(value, quote_type, data);
