@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex_builtins.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:48:13 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/07 10:48:45 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/15 00:43:56 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "exec.h"
 
 void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex)
 {

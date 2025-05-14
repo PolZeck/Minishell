@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 14:57:14 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/07 15:01:10 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/15 00:43:39 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "exec.h"
 
 void	handle_child_output(t_redir *redir, int *out_fd)
 {

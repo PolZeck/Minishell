@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:49:57 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/07 13:51:53 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/15 00:43:50 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "exec.h"
 
 static char	**get_path_split(char *cmd, t_data *data)
 {
