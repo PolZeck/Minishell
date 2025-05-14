@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
+#    By: pol <pol@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/09 10:51:35 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/05/14 23:12:21 by pol              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,12 +49,12 @@ MSH_DEP		= $(DEP_DIR)/minishell
 VALGRIND_SUPP = readline.supp
 
 # === Fichiers Sources Minishell ===
-MSH_SRCS	= main.c parsing/tokenizer/tokenizer.c parsing/utils.c parsing/tokenizer/tokenizer_words.c\
-              parsing/tokenizer/tokenizer_tokens.c parsing/parser/parsing_redir.c parsing/parser/parsing_redir_utils.c parsing/utils_memory.c parsing/tokenizer/tokenizer_quotes.c\
+MSH_SRCS	= main.c parsing/tokenizer/tokenizer.c parsing/utils_and_free/utils.c parsing/tokenizer/tokenizer_words.c\
+              parsing/tokenizer/tokenizer_tokens.c parsing/parser/parsing_redir.c parsing/parser/parsing_redir_utils.c parsing/utils_and_free/utils_memory.c parsing/tokenizer/tokenizer_quotes.c\
 			  parsing/tokenizer/tokenizer_operators.c parsing/tokenizer/tokenizer_init.c\
-              parsing/dup_env_utils.c parsing/quotes_token.c parsing/variable_expansion.c parsing/parser/parsing_pipes.c parsing/handle_heredoc.c parsing/parser/parsing_arguments.c\
-			  parsing/flush_buffer_to_token.c parsing/parser/parse_tokens.c parsing/parser/parse_tokens_loop.c parsing/parser/parse_tokens_content.c parsing/cmd_utils.c\
-			  parsing/create_tmp_file.c parsing/cmd_free.c parsing/dup_env.c parsing/handle_input_token.c \
+              parsing/env/dup_env_utils.c parsing/tokenizer/quotes_token.c parsing/env/variable_expansion.c parsing/parser/parsing_pipes.c parsing/heredoc/handle_heredoc.c parsing/parser/parsing_arguments.c\
+			  parsing/tokenizer/flush_buffer_to_token.c parsing/parser/parse_tokens.c parsing/parser/parse_tokens_loop.c parsing/parser/parse_tokens_content.c parsing/utils_and_free/cmd_utils.c\
+			  parsing/heredoc/create_tmp_file.c parsing/utils_and_free/cmd_free.c parsing/env/dup_env.c parsing/tokenizer/handle_input_token.c \
 			  signals/signals.c signals/signals_utils.c signals/exit_status.c \
 			  exec/exec_builtins.c \
 			  exec/exec.c exec/exec_commands.c\
@@ -122,6 +122,21 @@ $(MSH_OBJ)/parsing/tokenizer/%.o: $(SRC_DIR)/parsing/tokenizer/%.c | $(MSH_OBJ)/
 	@echo "🔹 Compiling $<..."
 	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(SRC_DIR)/%.c, $(MSH_DEP)/%.d, $<)
 
+$(MSH_OBJ)/parsing/env/%.o: $(SRC_DIR)/parsing/env/%.c | $(MSH_OBJ)/parsing/env $(MSH_DEP)/parsing/env
+	@mkdir -p $(dir $@)
+	@echo "🔹 Compiling $<..."
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(SRC_DIR)/%.c, $(MSH_DEP)/%.d, $<)
+
+$(MSH_OBJ)/parsing/utils_and_free/%.o: $(SRC_DIR)/parsing/utils_and_free/%.c | $(MSH_OBJ)/parsing/utils_and_free $(MSH_DEP)/parsing/utils_and_free
+	@mkdir -p $(dir $@)
+	@echo "🔹 Compiling $<..."
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(SRC_DIR)/%.c, $(MSH_DEP)/%.d, $<)
+
+$(MSH_OBJ)/parsing/heredoc/%.o: $(SRC_DIR)/parsing/heredoc/%.c | $(MSH_OBJ)/parsing/heredoc $(MSH_DEP)/parsing/heredoc
+	@mkdir -p $(dir $@)
+	@echo "🔹 Compiling $<..."
+	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@ -MF $(patsubst $(SRC_DIR)/%.c, $(MSH_DEP)/%.d, $<)
+
 $(MSH_OBJ)/signals/%.o: $(SIGNALS_DIR)/%.c | $(MSH_OBJ)/signals $(MSH_DEP)/signals
 	@mkdir -p $(dir $@)
 	@echo "🔹 Compiling $<..."
@@ -148,6 +163,9 @@ $(MSH_OBJ):
 	@mkdir -p $(MSH_OBJ)/parsing
 	@mkdir -p $(MSH_OBJ)/parsing/parser
 	@mkdir -p $(MSH_OBJ)/parsing/tokenizer
+	@mkdir -p $(MSH_OBJ)/parsing/env
+	@mkdir -p $(MSH_OBJ)/parsing/heredoc
+	@mkdir -p $(MSH_OBJ)/parsing/utils_and_free
 	@mkdir -p $(MSH_OBJ)/signals
 	@mkdir -p $(MSH_OBJ)/exec
 	@mkdir -p $(MSH_OBJ)/builtins
@@ -158,6 +176,9 @@ $(MSH_DEP):
 	@mkdir -p $(MSH_DEP)/parsing
 	@mkdir -p $(MSH_DEP)/parsing/parser
 	@mkdir -p $(MSH_DEP)/parsing/tokenizer
+	@mkdir -p $(MSH_DEP)/parsing/env
+	@mkdir -p $(MSH_DEP)/parsing/heredoc
+	@mkdir -p $(MSH_DEP)/parsing/utils_and_free
 	@mkdir -p $(MSH_DEP)/signals
 	@mkdir -p $(MSH_DEP)/exec
 	@mkdir -p $(MSH_DEP)/builtins
