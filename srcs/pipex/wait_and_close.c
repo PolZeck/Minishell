@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:34:28 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/09 10:00:46 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 13:54:31 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ void	close_fds(t_pipex *pipex)
 	pipex->prev_pipe_fd = -1;
 }
 
-static void	update_status(int status, int *final_status,
-	int *received_sigint, int is_last)
+void	update_status(int status, int *final_status, bool is_last, int *received_sigint)
 {
 	int	sig;
 
@@ -42,9 +41,13 @@ static void	update_status(int status, int *final_status,
 		if (sig == SIGINT)
 			*received_sigint = 1;
 		if (is_last)
+		{
+			if (sig == SIGQUIT)
+				write(2, "Quit (core dumped)\n", 20);
 			*final_status = 128 + sig;
+		}
 	}
-	else if (is_last && WIFEXITED(status))
+	else if (WIFEXITED(status) && is_last)
 		*final_status = WEXITSTATUS(status);
 }
 
@@ -61,8 +64,7 @@ int	wait_for_processes(t_pipex *pipex)
 	while (++i < pipex->num_cmds)
 	{
 		waitpid(pipex->pid[i], &status, 0);
-		update_status(status, &final_status, &received_sigint,
-			i == pipex->num_cmds - 1);
+		update_status(status, &final_status, i == pipex->num_cmds - 1, &received_sigint);
 	}
 	if (received_sigint)
 		write(1, "\n", 1);

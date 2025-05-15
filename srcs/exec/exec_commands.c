@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/09 09:41:46 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 14:05:47 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	execute_command_and_exit(t_pipex *pipex, t_data *data)
 	cmd_path = resolve_cmd_path(pipex->current_cmd, data);
 	if (!cmd_path)
 		exit_clean_pipex(pipex, data, NULL, *get_exit_status());
+	enable_ctrl_backslash();
 	saved_stdout = dup(STDOUT_FILENO);
 	pid = fork();
 	if (pid == 0)
