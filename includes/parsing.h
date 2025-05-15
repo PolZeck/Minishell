@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 01:31:29 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 12:33:48 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ bool			parse_all_tokens(t_token *tokens, t_cmd *cmd,
 					t_cmd *head, t_data *data);
 bool			handle_pipe_token(t_token **tokens, t_cmd **cmd,
 					int *arg_count, t_cmd *head);
+char			*expand_line(char *line, t_data *data);
 
 //dup_env
 
@@ -183,7 +184,8 @@ char			*increment_shlvl(const char *shlvl_entry);
 void			init_parseinfo(t_parseinfo *info, char *input,
 					t_data *data, int *i);
 void			init_token_structs(t_token_list *tlist);
-
+void			write_heredoc_content(int fd,
+					char *delimiter, bool expand, t_data *data);
 int				if_g_heredoc_interrupted(t_cmd *cmd, char *filename);
 void			generate_random_name(char *output, size_t len);
 void			handle_variable_expansion_tokenizer(char **buffer,

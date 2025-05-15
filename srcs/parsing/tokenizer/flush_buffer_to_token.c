@@ -81,10 +81,12 @@ static void	flush_single_token(t_token_list token_list,
 void	flush_buffer_to_token(t_token_list token_list,
 	char **buffer, t_quote_type quote_type, t_parseinfo *info)
 {
-	if (!*buffer || !**buffer)
+	if (!*buffer)
 		return ;
 	info->actual_from_quotes = info->came_from_quote
 		|| info->buffer_contains_quote;
+	if (!**buffer && !info->actual_from_quotes)
+		return ;
 	if (quote_type == NO_QUOTE && !info->actual_from_quotes)
 		flush_split_tokens(token_list, buffer, quote_type, info);
 	else
