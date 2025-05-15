@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   flush_buffer_to_token.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:22:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 00:41:09 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 12:10:29 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,12 @@ static void	flush_single_token(t_token_list token_list,
 void	flush_buffer_to_token(t_token_list token_list,
 	char **buffer, t_quote_type quote_type, t_parseinfo *info)
 {
-	if (!*buffer || !**buffer)
+	if (!*buffer)
 		return ;
 	info->actual_from_quotes = info->came_from_quote
 		|| info->buffer_contains_quote;
+	if (!**buffer && !info->actual_from_quotes)
+		return ;
 	if (quote_type == NO_QUOTE && !info->actual_from_quotes)
 		flush_split_tokens(token_list, buffer, quote_type, info);
 	else

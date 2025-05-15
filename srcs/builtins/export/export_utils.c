@@ -6,28 +6,28 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:21:27 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 12:31:28 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 11:52:02 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	is_valid_identifier_export(char *str)
+int	is_valid_identifier_export(char *arg)
 {
 	int	i;
 
 	i = 0;
-	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
+	if (!arg || arg[0] == '=' || arg[0] == '+')
 		return (0);
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+		return (0);
+	while (arg[i] && (ft_isalnum(arg[i]) || arg[i] == '_'))
 		i++;
-	}
-	if (str[i] == '=' && i == 0)
-		return (0);
-	return (1);
+	if (arg[i] == '+' && arg[i + 1] == '=')
+		return (1);
+	if (arg[i] == '=' || arg[i] == '\0')
+		return (1);
+	return (0);
 }
 
 int	var_exists(char **env, char *name)

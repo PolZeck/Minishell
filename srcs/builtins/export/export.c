@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/09 13:18:02 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 11:51:34 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,15 @@ static int	handle_export_arg(char *arg, t_data *data)
 		*get_exit_status() = 2;
 		return (2);
 	}
-	if (!is_valid_identifier_export(arg))
+	if (ft_strnstr(arg, "+=", ft_strlen(arg)))
 	{
-		handle_invalid_identifier(arg);
-		return (1);
+		if (!is_valid_identifier_export(arg))
+			return (handle_invalid_identifier(arg));
+		add_or_append_var(data, arg);
+		return (0);
 	}
+	if (!is_valid_identifier_export(arg))
+		return (handle_invalid_identifier(arg));
 	add_or_replace_var(data, arg);
 	return (0);
 }
