@@ -6,7 +6,7 @@
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/15 15:49:04 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/05/15 17:43:57 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ MSH_SRCS	= main.c init_minishell.c parsing/tokenizer/tokenizer.c parsing/utils_a
 			  exec/exec_builtins.c \
 			  exec/exec.c exec/exec_commands.c\
 			  exec/exec_pipex_builtins.c\
-			  exec/exec_path.c\
+			  exec/exec_path.c exec/resolve_cmd_path.c\
 			  exec/exec_child.c\
 			  exec/exec_helpers.c\
 			  exec/exec_utils.c\

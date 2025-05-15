@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:49:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/12 12:46:03 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/15 16:52:55 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-#include "builtins.h"
-#include <errno.h>
-#include <limits.h>
-
 static int	handle_pwd_option(char *arg)
 {
-	if (arg && arg[0] == '-')
+	if (!arg)
+		return (1);
+	if (ft_strcmp(arg, "--") == 0)
+		return (1);
+	if (arg[0] == '-')
 	{
 		ft_putstr_fd("bash: pwd: ", 2);
-		write(2, arg, 2);
+		ft_putstr_fd(arg, 2);
 		ft_putstr_fd(": invalid option\n", 2);
 		*get_exit_status() = 2;
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 14:05:47 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 17:41:14 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,9 @@ void	execute_command_and_exit(t_pipex *pipex, t_data *data)
 	saved_stdout = dup(STDOUT_FILENO);
 	pid = fork();
 	if (pid == 0)
+	{
 		run_child(pipex->current_cmd, data, cmd_path);
+	}
 	else if (pid > 0)
 		wait_and_handle(pid, saved_stdout);
 	else
