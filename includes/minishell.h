@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 15:30:33 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/15 15:48:54 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,9 @@
 
 typedef struct s_cmd	t_cmd;
 typedef struct s_data	t_data;
+
+int	init_shell(t_data *data, char **envp, struct termios *term);
+int	handle_null_input(t_data *data);
+int	process_input(char *input, t_data *data);
 
 #endif

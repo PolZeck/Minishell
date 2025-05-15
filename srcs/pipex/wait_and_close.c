@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:34:28 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/15 13:54:31 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 14:41:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	close_fds(t_pipex *pipex)
 	pipex->prev_pipe_fd = -1;
 }
 
-void	update_status(int status, int *final_status, bool is_last, int *received_sigint)
+void	update_status(int status, int *final_status,
+		bool is_last, int *received_sigint)
 {
 	int	sig;
 
@@ -64,7 +65,8 @@ int	wait_for_processes(t_pipex *pipex)
 	while (++i < pipex->num_cmds)
 	{
 		waitpid(pipex->pid[i], &status, 0);
-		update_status(status, &final_status, i == pipex->num_cmds - 1, &received_sigint);
+		update_status(status,
+			&final_status, i == pipex->num_cmds - 1, &received_sigint);
 	}
 	if (received_sigint)
 		write(1, "\n", 1);

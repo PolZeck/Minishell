@@ -6,7 +6,7 @@
 #    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/15 12:27:35 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/05/15 15:49:04 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ MSH_DEP		= $(DEP_DIR)/minishell
 VALGRIND_SUPP = readline.supp
 
 # === Fichiers Sources Minishell ===
-MSH_SRCS	= main.c parsing/tokenizer/tokenizer.c parsing/utils_and_free/utils.c parsing/tokenizer/tokenizer_words.c\
+MSH_SRCS	= main.c init_minishell.c parsing/tokenizer/tokenizer.c parsing/utils_and_free/utils.c parsing/tokenizer/tokenizer_words.c\
 			  parsing/tokenizer/tokenizer_tokens.c parsing/parser/parsing_redir.c parsing/parser/parsing_redir_utils.c parsing/utils_and_free/utils_memory.c parsing/tokenizer/tokenizer_quotes.c\
 			  parsing/tokenizer/tokenizer_operators.c parsing/tokenizer/tokenizer_init.c parsing/tokenizer/handle_variable_expansion_tokenizer.c\
 			  parsing/env/dup_env_utils.c parsing/tokenizer/quotes_token.c parsing/env/variable_expansion.c parsing/parser/parsing_pipes.c parsing/heredoc/handle_heredoc.c parsing/parser/parsing_arguments.c\
@@ -65,7 +65,7 @@ MSH_SRCS	= main.c parsing/tokenizer/tokenizer.c parsing/utils_and_free/utils.c p
 			  exec/exec_child.c\
 			  exec/exec_helpers.c\
 			  exec/exec_utils.c\
-			  builtins/cd/cd.c builtins/cd/cd_utils.c builtins/echo.c builtins/exit/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export/export.c builtins/export/export_utils.c \
+			  builtins/cd/cd.c builtins/cd/get_cd_target.c builtins/cd/cd_utils.c builtins/echo.c builtins/exit/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export/export.c builtins/export/export_utils.c \
 			  builtins/export/export_utils2.c builtins/export/add_or_append_var.c builtins/exit/exit_utils.c pipex/commands_bonus.c pipex/exit_bonus.c pipex/wait_and_close.c \
 			  pipex/execute_pipex_adapter.c pipex/executions_direct.c pipex/apply_redirections.c pipex/apply_redirections_utils.c
 MSH_OBJS	= $(patsubst %.c, $(MSH_OBJ)/%.o, $(MSH_SRCS))

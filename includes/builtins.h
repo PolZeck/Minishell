@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:47:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 11:01:59 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 15:36:13 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ int		str_to_llong(const char *str, long long *out);
 int		is_strict_numeric(char *str);
 void	print_numeric_error(char *arg);
 void	exit_cleanup(t_cmd *cmd, t_data *data, int exit_code);
+char	*get_cd_target(char **args, t_data *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/09 15:33:39 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/15 15:36:33 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,6 @@ static int	cd_too_many_args(char **args)
 		return (1);
 	}
 	return (0);
-}
-
-static char	*get_cd_target(char **args, t_data *data)
-{
-	char	*home;
-	char	*target;
-
-	home = NULL;
-	target = NULL;
-	if (!args[1] || args[1][0] == '~')
-		home = get_home(data);
-	if (!args[1])
-	{
-		if (!home)
-			return (NULL);
-		if (home[0] == '\0')
-			return (ft_strdup("."));
-		return (ft_strdup(home));
-	}
-	if (args[1][0] == '~' && args[1][1])
-		target = ft_strjoin(home, args[1] + 1);
-	else if (args[1][0] == '~')
-		target = ft_strdup(home);
-	else
-		target = ft_strdup(args[1]);
-	return (target);
 }
 
 static void	update_env_pwd(t_data *data, char *old_pwd)
