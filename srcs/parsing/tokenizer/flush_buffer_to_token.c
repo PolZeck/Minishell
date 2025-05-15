@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   flush_buffer_to_token.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:22:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 00:41:09 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/15 12:11:08 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static t_token	*create_token_from_buffer(char **buffer,
 	new->type = type;
 	new->quote_type = quote_type;
 	new->next = NULL;
+	new->from_quotes = 0;
 	return (new);
 }
 
