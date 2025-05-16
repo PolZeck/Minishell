@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pol <pol@student.42.fr>                    +#+  +:+       +#+         #
+#    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/15 23:20:27 by pol              ###   ########.fr        #
+#    Updated: 2025/05/16 14:35:01 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,6 @@ NAME	= minishell
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror -Iincludes -Ilibft
 DEPFLAGS = -MMD -MP
-AR		= ar rcs
 
 # === Couleurs ===
 GREEN   = \033[0;32m
@@ -65,6 +64,7 @@ MSH_SRCS	= main.c init_minishell.c parsing/tokenizer/tokenizer.c parsing/utils_a
 			  exec/exec_child.c\
 			  exec/exec_helpers.c\
 			  exec/exec_utils.c\
+			  exec/resolve_cmd_path.c\
 			  builtins/cd/cd.c builtins/cd/get_cd_target.c builtins/cd/cd_utils.c builtins/echo.c builtins/exit/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export/export.c builtins/export/export_utils.c \
 			  builtins/export/export_utils2.c builtins/export/add_or_append_var.c builtins/exit/exit_utils.c pipex/commands_bonus.c pipex/exit_bonus.c pipex/wait_and_close.c \
 			  pipex/execute_pipex_adapter.c pipex/executions_direct.c pipex/apply_redirections.c pipex/apply_redirections_utils.c

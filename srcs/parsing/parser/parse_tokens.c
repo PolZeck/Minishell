@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:32:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 01:16:36 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/16 14:30:28 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static bool	validate_first_token(t_token *tokens)
 		return (false);
 	if (tokens->type == PIPE)
 	{
-		ft_printf("bash: syntax error near unexpected token `|'\n");
+		ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);
 		*get_exit_status() = 2;
 		return (false);
 	}
