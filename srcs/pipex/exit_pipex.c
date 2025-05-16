@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_bonus.c                                       :+:      :+:    :+:   */
+/*   exit_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:41:37 by lcosson           #+#    #+#             */
-/*   Updated: 2025/04/09 18:32:09 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/16 14:48:42 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 void	handle_exec_error(char *path_cmd, char **tokenized_cmd)
 {

@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:30:39 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 00:52:28 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/16 15:05:55 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+
+int	run_exit_exception(t_cmd *cmd, t_data *data)
+{
+	if (ft_strcmp(cmd->args[0], "exit") == 0)
+	{
+		if (!data->in_pipeline)
+			run_builtin(cmd, data);
+		return (1);
+	}
+	return (0);
+}
 
 void	run_builtin(t_cmd *cmd, t_data *data)
 {

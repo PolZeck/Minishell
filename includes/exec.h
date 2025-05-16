@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 17:01:12 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/16 15:10:14 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define EXEC_H
 
 # include "minishell.h"
-# include "pipex_bonus.h"
+# include "pipex.h"
 
 typedef struct s_cmd	t_cmd;
 typedef struct s_data	t_data;
@@ -39,6 +39,6 @@ int		apply_redirs(t_list *redirs);
 char	*resolve_cmd_path(t_cmd *cmd, t_data *data);
 void	run_child(t_cmd *cmd, t_data *data, char *path);
 void	wait_and_handle(pid_t pid, int saved_stdout);
-bool	is_exit(t_cmd *cmd);
+int		run_exit_exception(t_cmd *cmd, t_data *data);
 
 #endif

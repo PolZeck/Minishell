@@ -6,11 +6,11 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:49:45 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/09 10:53:19 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/16 15:10:19 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 static void	open_and_close_output_file(t_redir *redir)
 {

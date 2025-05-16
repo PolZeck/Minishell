@@ -6,7 +6,7 @@
 /*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 09:02:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 15:48:54 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/16 15:10:17 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "../libft/libft.h"
 # include "signals.h"
 # include "parsing.h"
-# include "pipex_bonus.h"
+# include "pipex.h"
 # include "exec.h"
 # include "builtins.h"
 # include <stdlib.h>
