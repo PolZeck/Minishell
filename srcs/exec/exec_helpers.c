@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_helpers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 09:39:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 15:05:06 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/16 09:20:26 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	precheck_command(t_cmd *cmd, t_data *data)
 	{
 		if (ft_strcmp(cmd->args[0], "exit") == 0)
 		{
-			run_builtin(cmd, data);
+			if (!data->in_pipeline)
+				run_builtin(cmd, data);
 			return (1);
 		}
 		execute_builtin(cmd, data);
@@ -89,6 +90,7 @@ char	*resolve_cmd_path(t_cmd *cmd, t_data *data)
 
 void	run_child(t_cmd *cmd, t_data *data, char *path)
 {
+	signal(SIGPIPE, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	apply_redirections_in_child(cmd);
