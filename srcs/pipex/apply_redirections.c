@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   apply_redirections.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:23:47 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/16 13:15:28 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/16 13:56:10 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,7 @@ static void	apply_input_redirections(t_list *redirs, t_pipex *pipex)
 		{
 			fd = open(redir->file, O_RDONLY);
 			if (fd == -1)
-			{
-				//perror(redir->file);
 				close_unused_fds(pipex);
-				//exit(1);
-			}
 			else
 			{
 				dup2(fd, STDIN_FILENO);
