@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:16 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/13 15:27:58 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/16 12:23:50 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		execute_pipex_direct(t_cmd *cmds, t_data *data);
 
 bool	has_input_redir(t_cmd *cmd);
 bool	has_output_redir(t_cmd *cmd);
-void	apply_redirections(t_list *redirs);
+void	apply_redirections(t_list *redirs, t_pipex *pipex);
 int		wait_for_processes(t_pipex *pipex);
 
 pid_t	first_execution_direct(t_pipex *pipex, t_data *data);
@@ -69,5 +69,5 @@ pid_t	last_execution_direct(t_pipex *pipex, t_data *data);
 void	open_and_close_all_outputs(t_list *redirs);
 t_redir	*find_last_output_redirection(t_list *redirs);
 void	run_builtin(t_cmd *cmd, t_data *data);
-
+void	close_and_clean_in_fd(t_pipex *pipex);
 #endif

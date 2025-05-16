@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:42:11 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/09 10:24:10 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/16 13:15:29 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ bool	has_output_redir(t_cmd *cmd)
 void	close_and_clean_in_fd(t_pipex *pipex)
 {
 	close(pipex->pipe_fd[1]);
+	close(pipex->pipe_fd[0]);
 	close_fds(pipex);
 	clean (pipex);
 	exit(1);
