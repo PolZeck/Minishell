@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 15:37:54 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/19 15:42:25 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@ void	print_err(char *prefix, char *cmd, char *message)
 	ft_putstr_fd(prefix, STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putstr_fd(message, STDERR_FILENO);
+}
+
+int	has_valid_command(t_cmd *cmd)
+{
+	if (cmd->args && cmd->args[0])
+		return (1);
+	if (cmd->redirs)
+		return (1);
+	return (0);
 }
 
 void	execute_pipeline(t_cmd *cmd_list, t_data *data)
@@ -31,7 +40,7 @@ void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 		if (!has_valid_command(cmd_tmp))
 		{
 			write(2, "minishell: syntax error near unexpected token `newline'\n", 56);
-			*get_exit_status() = 2;
+			data->exit_status = 2;
 			return ;
 		}
 		count++;

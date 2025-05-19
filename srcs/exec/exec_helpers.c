@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 09:39:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 15:37:27 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/19 15:43:17 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,8 +140,8 @@ void	wait_and_handle(pid_t pid, int saved_stdout, t_data *data)
 		else if (sig == SIGQUIT)
 			write(1, "Quit (core dumped)\n", 20);
 		if (sig != SIGPIPE)
-			*get_exit_status() = 128 + sig;
+			data->exit_status = 128 + sig;
 		else
-			*get_exit_status() = 0;
+			data->exit_status = 0;
 	}
 }
