@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_helpers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 09:39:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/16 14:32:01 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 10:26:55 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,25 @@ int	precheck_command(t_cmd *cmd, t_data *data)
 	return (0);
 }
 
+void	close_fds_except_std(void)
+{
+	int	fd;
+
+	fd = 3;
+	while (fd < 1024)
+	{
+		close(fd);
+		fd++;
+	}
+}
+
 void	run_child(t_cmd *cmd, t_data *data, char *path)
 {
 	signal(SIGPIPE, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	apply_redirections_in_child(cmd);
+	close_fds_except_std();
 	execve(path, cmd->args, data->env);
 	perror(path);
 	exit(126);
