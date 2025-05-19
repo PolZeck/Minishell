@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 00:22:47 by pol               #+#    #+#             */
-/*   Updated: 2025/05/15 00:24:18 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/19 13:22:19 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void	expand_as_delimiter(char **buffer, t_parseinfo *info)
 	*buffer = tmp;
 	free(raw);
 	*(info->i) += len;
-	info->next_is_delimiter = 0;
 }
 
 static int	append_dollar_if_alone(char **buffer, t_parseinfo *info)
