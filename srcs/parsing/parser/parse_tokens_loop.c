@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tokens_loop.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:33:37 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/16 14:30:14 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 13:41:49 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool	handle_pipe_token(t_token **tokens, t_cmd **cmd,
 {
 	if (!(*tokens)->next || (*tokens)->next->type == PIPE)
 	{
-		ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);
+		ft_printf("bash: syntax error near unexpected token `|'\n");
 		*get_exit_status() = 2;
 		free_cmds(head);
 		return (false);

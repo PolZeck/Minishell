@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wait_and_close.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:34:28 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/16 15:10:32 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 13:41:44 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	close_fds(t_pipex *pipex)
 }
 
 void	update_status(int status, int *final_status,
-		bool is_last, int *received_sigint)
+			bool is_last, int *received_sigint)
 {
 	int	sig;
 
@@ -45,12 +45,16 @@ void	update_status(int status, int *final_status,
 		{
 			if (sig == SIGQUIT)
 				write(2, "Quit (core dumped)\n", 20);
-			*final_status = 128 + sig;
+			if (sig != SIGPIPE) // 🔥 ne modifie pas $? pour SIGPIPE
+				*final_status = 128 + sig;
+			else
+				*final_status = 0; // Bash se comporte comme si tout allait bien
 		}
 	}
 	else if (WIFEXITED(status) && is_last)
 		*final_status = WEXITSTATUS(status);
 }
+
 
 int	wait_for_processes(t_pipex *pipex)
 {

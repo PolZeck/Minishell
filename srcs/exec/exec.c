@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 11:33:51 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/19 14:06:39 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@ void	print_err(char *prefix, char *cmd, char *message, int exit_code)
 	*get_exit_status() = exit_code;
 }
 
+int	has_valid_command(t_cmd *cmd)
+{
+	if (cmd->args && cmd->args[0])
+		return (1);
+	if (cmd->redirs)
+		return (1);
+	return (0);
+}
+
 void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 {
 	t_cmd	*cmd_tmp;
@@ -29,6 +38,12 @@ void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 	cmd_tmp = cmd_list;
 	while (cmd_tmp)
 	{
+		if (!has_valid_command(cmd_tmp))
+		{
+			write(2, "minishell: syntax error near unexpected token `newline'\n", 56);
+			*get_exit_status() = 2;
+			return ;
+		}
 		count++;
 		cmd_tmp = cmd_tmp->next;
 	}

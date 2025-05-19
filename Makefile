@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+         #
+#    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/19 11:47:18 by lcosson          ###   ########.fr        #
+#    Updated: 2025/05/16 15:11:08 by pledieu          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,6 @@ MSH_SRCS	= main.c init_minishell.c parsing/tokenizer/tokenizer.c parsing/utils_a
 			  exec/exec_child.c\
 			  exec/exec_helpers.c\
 			  exec/exec_utils.c\
-			  exec/resolve_cmd_path.c\
 			  builtins/cd/cd.c builtins/cd/get_cd_target.c builtins/cd/cd_utils.c builtins/echo.c builtins/exit/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export/export.c builtins/export/export_utils.c \
 			  builtins/export/export_utils2.c builtins/export/add_or_append_var.c builtins/exit/exit_utils.c pipex/commands.c pipex/exit_pipex.c pipex/wait_and_close.c \
 			  pipex/execute_pipex_adapter.c pipex/executions_direct.c pipex/apply_redirections.c pipex/apply_redirections_utils.c

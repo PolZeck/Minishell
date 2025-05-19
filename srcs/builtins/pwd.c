@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:49:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/16 14:29:55 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/12 12:46:03 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+#include "builtins.h"
+#include <errno.h>
+#include <limits.h>
 
 static int	handle_pwd_option(char *arg)
 {
