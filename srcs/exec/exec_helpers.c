@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_helpers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 09:39:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 15:43:17 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/19 16:17:10 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,28 +92,28 @@ char	*resolve_cmd_path(t_cmd *cmd, t_data *data)
 	return (path);
 }
 
-void    close_fds_except_std(void)
+void	close_fds_except_std(void)
 {
-    int    fd;
+	int	fd;
 
-    fd = 3;
-    while (fd < 1024)
-    {
-        close(fd);
-        fd++;
-    }
+	fd = 3;
+	while (fd < 1024)
+	{
+		close(fd);
+		fd++;
+	}
 }
 
-void    run_child(t_cmd *cmd, t_data *data, char *path)
+void	run_child(t_cmd *cmd, t_data *data, char *path)
 {
 	signal(SIGPIPE, SIG_IGN);
-    signal(SIGINT, SIG_DFL);
-    signal(SIGQUIT, SIG_DFL);
-    apply_redirections_in_child(cmd);
-    close_fds_except_std();
-    execve(path, cmd->args, data->env);
-    perror(path);
-    exit(126);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	apply_redirections_in_child(cmd);
+	close_fds_except_std();
+	execve(path, cmd->args, data->env);
+	perror(path);
+	exit(126);
 }
 
 void	wait_and_handle(pid_t pid, int saved_stdout, t_data *data)

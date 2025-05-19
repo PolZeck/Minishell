@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 12:34:28 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/19 13:41:44 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/19 16:16:37 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,15 @@ void	update_status(int status, int *final_status,
 		{
 			if (sig == SIGQUIT)
 				write(2, "Quit (core dumped)\n", 20);
-			if (sig != SIGPIPE) // 🔥 ne modifie pas $? pour SIGPIPE
+			if (sig != SIGPIPE)
 				*final_status = 128 + sig;
 			else
-				*final_status = 0; // Bash se comporte comme si tout allait bien
+				*final_status = 0;
 		}
 	}
 	else if (WIFEXITED(status) && is_last)
 		*final_status = WEXITSTATUS(status);
 }
-
 
 int	wait_for_processes(t_pipex *pipex)
 {
