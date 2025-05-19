@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 13:46:14 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/19 14:37:33 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,8 @@ void			handle_argument(t_cmd *cmd, int *arg_count, char *value);
 void			handle_pipe(t_cmd **cmd, int *arg_count,
 					size_t *args_size, t_token **tokens);
 void			handle_redir_in(t_cmd *cmd, t_token **tokens, t_data *data);
-void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append, t_data *data);
+void			handle_redir_out(t_cmd *cmd, t_token **tokens,
+					int append, t_data *data);
 void			handle_heredoc(t_cmd *cmd, t_token **tokens, t_data	*data);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
 void			process_word_or_quote(t_quote *q, t_token_info *info);

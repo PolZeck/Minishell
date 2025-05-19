@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 09:39:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 14:15:11 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/19 14:41:36 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	precheck_command(t_cmd *cmd, t_data *data)
 		return (1);
 	if (cmd->args[0][0] == '\0')
 	{
-		print_err("bash: ", "", ": command not found\n", 127, data);
+		data->exit_status = 127;
+		print_err("bash: ", "", ": command not found\n");
 		return (1);
 	}
 	if (is_builtin(cmd->args[0]))
@@ -46,17 +47,20 @@ static char	*check_absolute_path(t_cmd *cmd, t_data *data)
 	{
 		if (S_ISDIR(st.st_mode))
 		{
-			print_err("bash: ", cmd->args[0], ": Is a directory\n", 126, data);
+			data->exit_status = 126;
+			print_err("bash: ", cmd->args[0], ": Is a directory\n");
 			return (NULL);
 		}
 		if (access(cmd->args[0], X_OK) != 0)
 		{
-			print_err("bash: ", cmd->args[0], ": Permission denied\n", 126, data);
+			data->exit_status = 126;
+			print_err("bash: ", cmd->args[0], ": Permission denied\n");
 			return (NULL);
 		}
 		return (ft_strdup(cmd->args[0]));
 	}
-	print_err("bash: ", cmd->args[0], ": No such file or directory\n", 127, data);
+	data->exit_status = 127;
+	print_err("bash: ", cmd->args[0], ": No such file or directory\n");
 	return (NULL);
 }
 
@@ -75,12 +79,16 @@ char	*resolve_cmd_path(t_cmd *cmd, t_data *data)
 		if (access(fallback, X_OK) == 0)
 			return (fallback);
 		free(fallback);
-		print_err("bash: ", cmd->args[0], ": No such file or directory\n", 127, data);
+		data->exit_status = 127;
+		print_err("bash: ", cmd->args[0], ": No such file or directory\n");
 		return (NULL);
 	}
 	path = find_command_path(cmd->args[0], data);
 	if (!path)
-		print_err("bash: ", cmd->args[0], ": command not found\n", 127, data);
+	{
+		data->exit_status = 127;
+		print_err("bash: ", cmd->args[0], ": command not found\n");
+	}
 	return (path);
 }
 
