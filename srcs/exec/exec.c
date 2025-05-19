@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 15:42:25 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/20 00:23:21 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 	cmd_tmp = cmd_list;
 	while (cmd_tmp)
 	{
+		//pourquoi cette fonction? ca fait bug si jamais on met que des tab 
 		if (!has_valid_command(cmd_tmp))
 		{
 			write(2, "minishell: syntax error near unexpected token `newline'\n", 56);
