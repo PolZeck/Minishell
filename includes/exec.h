@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/16 15:10:14 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:41:50 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ void	execute_pipeline(t_cmd *cmd_list, t_data *data);
 void	execute_command(t_cmd *cmd, t_data *data);
 void	apply_redirections_in_child(t_cmd *cmd);
 void	handle_child_output(t_redir *redir, int *out_fd);
-void	print_err(char *prefix, char *cmd, char *message, int exit_code);
+void	print_err(char *prefix, char *cmd, char *message);
 void	execute_command_and_exit(t_pipex *pipex, t_data *data);
 void	execute_command(t_cmd *cmd, t_data *data);
 void	save_stdio(int *save_stdin, int *save_stdout);
 void	restore_stdio(int save_stdin, int save_stdout);
 
 int		precheck_command(t_cmd *cmd, t_data *data);
-int		apply_redirs(t_list *redirs);
+int		apply_redirs(t_list *redirs, t_data *data);
 char	*resolve_cmd_path(t_cmd *cmd, t_data *data);
 void	run_child(t_cmd *cmd, t_data *data, char *path);
-void	wait_and_handle(pid_t pid, int saved_stdout);
+void	wait_and_handle(pid_t pid, int saved_stdout, t_data *data);
 int		run_exit_exception(t_cmd *cmd, t_data *data);
 
 #endif

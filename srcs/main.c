@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 11:43:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 15:47:57 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:50:00 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int argc, char **argv, char **envp)
 		g_heredoc_interrupted = 0;
 		disable_ctrl_backslash();
 		input = readline("minishell> ");
+		handle_sigint_status(&data);
 		if (!input && handle_null_input(&data))
 			break ;
 		if (input && *input)

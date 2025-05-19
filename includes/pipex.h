@@ -55,7 +55,6 @@ void	my_free(void *ptr);
 void	clean(t_pipex *pipex);
 void	handle_exec_error(char *path_cmd, char **tokenized_cmd);
 
-void	execute_pipex_builtin(char **args, char **envp, t_pipex *pipex);
 int		execute_pipex_direct(t_cmd *cmds, t_data *data);
 
 bool	has_input_redir(t_cmd *cmd);

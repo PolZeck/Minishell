@@ -3,30 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 14:06:39 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/19 15:37:54 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-void	print_err(char *prefix, char *cmd, char *message, int exit_code)
+void	print_err(char *prefix, char *cmd, char *message)
 {
 	ft_putstr_fd(prefix, STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putstr_fd(message, STDERR_FILENO);
-	*get_exit_status() = exit_code;
-}
-
-int	has_valid_command(t_cmd *cmd)
-{
-	if (cmd->args && cmd->args[0])
-		return (1);
-	if (cmd->redirs)
-		return (1);
-	return (0);
 }
 
 void	execute_pipeline(t_cmd *cmd_list, t_data *data)
@@ -57,6 +47,6 @@ void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 	else
 	{
 		data->in_pipeline = 1;
-		*get_exit_status() = execute_pipex_direct(cmd_list, data);
+		data->exit_status = execute_pipex_direct(cmd_list, data);
 	}
 }

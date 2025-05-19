@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:04:19 by lcosson           #+#    #+#             */
-/*   Updated: 2025/05/15 12:01:01 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:17:46 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	handle_invalid_identifier(char *arg)
+int	handle_invalid_identifier(char *arg, t_data *data)
 {
 	ft_putstr_fd("bash: export: `", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
-	*get_exit_status() = 1;
+	data->exit_status = 1;
 	return (0);
 }
 

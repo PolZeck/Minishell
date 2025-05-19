@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 15:48:06 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 12:32:03 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/19 15:38:43 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,15 @@ static void	init_terminal_settings(struct termios *term)
 	term->c_lflag |= ISIG;
 	term->c_cc[VQUIT] = 28;
 	tcsetattr(STDIN_FILENO, TCSANOW, term);
+}
+
+void	handle_sigint_status(t_data *data)
+{
+	if (g_heredoc_interrupted == 2)
+	{
+		data->exit_status = 130;
+		g_heredoc_interrupted = 0;
+	}
 }
 
 int	handle_null_input(t_data *data)
@@ -52,11 +61,12 @@ int	process_input(char *input, t_data *data)
 
 int	init_shell(t_data *data, char **envp, struct termios *term)
 {
-/* 	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+ 	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
 	{
 		ft_putendl_fd("minishell: not interactive mode", STDERR_FILENO);
 		return (1);
-	} */
+	}
+	data->exit_status = 0;
 	data->env = dup_env(envp, 1);
 	if (!data->env)
 		return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:33:29 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 12:33:48 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:37:33 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct s_data
 	int		in_pipeline;
 	t_cmd	*cmds_head;
 	bool	from_quotes;
+	int		exit_status;
 }	t_data;
 
 typedef struct s_parseinfo
@@ -122,14 +123,15 @@ char			**dup_env(char **envp, int initial);
 
 t_cmd			*create_cmd(t_token *tokens);
 
-void			syntax_error(char *token);
+void			syntax_error(char *token, t_data *data);
 void			add_token(t_token **tokens, t_token **last,
 					t_token_info info, t_data *data);
 void			handle_argument(t_cmd *cmd, int *arg_count, char *value);
 void			handle_pipe(t_cmd **cmd, int *arg_count,
 					size_t *args_size, t_token **tokens);
-void			handle_redir_in(t_cmd *cmd, t_token **tokens);
-void			handle_redir_out(t_cmd *cmd, t_token **tokens, int append);
+void			handle_redir_in(t_cmd *cmd, t_token **tokens, t_data *data);
+void			handle_redir_out(t_cmd *cmd, t_token **tokens,
+					int append, t_data *data);
 void			handle_heredoc(t_cmd *cmd, t_token **tokens, t_data	*data);
 void			handle_expansion(char *buffer, char *input, int *i, int *j);
 void			process_word_or_quote(t_quote *q, t_token_info *info);
@@ -172,7 +174,7 @@ void			finalize_args(t_cmd *head);
 bool			parse_all_tokens(t_token *tokens, t_cmd *cmd,
 					t_cmd *head, t_data *data);
 bool			handle_pipe_token(t_token **tokens, t_cmd **cmd,
-					int *arg_count, t_cmd *head);
+					int *arg_count, t_data *data);
 char			*expand_line(char *line, t_data *data);
 
 //dup_env

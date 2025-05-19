@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   handle_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:00:19 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 16:20:00 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 15:20:56 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-static int	check_heredoc_syntax(t_cmd *cmd, t_token **tokens)
+static int	check_heredoc_syntax(t_cmd *cmd, t_token **tokens, t_data *data)
 {
 	*tokens = (*tokens)->next;
 	if (!(*tokens))
 	{
-		syntax_error("newline");
+		syntax_error("newline", data);
 		cmd->invalid = 1;
 		return (0);
 	}
 	if ((*tokens)->type != WORD && (*tokens)->type
 		!= QUOTE && (*tokens)->type != DELIMITER)
 	{
-		syntax_error((*tokens)->value);
+		syntax_error((*tokens)->value, data);
 		cmd->invalid = 1;
 		return (0);
 	}
@@ -48,12 +48,15 @@ static int	open_heredoc_tmp(char **filename)
 	return (open(*filename, O_WRONLY | O_CREAT | O_TRUNC, 0600));
 }
 
-static int	finalize_heredoc(t_cmd *cmd, char *filename)
+static int	finalize_heredoc(t_cmd *cmd, char *filename, t_data *data)
 {
 	t_redir	*redir;
 
 	if (if_g_heredoc_interrupted(cmd, filename))
+	{
+		data->exit_status = 130;
 		return (0);
+	}
 	redir = malloc(sizeof(t_redir));
 	if (!redir)
 		return (free(filename), 0);
@@ -83,7 +86,7 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens, t_data	*data)
 		cmd->invalid = 1;
 		return ;
 	}
-	if (!check_heredoc_syntax(cmd, tokens))
+	if (!check_heredoc_syntax(cmd, tokens, data))
 		return ;
 	expand = ((*tokens)->quote_type == NO_QUOTE);
 	filename = NULL;
@@ -97,5 +100,5 @@ void	handle_heredoc(t_cmd *cmd, t_token **tokens, t_data	*data)
 	}
 	write_heredoc_content(fd, (*tokens)->value, expand, data);
 	close(fd);
-	finalize_heredoc(cmd, filename);
+	finalize_heredoc(cmd, filename, data);
 }

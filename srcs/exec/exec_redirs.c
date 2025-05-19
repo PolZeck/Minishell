@@ -6,13 +6,13 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 00:50:51 by pol               #+#    #+#             */
-/*   Updated: 2025/05/15 00:54:40 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/19 13:47:23 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-static int	open_input_redir(t_redir *redir)
+static int	open_input_redir(t_redir *redir, t_data *data)
 {
 	int	fd;
 
@@ -20,7 +20,7 @@ static int	open_input_redir(t_redir *redir)
 	if (fd == -1)
 	{
 		perror(redir->file);
-		*get_exit_status() = 1;
+		data->exit_status = 1;
 	}
 	else
 	{
@@ -30,7 +30,7 @@ static int	open_input_redir(t_redir *redir)
 	return (fd);
 }
 
-static int	open_output_redir(t_redir *redir)
+static int	open_output_redir(t_redir *redir, t_data *data)
 {
 	int	fd;
 	int	flags;
@@ -44,7 +44,7 @@ static int	open_output_redir(t_redir *redir)
 	if (fd == -1)
 	{
 		perror(redir->file);
-		*get_exit_status() = 1;
+		data->exit_status = 1;
 	}
 	else
 	{
@@ -54,7 +54,7 @@ static int	open_output_redir(t_redir *redir)
 	return (fd);
 }
 
-int	apply_redirs(t_list *redirs)
+int	apply_redirs(t_list *redirs, t_data *data)
 {
 	t_redir	*redir;
 	t_list	*node;
@@ -66,9 +66,9 @@ int	apply_redirs(t_list *redirs)
 		redir = (t_redir *)node->content;
 		fd = -1;
 		if (redir->type == REDIR_IN || redir->type == HEREDOC)
-			fd = open_input_redir(redir);
+			fd = open_input_redir(redir, data);
 		else if (redir->type == REDIR_OUT || redir->type == APPEND)
-			fd = open_output_redir(redir);
+			fd = open_output_redir(redir, data);
 		if (fd == -1)
 			return (1);
 		node = node->next;
