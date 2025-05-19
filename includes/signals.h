@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:39:00 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/07 15:06:38 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/19 14:30:09 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,5 @@ void	setup_signals(void);
 void	heredoc_sigint_handler(int sig);
 void	disable_ctrl_backslash(void);
 void	enable_ctrl_backslash(void);
-
-int		*get_exit_status(void);
 
 #endif

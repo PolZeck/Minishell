@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
+#    By: pol <pol@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/16 15:11:08 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/05/19 14:31:19 by pol              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,10 +56,9 @@ MSH_SRCS	= main.c init_minishell.c parsing/tokenizer/tokenizer.c parsing/utils_a
 			  parsing/heredoc/create_tmp_file.c parsing/heredoc/expand_line.c parsing/utils_and_free/cmd_free.c parsing/env/dup_env.c parsing/tokenizer/handle_input_token.c \
 			  parsing/heredoc/write_heredoc.c \
 			  exec/exec_stdio_utils.c exec/exec_redirs.c \
-			  signals/signals.c signals/signals_utils.c signals/exit_status.c \
+			  signals/signals.c signals/signals_utils.c\
 			  exec/exec_builtins.c \
 			  exec/exec.c exec/exec_commands.c\
-			  exec/exec_pipex_builtins.c\
 			  exec/exec_path.c \
 			  exec/exec_child.c\
 			  exec/exec_helpers.c\

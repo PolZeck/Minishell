@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:37:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 12:20:15 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 13:35:15 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-void	syntax_error(char *token)
+void	syntax_error(char *token, t_data *data)
 {
 	ft_putstr_fd("bash: syntax error near unexpected token `", 2);
 	ft_putstr_fd(token, 2);
 	ft_putstr_fd("'\n", 2);
-	*get_exit_status() = 2;
+	data->exit_status = 2;
 }

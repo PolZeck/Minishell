@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 14:05:47 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:15:39 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,23 @@ void	execute_command_and_exit(t_pipex *pipex, t_data *data)
 	pid_t	pid;
 
 	if (precheck_command(pipex->current_cmd, data))
-		exit_clean_pipex(pipex, data, NULL, *get_exit_status());
+		exit_clean_pipex(pipex, data, NULL, data->exit_status);
 	cmd_path = resolve_cmd_path(pipex->current_cmd, data);
 	if (!cmd_path)
-		exit_clean_pipex(pipex, data, NULL, *get_exit_status());
+		exit_clean_pipex(pipex, data, NULL, data->exit_status);
 	enable_ctrl_backslash();
 	saved_stdout = dup(STDOUT_FILENO);
 	pid = fork();
 	if (pid == 0)
 		run_child(pipex->current_cmd, data, cmd_path);
 	else if (pid > 0)
-		wait_and_handle(pid, saved_stdout);
+		wait_and_handle(pid, saved_stdout, data);
 	else
 	{
 		perror("fork");
-		*get_exit_status() = 1;
+		data->exit_status = 1;
 	}
-	exit_clean_pipex(pipex, data, cmd_path, *get_exit_status());
+	exit_clean_pipex(pipex, data, cmd_path, data->exit_status);
 }
 
 void	execute_command(t_cmd *cmd, t_data *data)
@@ -74,11 +74,11 @@ void	execute_command(t_cmd *cmd, t_data *data)
 	if (pid == 0)
 		run_child(cmd, data, cmd_path);
 	else if (pid > 0)
-		wait_and_handle(pid, saved_stdout);
+		wait_and_handle(pid, saved_stdout, data);
 	else
 	{
 		perror("fork");
-		*get_exit_status() = 1;
+		data->exit_status = 1;
 	}
 	free(cmd_path);
 }

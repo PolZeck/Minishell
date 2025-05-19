@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variable_expansion.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:32:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 10:25:17 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 13:34:33 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*expand_env_var(char *token, t_quote_type quote_type, t_data *data)
 	if (!token || token[0] != '$')
 		return (ft_strdup(token));
 	if (ft_strcmp(token, "$?") == 0)
-		return (ft_itoa(*get_exit_status()));
+		return (ft_itoa(data->exit_status));
 	if (token[1] == '\0')
 		return (ft_strdup("$"));
 	env_value = ft_getenv(data, token + 1);

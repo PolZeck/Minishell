@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:31 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 10:45:24 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:19:23 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ int	builtin_exit(t_cmd *cmd, t_data *data)
 		handle_invalid_argument(cmd, data);
 	if (has_too_many_args(cmd->args))
 	{
-		handle_too_many_arguments();
+		handle_too_many_arguments(data);
 		return (1);
 	}
 	if (cmd->args[1])
 		code = (unsigned char)nb;
 	else
-		code = *get_exit_status();
-	*get_exit_status() = code;
+		code = data->exit_status;
+	data->exit_status = code;
 	exit_cleanup(cmd, data, code);
 	return (0);
 }

@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:02:20 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 15:36:33 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:16:35 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	cd_too_many_args(char **args)
+static int	cd_too_many_args(char **args, t_data *data)
 {
 	if (args[1] && args[2])
 	{
 		ft_putstr_fd("bash: cd: too many arguments\n", STDERR_FILENO);
-		*get_exit_status() = 1;
+		data->exit_status = 1;
 		return (1);
 	}
 	return (0);
@@ -65,11 +65,11 @@ static int	cd_change_directory(char *target, t_data *data)
 	{
 		ft_putstr_fd("bash: cd: ", STDERR_FILENO);
 		perror(target);
-		*get_exit_status() = 1;
+		data->exit_status = 1;
 		free(old_copy);
 		return (1);
 	}
-	*get_exit_status() = 0;
+	data->exit_status = 0;
 	update_env_pwd(data, old_copy);
 	free(old_copy);
 	return (0);
@@ -80,7 +80,7 @@ int	builtin_cd(t_cmd *cmd, t_data *data)
 	char	*target;
 	int		res;
 
-	if (cd_too_many_args(cmd->args))
+	if (cd_too_many_args(cmd->args, data))
 		return (1);
 	target = get_cd_target(cmd->args, data);
 	if (!target)

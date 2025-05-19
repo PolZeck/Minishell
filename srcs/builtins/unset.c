@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:08:44 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/13 11:54:57 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 13:34:33 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	builtin_unset(t_cmd *cmd, t_data *data)
 			ft_putstr_fd("bash: unset: -", 2);
 			ft_putchar_fd(cmd->args[i][1], 2);
 			ft_putstr_fd(": invalid option\n", 2);
-			*get_exit_status() = 2;
+			data->exit_status = 2;
 			return (2);
 		}
 		if (is_valid_identifier_unset(cmd->args[i]))
@@ -103,6 +103,6 @@ int	builtin_unset(t_cmd *cmd, t_data *data)
 		}
 		i++;
 	}
-	*get_exit_status() = 0;
+	data->exit_status = 0;
 	return (0);
 }

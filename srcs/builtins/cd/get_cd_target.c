@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   get_cd_target.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 15:35:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 15:37:15 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:16:58 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	handle_home_unset(char *home)
+static int	handle_home_unset(char *home, t_data *data)
 {
 	if (!home)
 	{
-		*get_exit_status() = 1;
+		data->exit_status = 1;
 		return (1);
 	}
 	return (0);
@@ -48,7 +48,7 @@ char	*get_cd_target(char **args, t_data *data)
 	if (!args[1] || args[1][0] == '~')
 		home = get_home(data);
 	if ((args[1] && args[1][0] == '~') || !args[1])
-		if (handle_home_unset(home))
+		if (handle_home_unset(home, data))
 			return (NULL);
 	if (!args[1])
 		return (handle_empty_args(home));

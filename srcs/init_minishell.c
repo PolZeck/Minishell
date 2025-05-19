@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 15:48:06 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/16 15:12:22 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:27:18 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ int	process_input(char *input, t_data *data)
 
 int	init_shell(t_data *data, char **envp, struct termios *term)
 {
-	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
-	{
-		ft_putendl_fd("minishell: not interactive mode", STDERR_FILENO);
-		return (1);
-	}
+	//if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	//{
+	//	ft_putendl_fd("minishell: not interactive mode", STDERR_FILENO);
+	//	return (1);
+	//}
 	data->env = dup_env(envp, 1);
 	if (!data->env)
 		return (1);

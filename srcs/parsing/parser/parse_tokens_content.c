@@ -6,7 +6,7 @@
 /*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 09:34:36 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 01:17:29 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/19 13:40:16 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 static int	handle_redirections(t_cmd *cmd, t_token **tokens, t_data *data)
 {
 	if ((*tokens)->type == REDIR_IN)
-		handle_redir_in(cmd, tokens);
+		handle_redir_in(cmd, tokens, data);
 	else if ((*tokens)->type == REDIR_OUT)
-		handle_redir_out(cmd, tokens, 0);
+		handle_redir_out(cmd, tokens, 0, data);
 	else if ((*tokens)->type == APPEND)
-		handle_redir_out(cmd, tokens, 1);
+		handle_redir_out(cmd, tokens, 1, data);
 	else if ((*tokens)->type == HEREDOC)
 		handle_heredoc(cmd, tokens, data);
 	if (cmd->invalid)

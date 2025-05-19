@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:32:28 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/15 11:51:34 by pledieu          ###   ########lyon.fr   */
+/*   Updated: 2025/05/19 14:18:07 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,18 +79,18 @@ static int	handle_export_arg(char *arg, t_data *data)
 		ft_putstr_fd("bash: export: ", 2);
 		write(2, arg, 2);
 		ft_putstr_fd(": invalid option\n", 2);
-		*get_exit_status() = 2;
+		data->exit_status = 2;
 		return (2);
 	}
 	if (ft_strnstr(arg, "+=", ft_strlen(arg)))
 	{
 		if (!is_valid_identifier_export(arg))
-			return (handle_invalid_identifier(arg));
+			return (handle_invalid_identifier(arg, data));
 		add_or_append_var(data, arg);
 		return (0);
 	}
 	if (!is_valid_identifier_export(arg))
-		return (handle_invalid_identifier(arg));
+		return (handle_invalid_identifier(arg, data));
 	add_or_replace_var(data, arg);
 	return (0);
 }
@@ -119,5 +119,5 @@ int	builtin_export(t_cmd *cmd, t_data *data)
 			return (2);
 		i++;
 	}
-	return (*get_exit_status());
+	return (data->exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:20:10 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/06 14:56:13 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/19 13:34:33 by pol              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	builtin_env(t_cmd *cmd, t_data *data)
 	if (cmd->args[1])
 	{
 		ft_putstr_fd("env: No arguments allowed\n", 2);
-		*get_exit_status() = 1;
+		data->exit_status = 1;
 		return (1);
 	}
 	i = 0;
@@ -32,6 +32,6 @@ int	builtin_env(t_cmd *cmd, t_data *data)
 		}
 		i++;
 	}
-	*get_exit_status() = 0;
+	data->exit_status = 0;
 	return (0);
 }
