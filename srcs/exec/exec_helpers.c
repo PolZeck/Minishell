@@ -6,7 +6,7 @@
 /*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 09:39:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 10:26:55 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/19 11:19:28 by lcosson          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,8 @@ int	precheck_command(t_cmd *cmd, t_data *data)
 	}
 	if (is_builtin(cmd->args[0]))
 	{
-		if (ft_strcmp(cmd->args[0], "exit") == 0)
-		{
-			if (!data->in_pipeline)
-				run_builtin(cmd, data);
+		if (run_exit_exception(cmd, data) == 1)
 			return (1);
-		}
 		execute_builtin(cmd, data);
 		return (1);
 	}

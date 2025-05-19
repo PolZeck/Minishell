@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+         #
+#    By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 11:49:00 by pledieu           #+#    #+#              #
-#    Updated: 2025/05/16 14:35:01 by pledieu          ###   ########lyon.fr    #
+#    Updated: 2025/05/19 11:19:19 by lcosson          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,7 @@ MSH_SRCS	= main.c init_minishell.c parsing/tokenizer/tokenizer.c parsing/utils_a
 			  exec/exec_utils.c\
 			  exec/resolve_cmd_path.c\
 			  builtins/cd/cd.c builtins/cd/get_cd_target.c builtins/cd/cd_utils.c builtins/echo.c builtins/exit/exit.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export/export.c builtins/export/export_utils.c \
-			  builtins/export/export_utils2.c builtins/export/add_or_append_var.c builtins/exit/exit_utils.c pipex/commands_bonus.c pipex/exit_bonus.c pipex/wait_and_close.c \
+			  builtins/export/export_utils2.c builtins/export/add_or_append_var.c builtins/exit/exit_utils.c pipex/commands.c pipex/exit_pipex.c pipex/wait_and_close.c \
 			  pipex/execute_pipex_adapter.c pipex/executions_direct.c pipex/apply_redirections.c pipex/apply_redirections_utils.c
 MSH_OBJS	= $(patsubst %.c, $(MSH_OBJ)/%.o, $(MSH_SRCS))
 MSH_DEPS	= $(patsubst %.c, $(MSH_DEP)/%.d, $(MSH_SRCS))
