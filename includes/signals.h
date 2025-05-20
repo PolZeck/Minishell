@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:39:00 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 15:39:45 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/20 09:46:20 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ void	setup_signals(void);
 void	heredoc_sigint_handler(int sig);
 void	disable_ctrl_backslash(void);
 void	enable_ctrl_backslash(void);
+void	handle_sigpipe(int sig);
 
 #endif

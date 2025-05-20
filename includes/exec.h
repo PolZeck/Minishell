@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:46:18 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 14:41:50 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/20 09:50:04 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ char	*resolve_cmd_path(t_cmd *cmd, t_data *data);
 void	run_child(t_cmd *cmd, t_data *data, char *path);
 void	wait_and_handle(pid_t pid, int saved_stdout, t_data *data);
 int		run_exit_exception(t_cmd *cmd, t_data *data);
+void	close_fds_except_std(void);
 
 #endif

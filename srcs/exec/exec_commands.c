@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_commands.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:23:02 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 15:36:58 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/20 10:00:27 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	execute_command_and_exit(t_pipex *pipex, t_data *data)
 	if (!cmd_path)
 		exit_clean_pipex(pipex, data, NULL, data->exit_status);
 	enable_ctrl_backslash();
-	signal(SIGPIPE, SIG_IGN);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	saved_stdout = dup(STDOUT_FILENO);

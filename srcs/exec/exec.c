@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pol <pol@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:29:12 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/20 00:23:21 by pol              ###   ########.fr       */
+/*   Updated: 2025/05/20 09:32:59 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,6 @@ void	print_err(char *prefix, char *cmd, char *message)
 	ft_putstr_fd(message, STDERR_FILENO);
 }
 
-int	has_valid_command(t_cmd *cmd)
-{
-	if (cmd->args && cmd->args[0])
-		return (1);
-	if (cmd->redirs)
-		return (1);
-	return (0);
-}
-
 void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 {
 	t_cmd	*cmd_tmp;
@@ -37,13 +28,6 @@ void	execute_pipeline(t_cmd *cmd_list, t_data *data)
 	cmd_tmp = cmd_list;
 	while (cmd_tmp)
 	{
-		//pourquoi cette fonction? ca fait bug si jamais on met que des tab 
-		if (!has_valid_command(cmd_tmp))
-		{
-			write(2, "minishell: syntax error near unexpected token `newline'\n", 56);
-			data->exit_status = 2;
-			return ;
-		}
 		count++;
 		cmd_tmp = cmd_tmp->next;
 	}

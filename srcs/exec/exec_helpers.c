@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_helpers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcosson <lcosson@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pledieu <pledieu@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 09:39:53 by pledieu           #+#    #+#             */
-/*   Updated: 2025/05/19 16:17:10 by lcosson          ###   ########.fr       */
+/*   Updated: 2025/05/20 10:01:30 by pledieu          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,21 +92,9 @@ char	*resolve_cmd_path(t_cmd *cmd, t_data *data)
 	return (path);
 }
 
-void	close_fds_except_std(void)
-{
-	int	fd;
-
-	fd = 3;
-	while (fd < 1024)
-	{
-		close(fd);
-		fd++;
-	}
-}
-
 void	run_child(t_cmd *cmd, t_data *data, char *path)
 {
-	signal(SIGPIPE, SIG_IGN);
+	signal(SIGPIPE, handle_sigpipe);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	apply_redirections_in_child(cmd);
@@ -139,9 +127,5 @@ void	wait_and_handle(pid_t pid, int saved_stdout, t_data *data)
 			write(1, "\n", 1);
 		else if (sig == SIGQUIT)
 			write(1, "Quit (core dumped)\n", 20);
-		if (sig != SIGPIPE)
-			data->exit_status = 128 + sig;
-		else
-			data->exit_status = 0;
 	}
 }
